@@ -9,6 +9,7 @@ import { TodoComponent } from './widgets/todo/todo.component';
 import { PbiListComponent } from './widgets/pbi-list/pbi-list.component';
 
 import { TfsService } from './services/tfs.service';
+import { SprintComponent } from './sprint/sprint.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TfsService } from './services/tfs.service';
     DashboardComponent,
     CalendarComponent,
     TodoComponent,
-    PbiListComponent
+    PbiListComponent,
+    SprintComponent
   ],
   imports: [
     BrowserModule,
