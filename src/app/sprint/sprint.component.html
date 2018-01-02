@@ -1,19 +1,13 @@
 <div class="sprint" *ngIf="sprint">
     <div class="title">
-        <h1 [innerHtml]="sprint.name"></h1>
+        <h1 class="h1" [innerHtml]="sprint.name"></h1>
     </div>
-    <div class="table" *ngIf="workItems">
-        <div class="body">
-            <div class="row" *ngFor="let workItem of workItems">
-                <div class="pbi" *ngIf="workItem.workItemType === 'Product Backlog Item'">
-                    <div class="cell" [innerHtml]="workItem.id"></div>
-                    <div class="cell" [innerHtml]="workItem.title"></div>
-                </div>
-                <div class="task" *ngIf="workItem.workItemType === 'Task'">
-                    <div class="cell" [innerHtml]="workItem.id"></div>
-                    <div class="cell" [innerHtml]="workItem.title"></div>
-                </div>
-            </div>
-        </div>
+
+    <div class="board">
+        <kb-pbi-column [list]="todo" label="To Do"></kb-pbi-column>
+        <kb-pbi-column [list]="inProgress" label="In Progress"></kb-pbi-column>
+        <kb-pbi-column [list]="testing" label="Testing"></kb-pbi-column>
+        <kb-pbi-column [list]="done" label="Done"></kb-pbi-column>
     </div>
+    <kb-pbi-list [pbiList]="workItems"></kb-pbi-list>
 </div>

@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { WorkItem } from './../../models/work-item';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
-  selector: 'kb-pbi-list',
-  templateUrl: './pbi-list.component.html',
-  styleUrls: ['./pbi-list.component.scss']
+    selector: 'kb-pbi-list',
+    templateUrl: './pbi-list.component.html',
+    styleUrls: ['./pbi-list.component.scss']
 })
-export class PbiListComponent implements OnInit {
+export class PbiListComponent implements OnChanges {
+    @Input() pbiList: Array<WorkItem> = new Array<WorkItem>();
+    constructor() { }
 
-  constructor() { }
-
-  ngOnInit() {
-  }
+    ngOnChanges() {
+    }
 
 }
+

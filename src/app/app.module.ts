@@ -7,9 +7,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CalendarComponent } from './widgets/calendar/calendar.component';
 import { TodoComponent } from './widgets/todo/todo.component';
 import { PbiListComponent } from './widgets/pbi-list/pbi-list.component';
+import { PbiCardComponent } from './widgets/pbi-card/pbi-card.component';
 
 import { TfsService } from './services/tfs.service';
 import { SprintComponent } from './sprint/sprint.component';
+import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { SprintComponent } from './sprint/sprint.component';
     CalendarComponent,
     TodoComponent,
     PbiListComponent,
-    SprintComponent
+    SprintComponent,
+    PbiCardComponent,
+    PbiColumnComponent
   ],
   imports: [
     BrowserModule,

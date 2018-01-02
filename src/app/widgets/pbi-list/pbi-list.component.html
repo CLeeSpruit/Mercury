@@ -1,3 +1,14 @@
-<p>
-  pbi-list works!
-</p>
+<table class="table" *ngIf="pbiList">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let pbi of pbiList">
+            <th scope="row" [innerHtml]="pbi.id"></th>
+            <td [innerHtml]="pbi.title"></td>
+        </tr>
+    </tbody>
+</table>

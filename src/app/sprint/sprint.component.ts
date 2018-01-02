@@ -12,6 +12,12 @@ export class SprintComponent implements OnInit {
     sprint: Sprint;
     workItems: Array<WorkItem> = new Array<WorkItem>();
     workItemProperties: Array<string> = new Array<string>();
+
+    todo: Array<WorkItem> = new Array<WorkItem>();
+    inProgress: Array<WorkItem> = new Array<WorkItem>();
+    testing: Array<WorkItem> = new Array<WorkItem>();
+    done: Array<WorkItem> = new Array<WorkItem>();
+
     private workAssignedQuery: string;
     private workItemIds: Array<string> = new Array<string>(); // They're numbers but whatever.
 
@@ -33,8 +39,33 @@ export class SprintComponent implements OnInit {
 
                 this.tfsService.getSpecificWorkItems(this.workItemIds).subscribe((workItemsData: Array<WorkItem>) => {
                     this.workItems = workItemsData;
+                    this.sortWork();
                 });
             });
+        });
+    }
+
+    sortWork() {
+        this.todo = [];
+        this.inProgress = [];
+        this.testing = [];
+        this.done = [];
+
+        this.workItems.forEach((wi: WorkItem) => {
+            if (wi.workItemType === 'Product Backlog Item') {
+                switch (wi.boardColumn) {
+                    case 'Commited': {
+                        this.todo.push(wi);
+                        break;
+                    }
+                    case 'Done': {
+                        this.done.push(wi);
+                        break;
+                    }
+                    default:
+                        this.inProgress.push(wi);
+                }
+            }
         });
     }
 

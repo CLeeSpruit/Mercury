@@ -1,0 +1,9 @@
+<div class="col">
+    <div class="header" [innerHTML]="label"></div>
+    <div class="col-body">
+        <kb-pbi-card
+            *ngFor="let pbi of list"
+            [pbi]="pbi"
+        ></kb-pbi-card>
+    </div>
+</div>
