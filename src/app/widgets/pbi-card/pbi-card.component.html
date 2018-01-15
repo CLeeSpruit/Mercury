@@ -1,8 +1,14 @@
-<div class="pbi-card card">
-    <h5 class="card-header card-title" [innerHtml]="pbi.title"></h5>
-    <!-- <div class="card-body">
-        <h5 class="card-title" [innerHTML]="pbi.id"></h5>
-    </div> -->
+<div class="pbi-card card container">
+    <div class="card-header row">
+        <div class="col-md-11">
+            <h6 class="card-subtitle" [innerHtml]="pbi.id"></h6>
+            <h5 class="card-title" [innerHtml]="pbi.title"></h5>
+        </div>
+        <div class="col-md-1">
+            <span class="effort" [innerHtml]="pbi.effort"></span>
+            <span class="total-hours" [innerHtml]="pbi.totalHours"></span>
+        </div>
+    </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let child of pbi.children">
             <kb-pbi-task [task]="child"></kb-pbi-task>

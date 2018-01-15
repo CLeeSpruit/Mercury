@@ -141,6 +141,7 @@ export class TfsService {
                     remainingWork: wi.fields['Microsoft.VSTS.Scheduling.RemainingWork'],
                     backlogPriority: wi.fields['Microsoft.VSTS.Common.BacklogPriority'],
                     description: wi.fields['System.Description'],
+                    effort: wi.fields['Microsoft.VSTS.Scheduling.Effort'],
                     childrenIds: wi.relations
                         .map((relation: any) => {
                             if (relation.rel === 'System.LinkTypes.Hierarchy-Forward') {

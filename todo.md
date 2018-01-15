@@ -6,13 +6,11 @@
 * Display by priority
 
 ### PBI
-* Make Items Draggable across columns
 * Make Items Draggable in priority
 * After displaying task hours, calculate total time needed and display
 
 ### Tasks
 * Add ability to add tasks
-* Add ability to edit tasks name
 * Add ability to delete tasks
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
 * When changing a task status, it moves the pbi to a different column
