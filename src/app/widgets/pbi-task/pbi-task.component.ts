@@ -14,10 +14,26 @@ export class PbiTaskComponent implements OnInit {
 
     statusPopup = false;
     hoursPopup = false;
+    titleEditable = false;
 
     constructor(private tfsService: TfsService) { }
 
     ngOnInit() {
+    }
+
+    editTitle() {
+        console.log('dbclick');
+        this.titleEditable = true;
+    }
+
+    saveTitle(title: string) {
+        this.titleEditable = false;
+
+        if (title !== '' && this.task.title !== title) {
+            this.tfsService.editWorkItem(this.task.id, <WorkItem>{title: title}).subscribe(data => 
+                this.task.title = title
+            );
+        }
     }
 
     toggleStatus() {
@@ -30,7 +46,7 @@ export class PbiTaskComponent implements OnInit {
 
     statusChange(status: string) {
         this.toggleStatus();
-        if (status !== '') {
+        if (status !== '' && status !== this.task.state) {
             this.tfsService.editWorkItem(this.task.id, <WorkItem>{state: status}).subscribe(data =>
                 this.task.state = status
             );
@@ -39,7 +55,7 @@ export class PbiTaskComponent implements OnInit {
 
     hoursChange(hours: number) {
         this.toggleHours();
-        if (hours) {
+        if (hours && this.task.remainingWork !== hours) {
             this.tfsService.editWorkItem(this.task.id, <WorkItem>{remainingWork: hours}).subscribe(data =>
                 this.task.remainingWork = hours
             );

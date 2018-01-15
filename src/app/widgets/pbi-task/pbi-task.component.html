@@ -1,5 +1,18 @@
 <div class="pbi-task row">
-    <div class="child text col-8" [innerHtml]="task.title"></div>
+    <div class="child text col-8">
+        <span
+            *ngIf="!titleEditable"
+            [innerHtml]="task.title"
+            (dblclick)="editTitle()"
+            ></span>
+        <input
+            #titleInput
+            *ngIf="titleEditable"
+            type="text"
+            [value]="task.title"
+            (blur)="saveTitle(titleInput.value)"
+        />
+    </div>
     <div class="child col-4">
         <div class="btn-group" role="group">
             <div class="dropdown btn-group">

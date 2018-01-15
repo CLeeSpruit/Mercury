@@ -93,6 +93,14 @@ export class TfsService {
             });
         }
 
+        if (changes.title) {
+            allChanges.push({
+                op: 'replace',
+                path: '/fields/System.Title',
+                value: changes.title
+            });
+        }
+
         return this.http.patch(
             `${this.baseLocationGeneric}wit/workitems/${itemId}?api-version=1.0`,
             JSON.stringify(allChanges),
