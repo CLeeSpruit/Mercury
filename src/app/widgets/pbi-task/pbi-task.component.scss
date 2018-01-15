@@ -1,0 +1,15 @@
+$icon-width: 2em;
+
+.pbi-task {
+    .child {
+        display: inline;
+
+        &.text {
+            width: calc(100% - 2em);
+        }
+
+        &.action-icon {
+            float: right;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+<div class="pbi-task">
+    <div class="child text" [innerHtml]="task.title"></div>
+    <div class="child action-icon">
+        <i 
+            class="fa fa-2x"
+            [class.fa-square-o]="task.state === 'To Do'"
+            [class.fa-play]="task.state === 'In Progress'"
+            [class.fa-test]="task.state === 'Ready to test'"
+            [class.fa-check-square-o]="task.state === 'Done'"
+            ></i>
+    </div>
+</div>

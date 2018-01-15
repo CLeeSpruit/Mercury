@@ -8,6 +8,7 @@ import { CalendarComponent } from './widgets/calendar/calendar.component';
 import { TodoComponent } from './widgets/todo/todo.component';
 import { PbiListComponent } from './widgets/pbi-list/pbi-list.component';
 import { PbiCardComponent } from './widgets/pbi-card/pbi-card.component';
+import { PbiTaskComponent } from './widgets/pbi-task/pbi-task.component';
 
 import { TfsService } from './services/tfs.service';
 import { SprintComponent } from './sprint/sprint.component';
@@ -22,7 +23,8 @@ import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
     PbiListComponent,
     SprintComponent,
     PbiCardComponent,
-    PbiColumnComponent
+    PbiColumnComponent,
+    PbiTaskComponent
   ],
   imports: [
     BrowserModule,

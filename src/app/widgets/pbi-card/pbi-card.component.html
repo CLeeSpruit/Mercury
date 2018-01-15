@@ -5,16 +5,7 @@
     </div> -->
     <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let child of pbi.children">
-            <div class="child text" [innerHtml]="child?.title"></div>
-            <div class="child action-icon">
-                <i 
-                    class="fa fa-2x"
-                    [class.fa-square-o]="child?.state === 'To Do'"
-                    [class.fa-play]="child?.state === 'In Progress'"
-                    [class.fa-test]="child?.state === 'Ready to test'"
-                    [class.fa-check-square-o]="child?.state === 'Done'"
-                    ></i>
-            </div>
+            <kb-pbi-task [task]="child"></kb-pbi-task>
         </li>
     </ul>
 </div>
