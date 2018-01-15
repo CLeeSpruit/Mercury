@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('kanban App', () => {
+describe('mercury App', () => {
   let page: AppPage;
 
   beforeEach(() => {

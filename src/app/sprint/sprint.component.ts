@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { TaskStatus } from './../shared/task-status';
 @Component({
-    selector: 'kb-sprint',
+    selector: 'hg-sprint',
     templateUrl: './sprint.component.html',
     styleUrls: ['./sprint.component.scss']
 })

@@ -2,7 +2,7 @@ import { WorkItem } from './../../models/work-item';
 import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
-    selector: 'kb-pbi-list',
+    selector: 'hg-pbi-list',
     templateUrl: './pbi-list.component.html',
     styleUrls: ['./pbi-list.component.scss']
 })

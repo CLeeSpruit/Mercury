@@ -2,7 +2,7 @@ import { WorkItem } from './../../models/work-item';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 @Component({
-    selector: 'kb-pbi-card',
+    selector: 'hg-pbi-card',
     templateUrl: './pbi-card.component.html',
     styleUrls: ['./pbi-card.component.scss']
 })

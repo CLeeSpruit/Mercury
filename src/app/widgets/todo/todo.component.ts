@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'kb-todo',
+  selector: 'hg-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })

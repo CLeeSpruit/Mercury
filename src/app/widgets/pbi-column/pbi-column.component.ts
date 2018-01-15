@@ -2,7 +2,7 @@ import { WorkItem } from './../../models/work-item';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 @Component({
-    selector: 'kb-pbi-column',
+    selector: 'hg-pbi-column',
     templateUrl: './pbi-column.component.html',
     styleUrls: ['./pbi-column.component.scss']
 })

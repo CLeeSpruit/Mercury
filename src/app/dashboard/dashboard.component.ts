@@ -2,7 +2,7 @@ import { TfsService } from './../services/tfs.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'kb-dashboard',
+    selector: 'hg-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })

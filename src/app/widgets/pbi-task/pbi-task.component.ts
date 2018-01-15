@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TaskStatus } from './../../shared/task-status';
 
 @Component({
-    selector: 'kb-pbi-task',
+    selector: 'hg-pbi-task',
     templateUrl: './pbi-task.component.html',
     styleUrls: ['./pbi-task.component.scss']
 })
