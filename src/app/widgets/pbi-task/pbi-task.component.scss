@@ -1,15 +1,22 @@
 $icon-width: 2em;
 
 .pbi-task {
-    .child {
-        display: inline;
+    // .child {
+    //     display: inline;
 
-        &.text {
-            width: calc(100% - 2em);
-        }
+    //     &.pill {
+    //         background-color: rgba(0,0,0,0.1);
+    //         border-radius: $icon-width;
+    //         height: 3em;
 
-        &.action-icon {
-            float: right;
-        }
-    }
+    //         .hours {
+    //             width: 50%;
+    //             font-size: 2em;
+    //         }
+
+    //         .status { 
+    //             text-align: right;
+    //         }
+    //     }
+    // }
 }

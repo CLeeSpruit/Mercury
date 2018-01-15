@@ -12,7 +12,6 @@
 * After displaying task hours, calculate total time needed and display
 
 ### Tasks
-* Display task hours
 * Add ability to add tasks
 * Add ability to change the status of tasks
 * Add ability to edit tasks name

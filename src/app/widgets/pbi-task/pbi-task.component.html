@@ -1,12 +1,54 @@
-<div class="pbi-task">
-    <div class="child text" [innerHtml]="task.title"></div>
-    <div class="child action-icon">
-        <i 
-            class="fa fa-2x"
-            [class.fa-square-o]="task.state === 'To Do'"
-            [class.fa-play]="task.state === 'In Progress'"
-            [class.fa-test]="task.state === 'Ready to test'"
-            [class.fa-check-square-o]="task.state === 'Done'"
-            ></i>
+<div class="pbi-task row">
+    <div class="child text col-8" [innerHtml]="task.title"></div>
+    <div class="child col-4">
+        <div class="btn-group" role="group">
+            <div class="dropdown btn-group">
+                <a
+                    class="btn btn-outline-secondary"
+                    role="button"
+                    [innerHtml]="task.remainingWork"
+                    (click)="toggleHours()"
+                    ></a>
+                <div class="dropdown-menu show" *ngIf="hoursPopup">
+                        <a class="dropdown-item" href="#" (click)="hoursChange(1)">
+                            1
+                        </a>
+                        <a class="dropdown-item" href="#" (click)="hoursChange(2)">
+                            2
+                        </a>
+                        <a class="dropdown-item" href="#" (click)="hoursChange(3)">
+                            3
+                        </a>
+                        <a class="dropdown-item" (click)="hoursChange(5)">
+                            5
+                        </a>
+                </div>
+            </div>
+            <div class="dropdown btn-group">
+                <a
+                    class="fa btn btn-outline-secondary"
+                    role="button"
+                    [class.fa-asterisk]="task.state === 'To Do'"
+                    [class.fa-hourglass-half]="task.state === 'In Progress'"
+                    [class.fa-flask]="task.state === 'Ready to test'"
+                    [class.fa-check]="task.state === 'Done'"
+                    (click)="toggleStatus()"
+                ></a>
+                <div class="dropdown-menu show" *ngIf="statusPopup">
+                        <a class="dropdown-item" href="#" (click)="statusChange('To Do')">
+                            <i class="fa fa-asterisk"></i> To Do
+                        </a>
+                        <a class="dropdown-item" href="#" (click)="statusChange('In Progress')">
+                            <i class="fa fa-hourglass-half"></i> In Progress
+                        </a>
+                        <a class="dropdown-item" href="#" (click)="statusChange('Ready To Test')">
+                            <i class="fa fa-flask"></i> Ready To Test
+                        </a>
+                        <a class="dropdown-item" (click)="statusChange('Done')">
+                            <i class="fa fa-check"></i> Done
+                        </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
