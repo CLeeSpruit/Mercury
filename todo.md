@@ -1,9 +1,11 @@
 # TODO
+## Rename sprint to cool name
 
 ## Sprint Page
 
 ### Display
-* Display by priority
+* Emphasize what's currently in progress
+    ** Alternatively, de-emphasize what isn't in progress
 
 ### PBI
 * Make Items Draggable in priority
