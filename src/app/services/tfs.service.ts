@@ -9,7 +9,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class TfsService {
     private baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
-    private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/'
+    private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
     private accessCode = this.createAuthorization('lpinsks2xb6nhvw6fxn2474koaq3l5647bg7lkikm7ldhk7qrm4a');
 
     private options: RequestOptionsArgs = {
@@ -68,8 +68,8 @@ export class TfsService {
 
     getSpecificWorkItems(itemIds: Array<string>) {
         const ids = itemIds.toString();
-        return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}`, this.options)
-            .map(this.mapWorkItems);
+        return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options)
+            .map(this.mapWorkItems.bind(this));
     }
 
     private handleError(error: Response | any, caught: Observable<any>) {
@@ -105,11 +105,25 @@ export class TfsService {
                     title: wi.fields['System.Title'],
                     remainingWork: wi.fields['Microsoft.VSTS.Scheduling.RemainingWork'],
                     backlogPriority: wi.fields['Microsoft.VSTS.Common.BacklogPriority'],
-                    description: wi.fields['System.Description']
+                    description: wi.fields['System.Description'],
+                    childrenIds: wi.relations
+                        .map((relation: any) => {
+                        if (relation.rel === 'System.LinkTypes.Hierarchy-Forward') {
+                            return this.stripUrl(relation.url);
+                        }
+                        }).filter((relation: any) => {
+                            if (relation) { return relation; }
+                        })
                 };
             });
         }
 
         return payload;
     }
+
+    private stripUrl(url: string) {
+        // Return only the last series of numbers, which is the id
+        return url.match(/\d*$/)[0];
+    }
 }
+

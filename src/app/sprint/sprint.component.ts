@@ -53,6 +53,7 @@ export class SprintComponent implements OnInit {
 
         this.workItems.forEach((wi: WorkItem) => {
             if (wi.workItemType === 'Product Backlog Item') {
+                this.attachChildren(wi);
                 switch (wi.boardColumn) {
                     case 'Commited': {
                         this.todo.push(wi);
@@ -67,6 +68,22 @@ export class SprintComponent implements OnInit {
                 }
             }
         });
+    }
+
+    private attachChildren(pbi: WorkItem) {
+        // For now, only go one deep. If a tree is needed...well, we'll get to that bridge when we come to it
+        if (pbi.childrenIds && pbi.childrenIds.length) {
+            pbi.children = pbi.childrenIds.map((taskId: number) => {
+                if (!taskId) { return; }
+
+                const id = taskId;
+                return this.workItems.find((task: WorkItem) => {
+                    return task.id === +id;
+                });
+            }).filter((task: WorkItem) => {
+                if (task) { return task; }
+            });
+        }
     }
 
     private buildWorkItemProperties() {

@@ -25,6 +25,10 @@ export interface WorkItem {
     backlogPriority: number;
     description: string;
 
+    // Relations
+    childrenIds: Array<number>;
+    children: Array<WorkItem>;
+
     /*** Tasks ***/
     // VSTS.Scheduling.RemainingWork
     remainingWork: number;
