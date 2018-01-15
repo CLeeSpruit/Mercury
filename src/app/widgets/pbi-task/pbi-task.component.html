@@ -1,4 +1,4 @@
-<div class="pbi-task row">
+<div class="pbi-task row" [class.in-progress]="task.state === 'In Progress'">
     <div class="child text col-8">
         <span
             *ngIf="!titleEditable"

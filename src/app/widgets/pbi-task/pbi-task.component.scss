@@ -2,4 +2,8 @@
     .dropdown {
         cursor: pointer;
     }
+
+    &.in-progress {
+        font-weight: 700;
+    }
 }
