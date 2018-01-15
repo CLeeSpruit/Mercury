@@ -21,7 +21,9 @@ $dgray: #555;
 }
 
 .publish {
-    background-color: $red;
+    background: #e53935;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #e35d5b, #e53935);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #e35d5b, #e53935); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */        
 
     &::after{
         content: '\f1e2';
@@ -29,7 +31,11 @@ $dgray: #555;
 }
 
 .trac {
-    background-color: $green;
+    background: #56ab2f;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+    
 
     &::after{
         content: '\f074';
@@ -37,7 +43,10 @@ $dgray: #555;
 }
 
 .op {
-    background-color: $blue;
+    background: #077C94;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #3a7bd5, #077C94);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #3a7bd5, #077C94); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
 
     &::after{
         content: '\f135';
@@ -45,8 +54,10 @@ $dgray: #555;
 }
 
 .test {
-    background-color: $green;
-
+    background: #56ab2f;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #8AB453, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #8AB453, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
     &::after{
         font-size: 9em;
         content: '\f0c3';
