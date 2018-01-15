@@ -10,13 +10,13 @@
                     (click)="toggleHours()"
                     ></a>
                 <div class="dropdown-menu show" *ngIf="hoursPopup">
-                        <a class="dropdown-item" href="#" (click)="hoursChange(1)">
+                        <a class="dropdown-item" (click)="hoursChange(1)">
                             1
                         </a>
-                        <a class="dropdown-item" href="#" (click)="hoursChange(2)">
+                        <a class="dropdown-item" (click)="hoursChange(2)">
                             2
                         </a>
-                        <a class="dropdown-item" href="#" (click)="hoursChange(3)">
+                        <a class="dropdown-item" (click)="hoursChange(3)">
                             3
                         </a>
                         <a class="dropdown-item" (click)="hoursChange(5)">
@@ -35,13 +35,13 @@
                     (click)="toggleStatus()"
                 ></a>
                 <div class="dropdown-menu show" *ngIf="statusPopup">
-                        <a class="dropdown-item" href="#" (click)="statusChange('To Do')">
+                        <a class="dropdown-item" (click)="statusChange('To Do')">
                             <i class="fa fa-asterisk"></i> To Do
                         </a>
-                        <a class="dropdown-item" href="#" (click)="statusChange('In Progress')">
+                        <a class="dropdown-item" (click)="statusChange('In Progress')">
                             <i class="fa fa-hourglass-half"></i> In Progress
                         </a>
-                        <a class="dropdown-item" href="#" (click)="statusChange('Ready To Test')">
+                        <a class="dropdown-item" (click)="statusChange('Ready To Test')">
                             <i class="fa fa-flask"></i> Ready To Test
                         </a>
                         <a class="dropdown-item" (click)="statusChange('Done')">

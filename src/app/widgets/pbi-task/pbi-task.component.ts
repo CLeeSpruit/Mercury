@@ -1,3 +1,4 @@
+import { TfsService } from './../../services/tfs.service';
 import { WorkItem } from './../../models/work-item';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -14,7 +15,7 @@ export class PbiTaskComponent implements OnInit {
     statusPopup = false;
     hoursPopup = false;
 
-    constructor() { }
+    constructor(private tfsService: TfsService) { }
 
     ngOnInit() {
     }
@@ -28,17 +29,20 @@ export class PbiTaskComponent implements OnInit {
     }
 
     statusChange(status: string) {
-        switch (status) {
-            case TaskStatus.todo:
-                break;
-            case TaskStatus.inProgress:
-                break;
-            case TaskStatus.testing:
-                break;
-            case TaskStatus.done:
-                break;
-            default:
-                break;
+        this.toggleStatus();
+        if (status !== '') {
+            this.tfsService.editWorkItem(this.task.id, <WorkItem>{state: status}).subscribe(data =>
+                this.task.state = status
+            );
+        }
+    }
+
+    hoursChange(hours: number) {
+        this.toggleHours();
+        if (hours) {
+            this.tfsService.editWorkItem(this.task.id, <WorkItem>{remainingWork: hours}).subscribe(data =>
+                this.task.remainingWork = hours
+            );
         }
     }
 }

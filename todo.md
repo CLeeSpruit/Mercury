@@ -3,7 +3,6 @@
 ## Sprint Page
 
 ### Display
-* Display subtasks under PBIs
 * Display by priority
 
 ### PBI
@@ -13,10 +12,10 @@
 
 ### Tasks
 * Add ability to add tasks
-* Add ability to change the status of tasks
 * Add ability to edit tasks name
 * Add ability to delete tasks
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
+* When changing a task status, it moves the pbi to a different column
 
 ## Cleanup
 * Remove importing ALL of bootstrap in files

@@ -15,7 +15,8 @@ export class TfsService {
     private options: RequestOptionsArgs = {
         headers: new Headers({
             'cache-control': 'no-cache',
-            'authorization': `Basic ${this.accessCode}`
+            'authorization': `Basic ${this.accessCode}`,
+            'Content-Type': 'application/json-patch+json'
         })
     };
 
@@ -55,21 +56,47 @@ export class TfsService {
 
     runQuery(queryId: string) {
         return this.http.get(`${this.baseLocationOpus}wit/wiql/${queryId}`, this.options)
-        .map(res => {
-            const payload = res.json();
-            if (payload.workItems) {
-                return payload.workItems.map(wi => {
-                    return wi.id;
-                });
-            }
-            return payload;
-        });
+            .map(res => {
+                const payload = res.json();
+                if (payload.workItems) {
+                    return payload.workItems.map(wi => {
+                        return wi.id;
+                    });
+                }
+                return payload;
+            });
     }
 
     getSpecificWorkItems(itemIds: Array<string>) {
         const ids = itemIds.toString();
         return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options)
             .map(this.mapWorkItems.bind(this));
+    }
+
+    editWorkItem(itemId: number, changes: WorkItem) {
+        // Map changes to items that the server can parse
+        const allChanges = [];
+
+        if (changes.remainingWork) {
+            allChanges.push({
+                op: 'replace',
+                path: '/fields/Microsoft.VSTS.Scheduling.RemainingWork',
+                value: changes.remainingWork
+            });
+        }
+
+        if (changes.state) {
+            allChanges.push({
+                op: 'replace',
+                path: '/fields/System.State',
+                value: changes.state
+            });
+        }
+
+        return this.http.patch(
+            `${this.baseLocationGeneric}wit/workitems/${itemId}?api-version=1.0`,
+            JSON.stringify(allChanges),
+            this.options);
     }
 
     private handleError(error: Response | any, caught: Observable<any>) {
@@ -108,9 +135,9 @@ export class TfsService {
                     description: wi.fields['System.Description'],
                     childrenIds: wi.relations
                         .map((relation: any) => {
-                        if (relation.rel === 'System.LinkTypes.Hierarchy-Forward') {
-                            return this.stripUrl(relation.url);
-                        }
+                            if (relation.rel === 'System.LinkTypes.Hierarchy-Forward') {
+                                return this.stripUrl(relation.url);
+                            }
                         }).filter((relation: any) => {
                             if (relation) { return relation; }
                         })
