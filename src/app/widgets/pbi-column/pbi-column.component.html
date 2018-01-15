@@ -1,4 +1,4 @@
-<div class="col">
+<div class="col" [class.empty]="!list.length">
     <div class="header" [innerHTML]="label"></div>
     <div class="col-body">
         <kb-pbi-card

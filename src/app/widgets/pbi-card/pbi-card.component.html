@@ -1,14 +1,20 @@
 <div class="pbi-card card">
-    <div class="card-body">
+    <h5 class="card-header card-title" [innerHtml]="pbi.title"></h5>
+    <!-- <div class="card-body">
         <h5 class="card-title" [innerHTML]="pbi.id"></h5>
-        <h6 class="card-subtitle" [innerHtml]="pbi.title"></h6>
-        <ul class="list-group list-group-flush">
-            <li
-                class="list-group-item"
-                *ngFor="let child of pbi.children"
-                [innerHtml]="child?.title"
-            ></li>
-        </ul>
-        <a [href]="pbi.url" class="btn btn-primary">Go to TFS</a>
-    </div>
+    </div> -->
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let child of pbi.children">
+            <div class="child text" [innerHtml]="child?.title"></div>
+            <div class="child action-icon">
+                <i 
+                    class="fa fa-2x"
+                    [class.fa-square-o]="child?.state === 'To Do'"
+                    [class.fa-play]="child?.state === 'In Progress'"
+                    [class.fa-test]="child?.state === 'Ready to test'"
+                    [class.fa-check-square-o]="child?.state === 'Done'"
+                    ></i>
+            </div>
+        </li>
+    </ul>
 </div>

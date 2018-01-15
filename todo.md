@@ -12,8 +12,6 @@
 * After displaying task hours, calculate total time needed and display
 
 ### Tasks
-* Display task name
-* Display task status
 * Display task hours
 * Add ability to add tasks
 * Add ability to change the status of tasks
@@ -30,6 +28,7 @@
 * Display a burndown chart
 * Display current sprint velocity
 * Add profile icons to tasks
+* Add a link to the original task in TFS
 
 ### New Sprint Page
 * Set dates
