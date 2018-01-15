@@ -3,6 +3,7 @@ import { TfsService } from './../services/tfs.service';
 import { Sprint } from './../models/sprint';
 import { Component, OnInit } from '@angular/core';
 
+import { TaskStatus } from './../shared/task-status';
 @Component({
     selector: 'kb-sprint',
     templateUrl: './sprint.component.html',
@@ -54,17 +55,22 @@ export class SprintComponent implements OnInit {
         this.workItems.forEach((wi: WorkItem) => {
             if (wi.workItemType === 'Product Backlog Item') {
                 this.attachChildren(wi);
-                switch (wi.boardColumn) {
-                    case 'Commited': {
-                        this.todo.push(wi);
-                        break;
-                    }
-                    case 'Done': {
-                        this.done.push(wi);
-                        break;
-                    }
-                    default:
-                        this.inProgress.push(wi);
+
+                // To do: No tasks have been assigned
+                // In progress: One or more tasks have been moved to 'In Progress'
+                // Testing: At least one task have been moved to 'Ready to Test', overwrites in progress
+                // Done: All tasks have been moved to done
+
+                if (!wi.children || !wi.children.length) {
+                    this.todo.push(wi);
+                } else if (wi.children.every(child => child.state === TaskStatus.done)) {
+                    this.done.push(wi);
+                } else if (wi.children.find(child => child.state === TaskStatus.testing)) {
+                    this.testing.push(wi);
+                } else if (wi.children.find(child => child.state === TaskStatus.inProgress)) {
+                    this.inProgress.push(wi);
+                } else {
+                    this.todo.push(wi);
                 }
             }
         });
