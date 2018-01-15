@@ -1,0 +1,55 @@
+$blue: #003DAD;
+$red: #770101;
+$green: #287228;
+$dgray: #555;
+
+.iconbg {
+    background-color: $dgray;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+
+    &::after{
+        font-size: 10em;
+        color: rgba(255, 255, 255, 0.25);
+        position: absolute;
+        bottom: -.5em;
+        right: 0px;
+        content: '\f110';
+        font-family: FontAwesome;
+    }
+}
+
+.publish {
+    background-color: $red;
+
+    &::after{
+        content: '\f1e2';
+    }
+}
+
+.trac {
+    background-color: $green;
+
+    &::after{
+        content: '\f074';
+    }
+}
+
+.op {
+    background-color: $blue;
+
+    &::after{
+        content: '\f135';
+    }
+}
+
+.test {
+    background-color: $green;
+
+    &::after{
+        font-size: 9em;
+        content: '\f0c3';
+        transform: rotate(-45deg);
+    }
+}

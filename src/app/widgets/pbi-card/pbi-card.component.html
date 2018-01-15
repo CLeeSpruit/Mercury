@@ -1,10 +1,16 @@
 <div class="pbi-card card container">
-    <div class="card-header row">
-        <div class="col-md-11">
+    <div class="card-header row"
+        [class.iconbg]="keyword"
+        [class.publish]="keyword === 'publish'"
+        [class.trac]="keyword === 'trac'"
+        [class.test]="keyword === 'test'"
+        [class.op]="keyword === 'op'"
+        >
+        <div class="col-md-10">
             <h6 class="card-subtitle" [innerHtml]="pbi.id"></h6>
             <h5 class="card-title" [innerHtml]="pbi.title"></h5>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <span class="effort" [innerHtml]="pbi.effort"></span>
             <span class="total-hours" [innerHtml]="pbi.totalHours"></span>
         </div>
