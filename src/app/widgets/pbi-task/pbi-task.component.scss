@@ -1,4 +1,17 @@
+$initals-height: 2em;
+
 .pbi-task {
+    .initials {
+        display: block;
+        text-align: center;
+        display: block;
+        width: $initals-height;
+        height: $initals-height;
+        line-height: $initals-height;
+        border-radius: $initals-height;
+        background-color: #363636;
+        color: #fff;
+    }
     .dropdown {
         cursor: pointer;
     }

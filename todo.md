@@ -1,11 +1,12 @@
 # TODO
-## Rename sprint to cool name
 
 ## Sprint Page
 
 ### Display
 * Emphasize what's currently in progress
-    ** Alternatively, de-emphasize what isn't in progress
+    * Alternatively, de-emphasize what isn't in progress
+* Cross out items that are done
+* Also fix the bug where items that are done do not show up
 
 ### PBI
 * Make Items Draggable in priority
