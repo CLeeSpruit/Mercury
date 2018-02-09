@@ -6,7 +6,6 @@
 * Emphasize what's currently in progress
     * Alternatively, de-emphasize what isn't in progress
 * Cross out items that are done
-* Also fix the bug where items that are done do not show up
 
 ### PBI
 * Make Items Draggable in priority
@@ -18,7 +17,6 @@
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
 * When changing a task status, it moves the pbi to a different column without refreshing
 * Bug: Do not display tasks that have been removed
-* Bug: Done tasks should display
 * Bug: Icon for testing tasks should display
 
 ## Cleanup

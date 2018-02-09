@@ -47,7 +47,10 @@ export class TfsService {
     }
 
     getWorkAssignedQuery() {
-        return this.http.get(`${this.baseLocationOpus}wit/queries/Shared%20Queries/Work%20Assigned`, this.options)
+        // TODO: Get this query into shared queries for other users
+        const sharedLocation = '/Shared%20Queries/Work%20Assigned';
+        const myLocation = '/My%20Queries/Kanban';
+        return this.http.get(`${this.baseLocationOpus}wit/queries${myLocation}`, this.options)
             .map(res => {
                 const payload = res.json();
                 return payload.id || payload;
