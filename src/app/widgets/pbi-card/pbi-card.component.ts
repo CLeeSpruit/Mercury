@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { WorkItem } from './../../models/work-item';
 import { SprintService } from './../../services/sprint.service';
+import { TfsService } from './../../services/tfs.service';
 
 @Component({
     selector: 'hg-pbi-card',
@@ -11,7 +12,10 @@ export class PbiCardComponent implements OnChanges {
     @Input() pbi: WorkItem;
     keyword: string;
 
-    constructor(private sprintService: SprintService) { }
+    constructor(
+        private sprintService: SprintService,
+        private tfsService: TfsService
+    ) { }
 
     ngOnChanges() {
         if (this.pbi) {
@@ -19,8 +23,24 @@ export class PbiCardComponent implements OnChanges {
         }
     }
 
-    taskChanged(wi: WorkItem) {
-        this.sprintService.sendChangedWorkItem(wi);
+    pbiChanged(wi: WorkItem) {
+        const foundIndex = this.pbi.children.findIndex(child => child.id === wi.id);
+        if (foundIndex !== -1) {
+            this.pbi.children[foundIndex] = wi;
+        }
+        this.sprintService.sendChangedWorkItem(this.pbi);
+    }
+
+    newTask(task: WorkItem) {
+        this.tfsService.createTask(task, this.pbi).subscribe((data: WorkItem) => {
+            if (this.pbi.children) {
+                this.pbi.children = new Array(...this.pbi.children, data);
+            } else {
+                this.pbi.children = [data];
+            }
+
+            this.pbiChanged(this.pbi);
+        });
     }
 
     private parseHeader() {

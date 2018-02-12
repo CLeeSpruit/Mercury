@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import { WorkItem } from './../models/work-item';
 import { Sprint } from './../models/sprint';
 import { WorkItemMapper } from './../shared/work-item-mapper';
+import { WorkItemTypes } from './../shared/work-item-types';
 
 @Injectable()
 export class TfsService {
@@ -114,8 +115,20 @@ export class TfsService {
             this.options);
     }
 
-    createWorkItem(additions: WorkItem) {
-        const allChanges = [];
+    createTask(newItem: WorkItem, parent: WorkItem) {
+        if (!newItem.title) {
+            // return Observable.throw('Title is required!');
+        }
+
+        const type = WorkItemTypes.task;
+        const itemToBeAdded = this.workItemMapper.createNewTfsTask(newItem, parent);
+
+        return this.http.patch(
+            `${this.baseLocationOpus}wit/workitems/$${type}?api-version=1.0`,
+            JSON.stringify(itemToBeAdded),
+            this.options).map(
+                this.mapWorkItems.bind(this)
+            );
     }
 
     private handleError(error: Response | any, caught: Observable<any>) {

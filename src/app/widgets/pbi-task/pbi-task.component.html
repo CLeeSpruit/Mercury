@@ -5,15 +5,15 @@
             [style.background-color]="initialsColor"
             *ngIf="initials" 
             [innerHtml]="initials"
-            ></span>
+        ></span>
     </div>
     
-    <div class="child text col-7">
+    <div class="child text col-7" *ngIf="!isNew">
         <span
             *ngIf="!titleEditable"
             [innerHtml]="task.title"
             (dblclick)="editTitle()"
-            ></span>
+        ></span>
         <input
             #titleInput
             *ngIf="titleEditable"
@@ -22,8 +22,24 @@
             (blur)="saveTitle(titleInput.value)"
         />
     </div>
+    <div class="child text col-7" *ngIf="isNew">
+        <span
+            *ngIf="!titleEditable"
+            class="new"
+            [innerHtml]="'Add New'"
+            (click)="editTitle()"
+        ></span>
+        <input
+            #titleInput
+            *ngIf="titleEditable"
+            type="text"
+            (blur)="saveTitle(titleInput.value)"
+            (enter)="saveTitle(titleInput.value, true)"
+        />
+    </div>
+
     <div class="child col-3">
-        <div class="btn-group" role="group">
+        <div class="btn-group" role="group" *ngIf="!isNew">
             <div class="dropdown btn-group">
                 <a
                     class="btn btn-outline-secondary"

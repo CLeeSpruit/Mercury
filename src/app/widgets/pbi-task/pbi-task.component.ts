@@ -13,7 +13,9 @@ import { TaskStatus } from './../../shared/task-status';
 })
 export class PbiTaskComponent implements OnChanges {
     @Input() task: WorkItem;
+    @Input() isNew = false;
     @Output() taskChanged: EventEmitter<WorkItem> = new EventEmitter<WorkItem>();
+    @Output() newTask: EventEmitter<WorkItem> = new EventEmitter<WorkItem>();
     @ViewChild('initials') initial: HTMLElement;
 
     statusPopup = false;
@@ -32,6 +34,10 @@ export class PbiTaskComponent implements OnChanges {
         if (this.task && this.task.assignedTo) {
             this.initials = this.parseInitials(this.task.assignedTo);
             this.initialsColor = this.generateColor(this.initials);
+        } else if (this.isNew) {
+            this.task = <WorkItem>{
+                title: 'Add New'
+            };
         }
     }
 
@@ -54,13 +60,21 @@ export class PbiTaskComponent implements OnChanges {
         this.titleEditable = true;
     }
 
-    saveTitle(title: string) {
+    saveTitle(title: string, addAnother: boolean = false) {
         this.titleEditable = false;
-
-        if (title !== '' && this.task.title !== title) {
-            this.tfsService.editWorkItem(this.task.id, <WorkItem>{ title: title }).subscribe(data =>
-                this.task.title = title
-            );
+        if (title !== '' && (this.isNew || this.task.title !== title)) {
+            if (this.isNew) {
+                this.task.title = title;
+                this.isNew = false;
+                this.newTask.emit(this.task);
+                if (addAnother) {
+                    // TODO: Set focus to next text
+                }
+            } else {
+                this.tfsService.editWorkItem(this.task.id, <WorkItem>{ title: title }).subscribe(data =>
+                    this.task.title = title
+                );
+            }
         }
     }
 

@@ -19,7 +19,10 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let child of pbi.children">
-            <hg-pbi-task [task]="child" (taskChanged)="taskChanged($event)"></hg-pbi-task>
+            <hg-pbi-task [task]="child" (taskChanged)="pbiChanged($event)"></hg-pbi-task>
+        </li>
+        <li class="list-group-item">
+            <hg-pbi-task [isNew]="true" (newTask)="newTask($event)"></hg-pbi-task>
         </li>
     </ul>
 </div>

@@ -34,8 +34,30 @@ export class WorkItemMapper {
         }
     }
 
-    createNewTfsTask = (task: WorkItem) => {
+    createNewTfsTask = (newTask: WorkItem, parent: WorkItem) => {
+        const allChanges = [];
 
+        if (newTask.title) {
+            allChanges.push(this.buildField(newTask, 'title'));
+        } else {
+            // Title is required
+            return null;
+        }
+
+        if (parent.iterationPath) {
+            allChanges.push(this.buildField(parent, 'iterationPath'));
+        }
+
+        allChanges.push({
+            op: 'add',
+            path: '/relations/-',
+            value: {
+                rel: 'System.LinkTypes.Hierarchy-Reverse',
+                url: this.buildUrl(parent.id)
+            }
+        });
+
+        return allChanges;
     }
 
     mapWorkItem = (wi: any) => {

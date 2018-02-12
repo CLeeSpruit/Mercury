@@ -19,4 +19,10 @@ $initals-height: 2em;
     &.in-progress {
         font-weight: 700;
     }
+
+    .new {
+        cursor: pointer;
+        font-style: italic;
+        color: #aaa;
+    }
 }
