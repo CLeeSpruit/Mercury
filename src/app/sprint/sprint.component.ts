@@ -7,6 +7,8 @@ import { SprintService } from './../services/sprint.service';
 import { Sprint } from './../models/sprint';
 
 import { TaskStatus } from './../shared/task-status';
+import { WorkItemTypes } from './../shared/work-item-types';
+
 @Component({
     selector: 'hg-sprint',
     templateUrl: './sprint.component.html',
@@ -64,7 +66,7 @@ export class SprintComponent implements OnInit, OnDestroy {
     private sortWork() {
         if (this.workItems && this.workItems.length) {
             this.workItems.forEach((wi: WorkItem) => {
-                if (wi.workItemType === 'Product Backlog Item') {
+                if (wi.workItemType === WorkItemTypes.pbi || wi.workItemType === WorkItemTypes.bug) {
                     this.sortItem(wi);
                     this.columns[wi.column].push(wi);
                 }

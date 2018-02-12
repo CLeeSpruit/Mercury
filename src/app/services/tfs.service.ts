@@ -1,10 +1,12 @@
-import { WorkItem } from './../models/work-item';
-import { Sprint } from './../models/sprint';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+
+import { WorkItem } from './../models/work-item';
+import { Sprint } from './../models/sprint';
+import { WorkItemMapper } from './../shared/work-item-mapper';
 
 @Injectable()
 export class TfsService {
@@ -21,7 +23,8 @@ export class TfsService {
     };
 
     constructor(
-        private http: Http
+        private http: Http,
+        private workItemMapper: WorkItemMapper
     ) { }
 
     getProjects() {
@@ -50,7 +53,8 @@ export class TfsService {
         // TODO: Get this query into shared queries for other users
         const sharedLocation = '/Shared%20Queries/Work%20Assigned';
         const myLocation = '/My%20Queries/Kanban';
-        return this.http.get(`${this.baseLocationOpus}wit/queries${myLocation}`, this.options)
+        const testLocation = '/My%20Queries/Sprint%2036';
+        return this.http.get(`${this.baseLocationOpus}wit/queries${testLocation}`, this.options)
             .map(res => {
                 const payload = res.json();
                 return payload.id || payload;
@@ -110,6 +114,10 @@ export class TfsService {
             this.options);
     }
 
+    createWorkItem(additions: WorkItem) {
+        const allChanges = [];
+    }
+
     private handleError(error: Response | any, caught: Observable<any>) {
         console.error(error.json());
         return Observable.throw(error);
@@ -125,44 +133,11 @@ export class TfsService {
 
         if (payload && payload.value) {
             return payload.value.map((wi: any) => {
-                return <WorkItem>{
-                    id: wi.id,
-                    rev: wi.rev,
-                    url: wi.url,
-                    areaPath: wi.fields['System.AreaPath'],
-                    teamProject: wi.fields['System.TeamProject'],
-                    iterationPath: wi.fields['System.IterationPath'],
-                    workItemType: wi.fields['System.WorkItemType'],
-                    state: wi.fields['System.State'],
-                    reason: wi.fields['System.Reason'],
-                    assignedTo: wi.fields['System.AssignedTo'],
-                    createdDate: new Date(wi.fields['System.CreatedDate']),
-                    createdBy: wi.fields['System.CreatedBy'],
-                    changedDate: new Date(wi.fields['System.ChangedDate']),
-                    changedBy: wi.fields['System.ChangedBy'],
-                    title: wi.fields['System.Title'],
-                    remainingWork: wi.fields['Microsoft.VSTS.Scheduling.RemainingWork'],
-                    backlogPriority: wi.fields['Microsoft.VSTS.Common.BacklogPriority'],
-                    description: wi.fields['System.Description'],
-                    effort: wi.fields['Microsoft.VSTS.Scheduling.Effort'],
-                    childrenIds: wi.relations
-                        .map((relation: any) => {
-                            if (relation.rel === 'System.LinkTypes.Hierarchy-Forward') {
-                                return this.stripUrl(relation.url);
-                            }
-                        }).filter((relation: any) => {
-                            if (relation) { return relation; }
-                        })
-                };
+                return this.workItemMapper.mapWorkItem(wi);
             });
         }
 
         return payload;
-    }
-
-    private stripUrl(url: string) {
-        // Return only the last series of numbers, which is the id
-        return url.match(/\d*$/)[0];
     }
 }
 
