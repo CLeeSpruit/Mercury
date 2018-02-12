@@ -1,7 +1,9 @@
-import { TfsService } from './../../services/tfs.service';
-import { WorkItem } from './../../models/work-item';
-import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output, OnChanges, ViewChild } from '@angular/core';
 
+import { TfsService } from './../../services/tfs.service';
+import { SprintService } from './../../services/sprint.service';
+
+import { WorkItem } from './../../models/work-item';
 import { TaskStatus } from './../../shared/task-status';
 
 @Component({
@@ -11,6 +13,7 @@ import { TaskStatus } from './../../shared/task-status';
 })
 export class PbiTaskComponent implements OnChanges {
     @Input() task: WorkItem;
+    @Output() taskChanged: EventEmitter<WorkItem> = new EventEmitter<WorkItem>();
     @ViewChild('initials') initial: HTMLElement;
 
     statusPopup = false;
@@ -20,7 +23,10 @@ export class PbiTaskComponent implements OnChanges {
     initials: string;
     initialsColor: string;
 
-    constructor(private tfsService: TfsService) { }
+    constructor(
+        private tfsService: TfsService,
+        private sprintService: SprintService
+    ) { }
 
     ngOnChanges() {
         if (this.task && this.task.assignedTo) {
@@ -70,9 +76,10 @@ export class PbiTaskComponent implements OnChanges {
     statusChange(status: string) {
         this.toggleStatus();
         if (status !== '' && status !== this.task.state) {
-            this.tfsService.editWorkItem(this.task.id, <WorkItem>{ state: status }).subscribe(data =>
-                this.task.state = status
-            );
+            this.tfsService.editWorkItem(this.task.id, <WorkItem>{ state: status }).subscribe(data => {
+                this.task.state = status;
+                this.taskChanged.emit(this.task);
+            });
         }
     }
 

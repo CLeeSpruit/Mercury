@@ -39,4 +39,7 @@ export interface WorkItem {
 
     // VSTS.Scheduling.Effort
     effort: number;
+
+    /*** Mercury-only properties ***/
+    column: string;
 }

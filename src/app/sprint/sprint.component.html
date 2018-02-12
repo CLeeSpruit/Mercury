@@ -4,9 +4,9 @@
     </div>
 
     <div class="board">
-        <hg-pbi-column [list]="todo" label="To Do"></hg-pbi-column>
-        <hg-pbi-column [list]="inProgress" label="In Progress"></hg-pbi-column>
-        <hg-pbi-column [list]="testing" label="Testing"></hg-pbi-column>
-        <hg-pbi-column [list]="done" label="Done"></hg-pbi-column>
+        <hg-pbi-column [list]="columns['To Do']" label="To Do"></hg-pbi-column>
+        <hg-pbi-column [list]="columns['In Progress']" label="In Progress"></hg-pbi-column>
+        <hg-pbi-column [list]="columns['Ready To Test']" label="Testing"></hg-pbi-column>
+        <hg-pbi-column [list]="columns['Done']" label="Done"></hg-pbi-column>
     </div>
 </div>

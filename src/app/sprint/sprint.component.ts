@@ -1,7 +1,10 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
 import { WorkItem } from './../models/work-item';
 import { TfsService } from './../services/tfs.service';
+import { SprintService } from './../services/sprint.service';
 import { Sprint } from './../models/sprint';
-import { Component, OnInit } from '@angular/core';
 
 import { TaskStatus } from './../shared/task-status';
 @Component({
@@ -9,22 +12,26 @@ import { TaskStatus } from './../shared/task-status';
     templateUrl: './sprint.component.html',
     styleUrls: ['./sprint.component.scss']
 })
-export class SprintComponent implements OnInit {
+export class SprintComponent implements OnInit, OnDestroy {
     sprint: Sprint;
     workItems: Array<WorkItem> = new Array<WorkItem>();
     workItemProperties: Array<string> = new Array<string>();
 
-    todo: Array<WorkItem> = new Array<WorkItem>();
-    inProgress: Array<WorkItem> = new Array<WorkItem>();
-    testing: Array<WorkItem> = new Array<WorkItem>();
-    done: Array<WorkItem> = new Array<WorkItem>();
+    columns: Array<Array<WorkItem>> = new Array<Array<WorkItem>>();
 
     private workAssignedQuery: string;
     private workItemIds: Array<string> = new Array<string>(); // They're numbers but whatever.
+    private workItemChangeSubscription: Subscription = new Subscription();
 
     constructor(
-        private tfsService: TfsService
-    ) { }
+        private tfsService: TfsService,
+        private sprintService: SprintService
+    ) {
+        this.columns[TaskStatus.todo] = new Array<WorkItem>();
+        this.columns[TaskStatus.inProgress] = new Array<WorkItem>();
+        this.columns[TaskStatus.testing] = new Array<WorkItem>();
+        this.columns[TaskStatus.done] = new Array<WorkItem>();
+    }
 
     ngOnInit() {
         this.buildWorkItemProperties();
@@ -40,40 +47,69 @@ export class SprintComponent implements OnInit {
 
                 this.tfsService.getSpecificWorkItems(this.workItemIds).subscribe((workItemsData: Array<WorkItem>) => {
                     this.workItems = workItemsData;
-                    this.sortWork();
+                    if (this.workItems) {
+                        this.sortWork();
+                    }
                 });
             });
         });
+
+        this.workItemChangeSubscription = this.sprintService.listenToWorkItemChange().subscribe(this.syncItem.bind(this));
     }
 
-    sortWork() {
-        this.todo = [];
-        this.inProgress = [];
-        this.testing = [];
-        this.done = [];
+    ngOnDestroy() {
+        this.workItemChangeSubscription.unsubscribe();
+    }
 
-        this.workItems.forEach((wi: WorkItem) => {
-            if (wi.workItemType === 'Product Backlog Item') {
-                this.attachChildren(wi);
+    private sortWork() {
+        if (this.workItems && this.workItems.length) {
+            this.workItems.forEach((wi: WorkItem) => {
+                if (wi.workItemType === 'Product Backlog Item') {
+                    this.sortItem(wi);
+                    this.columns[wi.column].push(wi);
+                }
+            });
+        }
+    }
 
-                // To do: No tasks have been assigned
-                // In progress: One or more tasks have been moved to 'In Progress'
-                // Testing: At least one task have been moved to 'Ready to Test', overwrites in progress
-                // Done: All tasks have been moved to done
+    private sortItem(workItem: WorkItem) {
+        // To do: No tasks have been assigned
+        // In progress: One or more tasks have been moved to 'In Progress'
+        // Testing: At least one task have been moved to 'Ready to Test', overwrites in progress
+        // Done: All tasks have been moved to done
+        if (!workItem.children || !workItem.children.length) {
+            this.attachChildren(workItem);
+        }
 
-                if (!wi.children || !wi.children.length) {
-                    this.todo.push(wi);
-                } else if (wi.children.every(child => child.state === TaskStatus.done)) {
-                    this.done.push(wi);
-                } else if (wi.children.find(child => child.state === TaskStatus.testing)) {
-                    this.testing.push(wi);
-                } else if (wi.children.find(child => child.state === TaskStatus.inProgress)) {
-                    this.inProgress.push(wi);
-                } else {
-                    this.todo.push(wi);
+        if (!workItem.children || !workItem.children.length) {
+            workItem.column = TaskStatus.todo;
+        } else if (workItem.children.every(child => child.state === TaskStatus.done)) {
+            workItem.column = TaskStatus.done;
+        } else if (workItem.children.find(child => child.state === TaskStatus.testing)) {
+            workItem.column = TaskStatus.testing;
+        } else if (workItem.children.find(child => child.state === TaskStatus.inProgress)) {
+            workItem.column = TaskStatus.inProgress;
+        } else {
+            workItem.column = TaskStatus.todo;
+        }
+    }
+
+    private syncItem(workItem: WorkItem) {
+        const previousColumn = workItem.column;
+        this.sortItem(workItem);
+
+        if (previousColumn !== workItem.column) {
+            const futureList = this.columns[workItem.column];
+            const previousList = this.columns[previousColumn];
+            if (previousList) {
+                const foundIndex = previousList.findIndex(wi => wi.id === workItem.id);
+                if (foundIndex !== -1) {
+                    previousList.splice(foundIndex, 1);
                 }
             }
-        });
+
+            futureList.push(workItem);
+        }
     }
 
     private attachChildren(pbi: WorkItem) {

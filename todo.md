@@ -15,13 +15,12 @@
 * Add ability to add tasks
 * Add ability to delete tasks
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
-* When changing a task status, it moves the pbi to a different column without refreshing
 * Bug: Do not display tasks that have been removed
 * Bug: Icon for testing tasks should display
+* Add ability to assign a task to a person or self
 
 ## Cleanup
 * Remove importing ALL of bootstrap in files
-* Up test coverage
 
 ## Extras
 ### Sprint Page

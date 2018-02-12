@@ -1,4 +1,4 @@
-<div class="pbi-card card">
+<div class="pbi-card card" *ngIf="pbi">
     <div class="container">
         <div class="card-header row"
             [class.iconbg]="keyword"
@@ -19,7 +19,7 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let child of pbi.children">
-            <hg-pbi-task [task]="child"></hg-pbi-task>
+            <hg-pbi-task [task]="child" (taskChanged)="taskChanged($event)"></hg-pbi-task>
         </li>
     </ul>
 </div>

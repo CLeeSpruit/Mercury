@@ -1,4 +1,4 @@
-<div class="pbi-task row" [class.in-progress]="task.state === 'In Progress'">
+<div class="pbi-task row" [class.in-progress]="task.state === 'In Progress'" *ngIf="task">
     <div class="assigned col-2">
         <span 
             class="initials" 

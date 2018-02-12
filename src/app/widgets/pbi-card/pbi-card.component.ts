@@ -1,5 +1,6 @@
-import { WorkItem } from './../../models/work-item';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { WorkItem } from './../../models/work-item';
+import { SprintService } from './../../services/sprint.service';
 
 @Component({
     selector: 'hg-pbi-card',
@@ -10,12 +11,16 @@ export class PbiCardComponent implements OnChanges {
     @Input() pbi: WorkItem;
     keyword: string;
 
-    constructor() { }
+    constructor(private sprintService: SprintService) { }
 
     ngOnChanges() {
         if (this.pbi) {
             this.parseHeader();
         }
+    }
+
+    taskChanged(wi: WorkItem) {
+        this.sprintService.sendChangedWorkItem(wi);
     }
 
     private parseHeader() {
@@ -24,7 +29,8 @@ export class PbiCardComponent implements OnChanges {
             this.keyword = 'publish';
         } else if (title.toLowerCase().includes('trac')) {
             this.keyword = 'trac';
-        } else if (title.toLowerCase().includes('r & d')) {
+        } else if (title.toLowerCase().includes('r & d') || title.toLowerCase().includes('r&d')
+        ) {
             this.keyword = 'test';
         } else {
             this.keyword = 'op';
