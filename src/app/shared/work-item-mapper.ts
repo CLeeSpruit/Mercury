@@ -6,7 +6,10 @@ import { WorkItem } from '../models/work-item';
 export class WorkItemMapper {
     fields: Map<string, string> = FieldMap;
 
-    createNewTfsPBI = (newPbi: WorkItem, linkIds?: Array<number>) => {
+    createNewTfsPBI = (newPbi: WorkItem, iteration?: string, linkIds?: Array<number>) => {
+        // TODO: Have the option to not add this to the current iteration, but the backlog
+        // TODO: Also don't hard code this
+        iteration = 'OPUS\\Chupacabra\\Sprint 36';
         const allChanges = [];
 
         if (newPbi.title) {
@@ -16,8 +19,8 @@ export class WorkItemMapper {
             return null;
         }
 
-        if (newPbi.description) {
-            allChanges.push(this.buildField(newPbi, 'description'));
+        if (iteration) {
+            allChanges.push(this.buildField(iteration, 'iteration', false));
         }
 
         if (linkIds) {
@@ -26,7 +29,7 @@ export class WorkItemMapper {
                     op: 'add',
                     path: '/relations/-',
                     value: {
-                        rel: 'System.LinkTypes.Hierarchy-Reverse',
+                        rel: 'System.LinkTypes.Hierarchy-Forward',
                         url: this.buildUrl(id)
                     }
                 });
@@ -107,11 +110,11 @@ export class WorkItemMapper {
         return baseUrl + id;
     }
 
-    private buildField(workItem: WorkItem, field: string, operation: string = 'add') {
+    private buildField(value: any, field: string, isProperty = true, operation: string = 'add') {
         return {
             op: operation,
             path: '/fields/' + this.fields.get(field),
-            value: workItem[field]
+            value: isProperty ? value[field] : value
         };
     }
 }

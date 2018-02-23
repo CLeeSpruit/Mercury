@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { WorkItem } from './../models/work-item';
@@ -15,11 +15,15 @@ import { WorkItemTypes } from './../shared/work-item-types';
     styleUrls: ['./sprint.component.scss']
 })
 export class SprintComponent implements OnInit, OnDestroy {
+    @ViewChild('pbiInput') pbiInputBox: HTMLInputElement;
+
     sprint: Sprint;
     workItems: Array<WorkItem> = new Array<WorkItem>();
     workItemProperties: Array<string> = new Array<string>();
 
     columns: Array<Array<WorkItem>> = new Array<Array<WorkItem>>();
+    pbiType: string;
+    showAddNewPbi = false;
 
     private workAssignedQuery: string;
     private workItemIds: Array<string> = new Array<string>(); // They're numbers but whatever.
@@ -61,6 +65,18 @@ export class SprintComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.workItemChangeSubscription.unsubscribe();
+    }
+
+    addPbi(type: string) {
+        this.showAddNewPbi = true;
+        this.pbiType = type;
+    }
+
+    sendPbi() {
+        const title = this.pbiInputBox.textContent;
+        this.tfsService.createPbi(<WorkItem>{title}).subscribe((data: WorkItem) => {
+            // TODO: Assign to column
+        });
     }
 
     private sortWork() {

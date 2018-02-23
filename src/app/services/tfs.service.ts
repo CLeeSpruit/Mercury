@@ -116,12 +116,20 @@ export class TfsService {
     }
 
     createTask(newItem: WorkItem, parent: WorkItem) {
-        if (!newItem.title) {
-            // return Observable.throw('Title is required!');
-        }
-
         const type = WorkItemTypes.task;
         const itemToBeAdded = this.workItemMapper.createNewTfsTask(newItem, parent);
+
+        return this.http.patch(
+            `${this.baseLocationOpus}wit/workitems/$${type}?api-version=1.0`,
+            JSON.stringify(itemToBeAdded),
+            this.options).map(
+                this.mapWorkItems.bind(this)
+            );
+    }
+
+    createPbi(newPbi: WorkItem) {
+        const type = WorkItemTypes.pbi;
+        const itemToBeAdded = this.workItemMapper.createNewTfsPBI(newPbi);
 
         return this.http.patch(
             `${this.baseLocationOpus}wit/workitems/$${type}?api-version=1.0`,
