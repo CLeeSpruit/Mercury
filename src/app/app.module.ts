@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
+
+import { AppRoutesModule } from './app.routes';
+import { EnvironmentsModule } from './environments/environments.module';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -31,7 +35,10 @@ import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
   ],
   imports: [
     BrowserModule,
-    HttpModule
+    HttpModule,
+    RouterModule,
+    AppRoutesModule,
+    EnvironmentsModule
   ],
   providers: [
     TfsService,
