@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TfsEnvironmentService } from '../services/tfs-environment.service';
 import { Deployment } from '../models/deployment.model';
+import { Build } from '../models/build.model';
 
 @Component({
     selector: 'hg-heartbeat',
@@ -9,7 +10,6 @@ import { Deployment } from '../models/deployment.model';
 })
 export class HeartbeatComponent implements OnInit {
     @Input() deployment: Deployment;
-    // buildData: BuildRecord;
 
     constructor(
         private tfsEnvironmentService: TfsEnvironmentService
@@ -19,5 +19,10 @@ export class HeartbeatComponent implements OnInit {
         // this.tfsEnvironmentService.getBuildTimeline(this.build).subscribe((data: BuildRecord) => {
         //     this.buildData = data;
         // });
+    }
+
+    startRelease(buildId: number) {
+        const found = this.deployment.applicableBuilds.find(build => build.id === +buildId);
+        this.tfsEnvironmentService.createRelease(found, this.deployment.release.releaseDefinition).subscribe((data) => {});
     }
 }

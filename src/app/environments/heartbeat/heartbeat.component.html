@@ -49,7 +49,7 @@
                     <option 
                         *ngFor="let applicableBuild of deployment.applicableBuilds"
                         [innerHtml]="applicableBuild.buildNumber"
-                        [value]="applicableBuild.buildNumber"
+                        [value]="applicableBuild.id"
                         ></option>
                 </select>
                 <div class="input-group-append">
