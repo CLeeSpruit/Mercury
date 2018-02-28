@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptionsArgs } from '@angular/http';
+import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { Build } from './models/build.model';
+import { Build } from '../models/build.model';
 
 @Injectable()
 export class TfsEnvironmentService {
@@ -26,15 +26,27 @@ export class TfsEnvironmentService {
         private http: Http
     ) { }
 
-    getBuilds(): Observable<Build> {
+    getBuilds() {
         return this.http.get(`${this.baseLocationOpus}/build/builds`, this.options)
-            .map(res => res.json() as Build)
+            .map((res: Response) => {
+                const response = res.json();
+                return response.value;
+            })
             .catch(this.handleError);
     }
 
     getBuildTimeline(build: Build) {
         return this.http.get(`${this.baseLocationOpus}/build/builds/${build.id}/timeline`, this.options)
             .map(res => res.json())
+            .catch(this.handleError);
+    }
+
+    getDefinitions() {
+        return this.http.get(`${this.baseLocationOpus}/build/definitions`, this.options)
+            .map((res: Response) => {
+                const response = res.json();
+                return response.value;
+            })
             .catch(this.handleError);
     }
 

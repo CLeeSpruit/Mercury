@@ -1,0 +1,27 @@
+<div 
+    class="heartbeat card"
+    [class.border-success]="build.result === 'succeeded'"
+    [class.border-warning]=""
+    [class.border-danger]="build.result === 'failed'"
+    [class.border-info]="build.status === 'inProgress'"
+    >
+    <div class="card-header">
+        <span [innerHtml]="build.definition?.name"></span>
+    </div>
+    <div class="card-body">
+        <p>Status:
+            <span
+                [class.text-success]="build.status === 'completed'"
+                [class.text-info]= "build.status === 'inProgress'"
+                [innerHtml]="build.status"
+            ></span>
+        </p>
+        <p>Result: 
+            <span
+                [class.text-success]="build.result === 'succeeded'"
+                [innerHtml]="build.result"
+            ></span>
+        </p>
+        <p>Last Build: <span [innerHtml]="build.buildNumber"></span></p>
+    </div>
+</div>

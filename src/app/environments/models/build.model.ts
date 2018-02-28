@@ -1,3 +1,4 @@
+import { BuildDefinition } from './build-definition.model';
 export interface Build {
     id: number;
     buildNumber: string;
@@ -5,7 +6,7 @@ export interface Build {
     queueTime: Date;
     startTime: Date;
     finishTime: Date;
-    definition: any; // TODO: Create definition model
+    definition: BuildDefinition;
     buildNumberRevision: number;
     project: any; // TODO: Create project model
     uri: string;
@@ -27,6 +28,10 @@ export interface Build {
 }
 
 // TODO: Const of build status
+// completed, inProgress
+
 // TODO: Const of build results
+// succeeded
+
 // TODO: Const of priorities
 // TODO: Const of reasons
