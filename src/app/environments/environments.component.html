@@ -2,5 +2,10 @@
     <div class="title">
         <h1 class="h1">Environments</h1>
     </div>
-    <hg-heartbeat *ngFor="let build of mostRecentBuilds" [build]="build"></hg-heartbeat>
+    <div class="build">
+        <hg-heartbeat *ngFor="let build of mostRecentBuilds" [build]="build"></hg-heartbeat>
+    </div>
+    <div class="release">
+        <hg-release *ngFor="let release of mostRecentReleases" [release]="release"></hg-release>
+    </div>
 </div>

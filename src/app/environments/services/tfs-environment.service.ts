@@ -41,13 +41,31 @@ export class TfsEnvironmentService {
             .catch(this.handleError);
     }
 
-    getDefinitions() {
+    getBuildDefinitions() {
         return this.http.get(`${this.baseLocationOpus}/build/definitions`, this.options)
             .map((res: Response) => {
                 const response = res.json();
                 return response.value;
             })
             .catch(this.handleError);
+    }
+
+    getReleases() {
+        return this.http.get(`${this.baseLocationOpus}/release/releases`, this.options)
+        .map((res: Response) => {
+            const response = res.json();
+            return response.value;
+        })
+        .catch(this.handleError);
+    }
+
+    getReleaseDefinitions() {
+        return this.http.get(`${this.baseLocationOpus}/release/definitions`, this.options)
+        .map((res: Response) => {
+            const response = res.json();
+            return response.value;
+        })
+        .catch(this.handleError);
     }
 
     private createAuthorization(token: string) {
