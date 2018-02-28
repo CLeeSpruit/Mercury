@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { Build } from '../models/build.model';
+import { Release } from '../models/release.model';
+import { Artifact } from '../models/artifact.model';
 
 @Injectable()
 export class TfsEnvironmentService {
@@ -52,20 +54,46 @@ export class TfsEnvironmentService {
 
     getReleases() {
         return this.http.get(`${this.baseLocationOpus}/release/releases`, this.options)
-        .map((res: Response) => {
-            const response = res.json();
-            return response.value;
-        })
-        .catch(this.handleError);
+            .map((res: Response) => {
+                const response = res.json();
+                return response.value;
+            })
+            .catch(this.handleError);
+    }
+
+    getReleaseDetails(release: Release) {
+        return this.http.get(`${this.baseLocationOpus}/release/releases/${release.id}`, this.options)
+            .map((res: Response) => {
+                const response = res.json();
+                const artifact = <Artifact>{};
+                if (response.environments && response.environments[0]
+                    && response.environments[0].artifacts && response.environments[0].artifacts[0]) {
+                        if (response.environments[0].artifacts[0].version) {
+                            artifact.versionId = response.environments[0].artifacts[0].version.id;
+                            artifact.versionName = response.environments[0].artifacts[0].version.name;
+                        }
+
+                        if (response.environments[0].artifacts[0].branch) {
+                            artifact.branchId = response.environments[0].artifacts[0].branch.id;
+                            artifact.branchName = response.environments[0].artifacts[0].branch.name;
+                        }
+                    }
+                return <Release>{
+                    ...response,
+                    artifact
+                };
+
+            })
+            .catch(this.handleError);
     }
 
     getReleaseDefinitions() {
         return this.http.get(`${this.baseLocationOpus}/release/definitions`, this.options)
-        .map((res: Response) => {
-            const response = res.json();
-            return response.value;
-        })
-        .catch(this.handleError);
+            .map((res: Response) => {
+                const response = res.json();
+                return response.value;
+            })
+            .catch(this.handleError);
     }
 
     private createAuthorization(token: string) {

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Build } from '../models/build.model';
-import { BuildRecord } from '../models/build-record.model';
 import { TfsEnvironmentService } from '../services/tfs-environment.service';
+import { Deployment } from '../models/deployment.model';
 
 @Component({
     selector: 'hg-heartbeat',
@@ -9,16 +8,16 @@ import { TfsEnvironmentService } from '../services/tfs-environment.service';
     styleUrls: ['./heartbeat.component.scss']
 })
 export class HeartbeatComponent implements OnInit {
-    @Input() build: Build;
-    buildData: BuildRecord;
+    @Input() deployment: Deployment;
+    // buildData: BuildRecord;
 
     constructor(
         private tfsEnvironmentService: TfsEnvironmentService
     ) { }
 
     ngOnInit() {
-        this.tfsEnvironmentService.getBuildTimeline(this.build).subscribe((data: BuildRecord) => {
-            this.buildData = data;
-        });
+        // this.tfsEnvironmentService.getBuildTimeline(this.build).subscribe((data: BuildRecord) => {
+        //     this.buildData = data;
+        // });
     }
 }

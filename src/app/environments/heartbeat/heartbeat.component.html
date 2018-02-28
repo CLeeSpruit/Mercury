@@ -1,27 +1,61 @@
-<div 
-    class="heartbeat card"
-    [class.border-success]="build.result === 'succeeded'"
-    [class.border-warning]=""
-    [class.border-danger]="build.result === 'failed'"
-    [class.border-info]="build.status === 'inProgress'"
-    >
-    <div class="card-header">
-        <span [innerHtml]="build.definition?.name"></span>
+<div class="heartbeat card-group">
+    <div class="card-header col-md-1">
+        <span [innerHtml]="deployment.name"></span>
     </div>
-    <div class="card-body">
-        <p>Status:
-            <span
-                [class.text-success]="build.status === 'completed'"
-                [class.text-info]= "build.status === 'inProgress'"
-                [innerHtml]="build.status"
-            ></span>
-        </p>
-        <p>Result: 
-            <span
-                [class.text-success]="build.result === 'succeeded'"
-                [innerHtml]="build.result"
-            ></span>
-        </p>
-        <p>Last Build: <span [innerHtml]="build.buildNumber"></span></p>
+
+    <div class="card">
+        <div class="card-header">Build</div>
+        <div class="card-body">
+            <p>Last Build: <span [innerHtml]="deployment.build?.buildNumber"></span></p>
+            <p>Date: <span [innerHtml]="deployment.build?.finishTime"></span></p>
+            <p>Status:
+                <span
+                [class.text-success]="deployment.build?.status === 'completed'"
+                [class.text-info]= "deployment.build?.status === 'inProgress'"
+                [innerHtml]="deployment.build?.status"
+                ></span>
+            </p>
+            <p>Result: 
+                <span
+                [class.text-success]="deployment.build?.result === 'succeeded'"
+                [innerHtml]="deployment.build?.result"
+                ></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Release</div>
+        <div class="card-body">
+            <p>Last Release: 
+                <span [innerHtml]="deployment.release?.name"></span>
+            </p>
+            <p>From Build: 
+                <span [innerHtml]="deployment.release?.artifact?.versionName"></span>
+            </p>
+            <p>Date: <span [innerHtml]="deployment.release?.createdOn"></span></p>
+            <p>Status: 
+                <span [innerHtml]="deployment.release?.status"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Deploy to Environment</div>
+        <div class="card-body">
+            <div class="input-group">
+                <select class="custom-select" #deploySelect>
+                    <option selected>Select Build</option>
+                    <option 
+                        *ngFor="let applicableBuild of deployment.applicableBuilds"
+                        [innerHtml]="applicableBuild.buildNumber"
+                        [value]="applicableBuild.buildNumber"
+                        ></option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" (click)="startRelease(deploySelect.value)">Deploy</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
