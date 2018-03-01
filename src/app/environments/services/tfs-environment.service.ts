@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 
 import { Build } from '../models/build.model';
 import { Release } from '../models/release.model';
-import { Artifact, ReleaseArtifact } from '../models/artifact.model';
+import { Artifact } from '../models/artifact.model';
 import { ReleaseRequest, ReleaseArtifact } from '../models/release-request.model';
 import { BuildDefinition } from '../models/build-definition.model';
 import { ReleaseDefinition } from '../models/release-definition.model';
