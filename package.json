@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build --prod --output-hashing=false --output-path ./dist",
     "test": "jest --colors",
     "lint": "ng lint",
     "e2e": "ng e2e"
