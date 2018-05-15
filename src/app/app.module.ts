@@ -22,6 +22,7 @@ import { DynamicComponentService } from './services/dynamic-component.service';
 
 import { SprintComponent } from './sprint/sprint.component';
 import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
     PbiCardComponent,
     PbiColumnComponent,
     PbiTaskComponent
+    ,NavigationComponent
   ],
   imports: [
     BrowserModule,

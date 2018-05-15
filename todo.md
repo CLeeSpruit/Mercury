@@ -16,7 +16,7 @@
 * Automatically update the page as the statuses change
 
 ## Sprint Page
-
+* Add "Back to Top" arrow in bottom right corner
 
 ### Display
 * Emphasize what's currently in progress
@@ -40,9 +40,13 @@
 ## Cleanup
 * Remove importing ALL of bootstrap in files
 
-# Config
+## Config
 * Make a config json for each project
 * Make the order of heartbeat environments sortable
+
+## Navigation
+* Warn the user if they logout
+* Display current user
 
 ## Extras
 ### Sprint Page
