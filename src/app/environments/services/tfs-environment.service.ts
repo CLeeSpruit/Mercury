@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -10,64 +9,52 @@ import { Artifact } from '../models/artifact.model';
 import { ReleaseRequest, ReleaseArtifact } from '../models/release-request.model';
 import { BuildDefinition } from '../models/build-definition.model';
 import { ReleaseDefinition } from '../models/release-definition.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class TfsEnvironmentService {
     // TODO: Don't hard code this.
     private baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
     private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
-    // TODO: Especially this
-    private accessCode = this.createAuthorization('lpinsks2xb6nhvw6fxn2474koaq3l5647bg7lkikm7ldhk7qrm4a');
 
-    private options: RequestOptionsArgs = {
-        headers: new Headers({
+    private options = {
+        headers: new HttpHeaders({
             'cache-control': 'no-cache',
-            'authorization': `Basic ${this.accessCode}`,
             'Content-Type': 'application/json'
         })
     };
 
     constructor(
-        private http: Http
+        private http: HttpClient
     ) { }
 
-    getBuilds() {
+    getBuilds(): Observable<Array<Build>> {
         return this.http.get(`${this.baseLocationOpus}/build/builds`, this.options)
-            .map((res: Response) => {
-                const response = res.json();
-                return response.value;
-            })
+            .map(this.getValue)
             .catch(this.handleError);
     }
 
+    // Not used
     getBuildTimeline(build: Build) {
         return this.http.get(`${this.baseLocationOpus}/build/builds/${build.id}/timeline`, this.options)
-            .map(res => res.json())
             .catch(this.handleError);
     }
 
-    getBuildDefinitions() {
+    getBuildDefinitions(): Observable<Array<BuildDefinition>> {
         return this.http.get(`${this.baseLocationOpus}/build/definitions`, this.options)
-            .map((res: Response) => {
-                const response = res.json();
-                return response.value;
-            })
+            .map(this.getValue)
             .catch(this.handleError);
     }
 
-    getReleases() {
+    getReleases(): Observable<Array<Release>> {
         return this.http.get(`${this.baseLocationOpus}/release/releases`, this.options)
-            .map((res: Response) => {
-                const response = res.json();
-                return response.value;
-            })
+            .map(this.getValue)
             .catch(this.handleError);
     }
 
-    getReleaseDetails(release: Release) {
+    getReleaseDetails(release: Release): Observable<Release> {
         return this.http.get(`${this.baseLocationOpus}/release/releases/${release.id}`, this.options)
-            .map((res: Response) => {
-                const response = res.json();
+            .map((response: any) => {
                 const artifact = <Artifact>{};
                 if (response.environments && response.environments[0]
                     && response.environments[0].artifacts && response.environments[0].artifacts[0]) {
@@ -90,11 +77,10 @@ export class TfsEnvironmentService {
             .catch(this.handleError);
     }
 
-    getReleaseDefinitions() {
+    getReleaseDefinitions(): Observable<Array<ReleaseDefinition>> {
         return this.http.get(`${this.baseLocationOpus}/release/definitions`, this.options)
-            .map((res: Response) => {
-                const response = res.json();
-                return response.value;
+            .map((res: any) => {
+                return res.value;
             })
             .catch(this.handleError);
     }
@@ -105,18 +91,11 @@ export class TfsEnvironmentService {
             `${this.baseLocationOpus}/release/releases?api-version=2.2-preview.1`,
             JSON.stringify(this.createReleaseRequest(build, definition)),
             this.options)
-        .map((res: Response) => {
-            const response = res.json();
-            return response.value;
-        })
+        .map(this.getValue)
         .catch(this.handleError);
     }
 
-    private createAuthorization(token: string) {
-        const buff = new Buffer(`:${token}`);
-        return buff.toString('base64');
-    }
-
+    // TODO: Write a response handler
     private handleError(error: Response | any, caught: Observable<any>) {
         console.error(error.json());
         return Observable.throw(error);
@@ -142,5 +121,9 @@ export class TfsEnvironmentService {
             isDraft: false,
             manualEnvironments: []
         };
+    }
+
+    private getValue(res: any) {
+        return res.value;
     }
 }

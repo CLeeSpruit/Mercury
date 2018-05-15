@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptionsArgs } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -13,75 +13,66 @@ import { WorkItemTypes } from './../shared/work-item-types';
 export class TfsService {
     private baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
     private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
-    private accessCode = this.createAuthorization('lpinsks2xb6nhvw6fxn2474koaq3l5647bg7lkikm7ldhk7qrm4a');
 
-    private options: RequestOptionsArgs = {
-        headers: new Headers({
+    private options = {
+        headers: new HttpHeaders({
             'cache-control': 'no-cache',
-            'authorization': `Basic ${this.accessCode}`,
             'Content-Type': 'application/json-patch+json'
         })
     };
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private workItemMapper: WorkItemMapper
     ) { }
 
-    getProjects() {
-        return this.http.get(`${this.baseLocationGeneric}projects`, this.options)
-            .map(res => {
-                return res.json();
-            });
+    getProjects(): Observable<any> {
+        return this.http.get(`${this.baseLocationGeneric}projects`, this.options);
     }
 
+    // Not used currently
     getRecentCommits() {
-        return this.http.get(`${this.baseLocationOpus}git/repositories/OPUS/commits`, this.options)
-            .map(res => {
-                return res.json();
-            });
+        return this.http.get(`${this.baseLocationOpus}git/repositories/OPUS/commits`, this.options);
     }
 
-    getCurrentSprint() {
+    getCurrentSprint(): Observable<Sprint> {
         return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations?$timeframe=current`, this.options)
-            .map(res => {
-                const payload = res.json();
-                return <Sprint>(payload.value[0]) || payload;
+            .map((data: any) => {
+                return <Sprint>(data.value[0]) || data;
             });
     }
 
-    getWorkAssignedQuery() {
+    // TODO: Create a query object
+    getWorkAssignedQuery(): Observable<any> {
         // TODO: Get this query into shared queries for other users
         const sharedLocation = '/Shared%20Queries/Work%20Assigned';
         const myLocation = '/My%20Queries/Kanban';
         const testLocation = '/My%20Queries/Sprint%2036';
         return this.http.get(`${this.baseLocationOpus}wit/queries${testLocation}`, this.options)
-            .map(res => {
-                const payload = res.json();
-                return payload.id || payload;
+            .map((data: any) => {
+                return data.id || data;
             });
     }
 
-    runQuery(queryId: string) {
+    runQuery(queryId: string): Observable<Array<string>> {
         return this.http.get(`${this.baseLocationOpus}wit/wiql/${queryId}`, this.options)
-            .map(res => {
-                const payload = res.json();
-                if (payload.workItems) {
-                    return payload.workItems.map(wi => {
+            .map((data: any) => {
+                if (data.workItems) {
+                    return data.workItems.map(wi => {
                         return wi.id;
                     });
                 }
-                return payload;
+                return data;
             });
     }
 
-    getSpecificWorkItems(itemIds: Array<string>) {
+    getSpecificWorkItems(itemIds: Array<string>): Observable<Array<WorkItem>> {
         const ids = itemIds.toString();
         return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options)
             .map(this.mapWorkItems.bind(this));
     }
 
-    editWorkItem(itemId: number, changes: WorkItem) {
+    editWorkItem(itemId: number, changes: WorkItem): Observable<any> {
         // Map changes to items that the server can parse
         const allChanges = [];
 
@@ -139,19 +130,13 @@ export class TfsService {
             );
     }
 
+    // TODO: Create a responses interceptor for these
     private handleError(error: Response | any, caught: Observable<any>) {
         console.error(error.json());
         return Observable.throw(error);
     }
 
-    private createAuthorization(token: string) {
-        const buff = new Buffer(`:${token}`);
-        return buff.toString('base64');
-    }
-
-    private mapWorkItems(res) {
-        const payload: any = res.json();
-
+    private mapWorkItems(payload) {
         if (payload && payload.value) {
             return payload.value.map((wi: any) => {
                 return this.workItemMapper.mapWorkItem(wi);

@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { AppRoutesModule } from './app.routes';
 import { EnvironmentsModule } from './environments/environments.module';
+import { AuthorizationModule } from './authorization/authorization.module';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -38,7 +39,8 @@ import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
     HttpModule,
     RouterModule,
     AppRoutesModule,
-    EnvironmentsModule
+    EnvironmentsModule,
+    AuthorizationModule
   ],
   providers: [
     TfsService,

@@ -1,6 +1,25 @@
 # TODO
 
+## Authorization
+* Automatically redirect (or show in modal) when auth fails
+* Add link to tfs page to get an auth key
+* Add steps to create auth key
+
+## Environments Page
+* Dates should not be in ISO8601 format
+* Add person requested in Build and Release
+* Add indicator that Deploy went though successfully
+* Add better visual indicators that a build is running
+* Statuses should have better names (not inProgress)
+* Change display to better reflect what's in the Environment
+* Bug: Sometimes the builds to deploy list just disapears for no good reason
+
+## Extras
+* Automatically update the page as the statuses change
+
 ## Sprint Page
+* Columns should expand the entire length of page
+* Buffer at bottom of page
 
 ### Display
 * Emphasize what's currently in progress
@@ -12,11 +31,13 @@
 * After displaying task hours, calculate total time needed and display
 
 ### Tasks
-* Add ability to add tasks
 * Add ability to delete tasks
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
 * Bug: Do not display tasks that have been removed
 * Bug: Icon for testing tasks should display
+* Bug: Adding hours to a new task does not work
+* Bug: New task is put at the bottom of list (after Add New)
+* Bug: New task icon doesn't show up on refresh
 * Add ability to assign a task to a person or self
 
 ## Cleanup
@@ -34,3 +55,5 @@
 * Set Sprint Name (based off of Sprint # -)
 * Set team capacity (days off)
 
+### Changelog Page
+* Post a list of recent bugfixes and features

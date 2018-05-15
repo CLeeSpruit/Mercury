@@ -28,7 +28,7 @@ export interface Build {
 }
 
 // TODO: Const of build status
-// completed, inProgress
+// completed, inProgress, notStarted
 
 // TODO: Const of build results
 // succeeded
