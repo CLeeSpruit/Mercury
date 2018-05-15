@@ -6,7 +6,6 @@
 * If a request returns as not authorized, show modal
 
 ## Environments Page
-* Add person requested in Build and Release
 * Add indicator that Deploy went though successfully
 * Add better visual indicators that a build is running
 * Statuses should have better names (not inProgress)

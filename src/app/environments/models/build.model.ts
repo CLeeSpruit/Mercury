@@ -25,6 +25,8 @@ export interface Build {
     repository: any;
     keepForever: boolean;
     retainedByRelease: boolean;
+
+    dropdownName: string; // Custom field in the dropdown
 }
 
 // TODO: Const of build status

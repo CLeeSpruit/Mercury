@@ -31,13 +31,36 @@ export class TfsEnvironmentService {
     getBuilds(): Observable<Array<Build>> {
         return this.http.get(`${this.baseLocationOpus}/build/builds`, this.options)
             .map((response: any) => {
-                const build: Build = response.value;
-                build.finishTime = new Date(build.finishTime);
-                build.startTime = new Date(build.startTime);
-                build.queueTime = new Date(build.queueTime);
-                return build;
+                const builds: Array<Build> = response.value;
+                return builds.map((build) => {
+                    build.finishTime = new Date(build.finishTime);
+                    build.startTime = new Date(build.startTime);
+                    build.queueTime = new Date(build.queueTime);
+                    build.dropdownName = build.buildNumber;
+                    if (build.sourceBranch) {
+                        build.dropdownName += ` - ${this.parseBranch(build.sourceBranch)}`;
+                    }
+                    if (build.requestedFor && build.requestedFor.displayName) {
+                        build.dropdownName += ` - ${build.requestedFor.displayName}`;
+                    }
+                    if (build.finishTime) {
+                        build.dropdownName += ` - ${build.finishTime.toLocaleDateString()}`;
+                    }
+                    return build;
+                });
             })
             .catch(this.handleError);
+    }
+
+    private parseBranch(sourceBranch: string) {
+        if (!sourceBranch) { return ''; }
+        // zalgo he comes
+        let matches = sourceBranch.match(new RegExp(/(?:refs\/pull\/)(\d+)(?:\/merge)/));
+        // PR build
+        if (matches) { return matches[1]; }
+        // branch build (usually dev or itp)
+        matches = sourceBranch.match(new RegExp(/(?:refs\/heads\/)(\w+)/));
+        return matches ? matches[1] : '';
     }
 
     // Not used
