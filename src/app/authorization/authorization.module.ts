@@ -17,6 +17,9 @@ import { AuthInterceptor } from './services/auth.interceptor';
     providers: [
         AuthorizationService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    ],
+    entryComponents: [
+        SignInComponent
     ]
 })
 export class AuthorizationModule { }

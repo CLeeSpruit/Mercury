@@ -1,9 +1,9 @@
 # TODO
 
 ## Authorization
-* Automatically redirect (or show in modal) when auth fails
-* Add link to tfs page to get an auth key
-* Add steps to create auth key
+* Add "Continue as Guest"
+* Add more reliable way to store PATs
+* If a request returns as not authorized, show modal
 
 ## Environments Page
 * Dates should not be in ISO8601 format

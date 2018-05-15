@@ -18,6 +18,7 @@ import { PbiTaskComponent } from './widgets/pbi-task/pbi-task.component';
 import { TfsService } from './services/tfs.service';
 import { SprintService } from './services/sprint.service';
 import { WorkItemMapper } from './shared/work-item-mapper';
+import { DynamicComponentService } from './services/dynamic-component.service';
 
 import { SprintComponent } from './sprint/sprint.component';
 import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
@@ -45,7 +46,8 @@ import { PbiColumnComponent } from './widgets/pbi-column/pbi-column.component';
   providers: [
     TfsService,
     SprintService,
-    WorkItemMapper
+    WorkItemMapper,
+    DynamicComponentService
   ],
   bootstrap: [AppComponent]
 })

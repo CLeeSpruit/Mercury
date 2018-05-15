@@ -1,6 +1,30 @@
+<div class="shader"></div>
 <div class="sign-in">
     <div class="title">
-        <h1 class="h1">Authorization</h1>
+        <h1>Mercury Task Manager Authorization</h1>
     </div>
-    <input type="text" #authInput (keyup.enter)="signIn(authInput.value)">
+    <div class="body">
+        <div class="field">
+            <span label="auth">Authorization Key *: </span>
+            <input name="auth" type="text" #authInput (keyup.enter)="signIn(authInput.value)">
+        </div>
+        <div class="register">
+            <a href="http://tfs2013-mn:8080/tfs/DefaultCollection/_details/security/tokens">Get an auth key from TFS here <i class="fa fa-external-link"></i></a>
+            <p class="clickable" (click)="toggleExpand()">Directions <i class="fa" [class.fa-caret-down]="!expandInfo" [class.fa-caret-up]="expandInfo"></i></p>
+            <span class="directions" [hidden]="!expandInfo">
+                <ol>
+                    <li>Under "Personal Access Tokens", click "Add"</li>
+                    <li>Add a description (Mercury Task Manager)</li>
+                    <li>Select how long this PAT will be active. Default is 3 months. After that you'll need to create another key.</li>
+                    <li>Keep "All Scopes" selected</li>
+                    <li>Click "Create Token"</li>
+                    <li>Copy and paste the token into the box above. Keep this secure as you will not be able to fetch this token again.</li>
+                </ol>
+            </span>
+        </div>
+        
+        <div class="note">
+            * This is stored in your cookies. If you clear your cookies, you'll need to re-enter your key. 
+        </div>
+    </div>
 </div>

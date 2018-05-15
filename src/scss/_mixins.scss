@@ -1,0 +1,48 @@
+/* =========
+    Mixins
+    Shamelessly stolen from Opus Order App
+   ========= */
+
+// A boxshadow that with a top light source
+@mixin box-shadow($depth: 1px, $color: rgba(0, 0, 0, 0.15)) {
+    box-shadow: 0px $depth $depth $color;
+    -webkit-box-shadow: 0px $depth $depth $color;
+    -moz-box-shadow: 0px $depth $depth $color;
+}
+
+@mixin verticalAlignText($parentHeight) {
+    height: $parentHeight;
+    line-height: $parentHeight;
+}
+
+@mixin verticalAlignElement() {
+    // Requires parent to be defined height or display: flex
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+@mixin unselectable {
+    cursor: pointer;
+	user-select: none;
+	-moz-user-select: none !important;
+	-webkit-user-select: none !important;
+}
+
+@mixin modalize {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -75%);
+    border: 3px solid #3a7bd5;
+    border-radius: 5px;
+    background-color: #fff;
+    @include box-shadow(3px);
+    z-index: 3;
+}
+
+@mixin fontAwesomeIcon($unicode: '\f000', $size: 1em) {
+    font-family: 'FontAwesome';
+    content: $unicode;
+    font-size: $size;
+}
