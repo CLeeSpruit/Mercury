@@ -10,13 +10,13 @@
 * Add better visual indicators that a build is running
 * Statuses should have better names (not inProgress)
 * Change display to better reflect what's in the Environment
+* Heartbeats keep moving around
 
 ## Extras
 * Automatically update the page as the statuses change
 
 ## Sprint Page
-* Columns should expand the entire length of page
-* Buffer at bottom of page
+
 
 ### Display
 * Emphasize what's currently in progress
@@ -39,6 +39,10 @@
 
 ## Cleanup
 * Remove importing ALL of bootstrap in files
+
+# Config
+* Make a config json for each project
+* Make the order of heartbeat environments sortable
 
 ## Extras
 ### Sprint Page

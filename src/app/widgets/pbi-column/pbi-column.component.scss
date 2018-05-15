@@ -1,8 +1,7 @@
 @import '~bootstrap/scss/bootstrap'; // TODO: Import just the parts you need
 
 .col {
-    @extend .col-md-3;
-    float: left;
+    height: 100%;
 
     .header {
         text-align: center;
@@ -11,6 +10,6 @@
 
     .col-body {
         background: #cccccc;
-        height: 100vh; // TODO: Remove
+        height: 100%;
     }
 }

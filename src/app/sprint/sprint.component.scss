@@ -3,6 +3,7 @@ $warning-color: #ffc107;
 $danger-color: #dc3545;
 
 .sprint {
+    padding-bottom: 3em; 
     .title {
         text-align: center;
         padding: 1em;
@@ -40,6 +41,17 @@ $danger-color: #dc3545;
         input.pbi {
             border-color: $info-color !important;
             border-top-left-radius: 0px !important;
+        }
+    }
+
+    .board {
+        display: flex;
+        align-items: stretch;
+
+        hg-pbi-column {
+            float: left;
+            flex-grow: 1;
+            width: 100%;
         }
     }
 }
