@@ -30,7 +30,13 @@ export class TfsEnvironmentService {
 
     getBuilds(): Observable<Array<Build>> {
         return this.http.get(`${this.baseLocationOpus}/build/builds`, this.options)
-            .map(this.getValue)
+            .map((response: any) => {
+                const build: Build = response.value;
+                build.finishTime = new Date(build.finishTime);
+                build.startTime = new Date(build.startTime);
+                build.queueTime = new Date(build.queueTime);
+                return build;
+            })
             .catch(this.handleError);
     }
 
@@ -54,7 +60,7 @@ export class TfsEnvironmentService {
 
     getReleaseDetails(release: Release): Observable<Release> {
         return this.http.get(`${this.baseLocationOpus}/release/releases/${release.id}`, this.options)
-            .map((response: any) => {
+            .map((response: any | Release) => {
                 const artifact = <Artifact>{};
                 if (response.environments && response.environments[0]
                     && response.environments[0].artifacts && response.environments[0].artifacts[0]) {
@@ -67,7 +73,11 @@ export class TfsEnvironmentService {
                         artifact.branchId = response.environments[0].artifacts[0].branch.id;
                         artifact.branchName = response.environments[0].artifacts[0].branch.name;
                     }
+
                 }
+
+                response.createdOn = new Date(response.createdOn);
+                response.modifiedOn = new Date(response.modifiedOn);
                 return <Release>{
                     ...response,
                     artifact

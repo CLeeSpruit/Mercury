@@ -7,7 +7,7 @@
         <div class="card-header">Build</div>
         <div class="card-body">
             <p>Last Build: <span [innerHtml]="deployment.build?.buildNumber"></span></p>
-            <p>Date: <span [innerHtml]="deployment.build?.finishTime"></span></p>
+            <p>Date: <span [innerHtml]="deployment.build?.finishTime | date: 'medium'"></span></p>
             <p>Status:
                 <span
                 [class.text-success]="deployment.build?.status === 'completed'"
@@ -27,7 +27,7 @@
             <p>From Build: 
                 <span [innerHtml]="deployment.release?.artifact?.versionName"></span>
             </p>
-            <p>Date: <span [innerHtml]="deployment.release?.createdOn"></span></p>
+            <p>Date: <span [innerHtml]="deployment.release?.createdOn | date: 'medium'"></span></p>
             <p>Status: 
                 <span [innerHtml]="deployment.release?.status"></span>
             </p>

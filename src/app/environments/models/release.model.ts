@@ -6,8 +6,8 @@ export interface Release {
     id: number;
     name: string;
     status: string; // TODO: Const of release statuses
-    createdOn: Date;
-    modifiedOn: Date;
+    createdOn: Date | string;
+    modifiedOn: Date | string;
     modifiedBy: any; // TODO: User model
     createdBy: any; // TODO: User model
     environments: Array<Environment>;

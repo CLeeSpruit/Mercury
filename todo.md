@@ -6,7 +6,6 @@
 * If a request returns as not authorized, show modal
 
 ## Environments Page
-* Dates should not be in ISO8601 format
 * Add person requested in Build and Release
 * Add indicator that Deploy went though successfully
 * Add better visual indicators that a build is running
