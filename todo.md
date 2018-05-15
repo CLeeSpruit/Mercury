@@ -11,7 +11,6 @@
 * Add better visual indicators that a build is running
 * Statuses should have better names (not inProgress)
 * Change display to better reflect what's in the Environment
-* Bug: Sometimes the builds to deploy list just disapears for no good reason
 
 ## Extras
 * Automatically update the page as the statuses change

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { Build } from './models/build.model';
 import { TfsEnvironmentService } from './services/tfs-environment.service';
 import { BuildDefinition } from './models/build-definition.model';
@@ -13,8 +15,8 @@ import { Deployment } from './models/deployment.model';
 })
 export class EnvironmentsComponent implements OnInit {
     mostRecentBuilds: Array<Build> = new Array<Build>();
-    private builds: Array<Build> = new Array<Build>();
     private buildDefinitions: Array<BuildDefinition> = new Array<BuildDefinition>();
+    private buildsSubject: BehaviorSubject<Array<Build>> = new BehaviorSubject<Array<Build>>(null);
 
     mostRecentReleases: Array<Release> = new Array<Release>();
     private releases: Array<Release> = new Array<Release>();
@@ -28,7 +30,9 @@ export class EnvironmentsComponent implements OnInit {
 
     ngOnInit() {
         this.tfsEnvironmentService.getBuilds().subscribe((data: Array<Build>) => {
-            this.builds = data;
+            // Let the set deployment know it can trigger
+            this.buildsSubject.next(data);
+
             this.tfsEnvironmentService.getBuildDefinitions().subscribe((definitionData: Array<BuildDefinition>) => {
                 this.buildDefinitions = definitionData;
                 this.mostRecentBuilds = this.getMostRecentBuilds(data);
@@ -68,8 +72,14 @@ export class EnvironmentsComponent implements OnInit {
             return;
         }
 
+        this.buildsSubject.filter(builds => !!builds).subscribe((builds: Array<Build>) => {
+            this.populateDeployments(build, release, builds);
+        });
+    }
+
+    private populateDeployments(build: Build, release: Release, builds: Array<Build>) {
         const name = build ? build.definition.name : release.releaseDefinition.name;
-        const applicableBuilds = this.builds.filter(buildListItem => buildListItem.definition.name === name);
+        const applicableBuilds = builds.filter(buildListItem => buildListItem.definition.name === name);
         const foundIndex = this.deployments.findIndex(deploy => deploy.name === name);
 
         if (foundIndex !== -1) {

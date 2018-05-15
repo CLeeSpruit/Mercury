@@ -62,18 +62,16 @@ export class TfsEnvironmentService {
         return this.http.get(`${this.baseLocationOpus}/release/releases/${release.id}`, this.options)
             .map((response: any | Release) => {
                 const artifact = <Artifact>{};
-                if (response.environments && response.environments[0]
-                    && response.environments[0].artifacts && response.environments[0].artifacts[0]) {
-                    if (response.environments[0].artifacts[0].version) {
-                        artifact.versionId = response.environments[0].artifacts[0].version.id;
-                        artifact.versionName = response.environments[0].artifacts[0].version.name;
+                if (response.artifacts && response.artifacts[0] && response.artifacts[0].definitionReference) {
+                    if (response.artifacts[0].definitionReference.version) {
+                        artifact.versionId = response.artifacts[0].definitionReference.version.id;
+                        artifact.versionName = response.artifacts[0].definitionReference.version.name;
                     }
 
-                    if (response.environments[0].artifacts[0].branch) {
-                        artifact.branchId = response.environments[0].artifacts[0].branch.id;
-                        artifact.branchName = response.environments[0].artifacts[0].branch.name;
+                    if (response.artifacts[0].definitionReference.branch) {
+                        artifact.branchId = response.artifacts[0].definitionReference.branch.id;
+                        artifact.branchName = response.artifacts[0].definitionReference.branch.name;
                     }
-
                 }
 
                 response.createdOn = new Date(response.createdOn);
