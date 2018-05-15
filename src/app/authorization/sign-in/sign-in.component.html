@@ -9,7 +9,7 @@
             <input name="auth" type="text" #authInput (keyup.enter)="signIn(authInput.value)">
         </div>
         <div class="register">
-            <a href="http://tfs2013-mn:8080/tfs/DefaultCollection/_details/security/tokens">Get an auth key from TFS here <i class="fa fa-external-link"></i></a>
+            <a href="http://tfs2013-mn:8080/tfs/DefaultCollection/_details/security/tokens">Get an auth key from TFS<i class="fa fa-external-link"></i></a>
             <p class="clickable" (click)="toggleExpand()">Directions <i class="fa" [class.fa-caret-down]="!expandInfo" [class.fa-caret-up]="expandInfo"></i></p>
             <span class="directions" [hidden]="!expandInfo">
                 <ol>
