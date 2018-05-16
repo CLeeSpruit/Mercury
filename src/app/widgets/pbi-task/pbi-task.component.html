@@ -1,4 +1,8 @@
-<div class="pbi-task row" [class.in-progress]="task.state === 'In Progress'" *ngIf="task">
+<div class="pbi-task row" 
+    [class.in-progress]="task.state === 'In Progress'"
+    [class.done]="task.state ==='Done'" 
+    *ngIf="task"
+    >
     <div class="assigned col-2">
         <span 
             class="initials" 
@@ -40,7 +44,7 @@
 
     <div class="child col-3">
         <div class="btn-group" role="group" *ngIf="!isNew">
-            <div class="dropdown btn-group">
+            <div class="dropdown btn-group" *ngIf="task.state !== 'Done' && task.remainingWork !== 0">
                 <a
                     class="btn btn-outline-secondary"
                     role="button"

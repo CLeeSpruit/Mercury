@@ -20,6 +20,13 @@ $initals-height: 2em;
         font-weight: 700;
     }
 
+    &.done {
+        .text {
+            color: #999;
+            text-decoration: line-through;
+        }
+    }
+
     .new {
         cursor: pointer;
         font-style: italic;

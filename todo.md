@@ -21,7 +21,6 @@
 ### Display
 * Emphasize what's currently in progress
     * Alternatively, de-emphasize what isn't in progress
-* Cross out items that are done
 
 ### PBI
 * Make Items Draggable in priority
@@ -36,6 +35,7 @@
 * Bug: New task is put at the bottom of list (after Add New)
 * Bug: New task icon doesn't show up on refresh
 * Add ability to assign a task to a person or self
+* Add more variation for people's name colors
 
 ## Cleanup
 * Remove importing ALL of bootstrap in files
