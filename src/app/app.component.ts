@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewContainerRef, AfterViewInit } from '@angular/core';
-import { DynamicComponentService } from './services/dynamic-component.service';
+import { DynamicComponentService } from '@shared/services/dynamic-component.service';
 
 @Component({
     selector: 'hg-root',

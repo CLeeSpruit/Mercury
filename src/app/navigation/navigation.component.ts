@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthorizationService } from '../authorization/services/authorization.service';
+import { AuthorizationService } from '@auth/services/authorization.service';
 
 @Component({
     selector: 'hg-navigation',

@@ -1,4 +1,4 @@
-import { WorkItem } from './../../models/work-item';
+import { WorkItem } from '@sprint/models/work-item';
 import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({

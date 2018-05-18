@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { WorkItem } from './../models/work-item';
-import { TfsService } from './../services/tfs.service';
-import { SprintService } from './../services/sprint.service';
-import { Sprint } from './../models/sprint';
+import { WorkItem } from '@sprint/models/work-item';
+import { TfsService } from '@sprint/services/tfs.service';
+import { SprintService } from '@sprint/services/sprint.service';
+import { Sprint } from '@sprint/models/sprint';
 
-import { TaskStatus } from './../shared/task-status';
-import { WorkItemTypes } from './../shared/work-item-types';
+import { TaskStatus } from '@sprint/constants/task-status';
+import { WorkItemTypes } from '@sprint/constants/work-item-types';
 
 @Component({
     selector: 'hg-sprint',

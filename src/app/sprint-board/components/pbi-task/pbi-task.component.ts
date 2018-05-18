@@ -1,10 +1,9 @@
 import { Component, EventEmitter, OnInit, Input, Output, OnChanges, ViewChild } from '@angular/core';
 
-import { TfsService } from './../../services/tfs.service';
-import { SprintService } from './../../services/sprint.service';
-
-import { WorkItem } from './../../models/work-item';
-import { TaskStatus } from './../../shared/task-status';
+import { TfsService } from '@sprint/services/tfs.service';
+import { SprintService } from '@sprint/services/sprint.service';
+import { WorkItem } from '@sprint/models/work-item';
+import { TaskStatus } from '@sprint/constants/task-status';
 
 @Component({
     selector: 'hg-pbi-task',

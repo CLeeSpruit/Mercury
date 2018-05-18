@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Build } from '../models/build.model';
 import { Release } from '../models/release.model';
@@ -9,7 +10,6 @@ import { Artifact } from '../models/artifact.model';
 import { ReleaseRequest, ReleaseArtifact } from '../models/release-request.model';
 import { BuildDefinition } from '../models/build-definition.model';
 import { ReleaseDefinition } from '../models/release-definition.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class TfsEnvironmentService {

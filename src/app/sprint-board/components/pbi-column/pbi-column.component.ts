@@ -1,5 +1,5 @@
-import { WorkItem } from './../../models/work-item';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { WorkItem } from '@sprint/models/work-item';
 
 @Component({
     selector: 'hg-pbi-column',

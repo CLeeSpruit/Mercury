@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { WorkItem } from './../models/work-item';
-import { Sprint } from './../models/sprint';
-import { WorkItemMapper } from './../shared/work-item-mapper';
-import { WorkItemTypes } from './../shared/work-item-types';
+import { WorkItem } from '@sprint/models/work-item';
+import { Sprint } from '@sprint/models/sprint';
+import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
+import { WorkItemTypes } from '@sprint/constants/work-item-types';
 
 @Injectable()
 export class TfsService {

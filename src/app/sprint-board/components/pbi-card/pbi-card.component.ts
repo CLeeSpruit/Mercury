@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { WorkItem } from './../../models/work-item';
-import { SprintService } from './../../services/sprint.service';
-import { TfsService } from './../../services/tfs.service';
+import { WorkItem } from '@sprint/models/work-item';
+import { SprintService } from '@sprint/services/sprint.service';
+import { TfsService } from '@sprint/services/tfs.service';
 
 @Component({
     selector: 'hg-pbi-card',

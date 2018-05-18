@@ -1,4 +1,4 @@
-import { TfsService } from './../services/tfs.service';
+import { TfsService } from '@sprint/services/tfs.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

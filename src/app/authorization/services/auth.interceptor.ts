@@ -1,9 +1,10 @@
 import { Injectable, ComponentRef } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
-import { AuthorizationService } from './authorization.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
-import { DynamicComponentService } from '../../services/dynamic-component.service';
+
+import { DynamicComponentService } from '@shared/services/dynamic-component.service';
+import { AuthorizationService } from './authorization.service';
 import { SignInComponent } from '../sign-in/sign-in.component';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
