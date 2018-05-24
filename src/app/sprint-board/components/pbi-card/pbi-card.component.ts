@@ -43,6 +43,10 @@ export class PbiCardComponent implements OnChanges {
         });
     }
 
+    selectPbi(wi: WorkItem) {
+        this.sprintService.setSelectedPbi(wi);
+    }
+
     private parseHeader() {
         const title = this.pbi.title;
         if (title.toLowerCase().includes('publish')) {

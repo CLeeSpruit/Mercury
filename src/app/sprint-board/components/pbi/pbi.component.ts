@@ -1,19 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { WorkItem } from '@sprint/models/work-item';
+import { SprintService } from '@sprint/services/sprint.service';
 
 @Component({
-    styleUrls: [ 'pbi.component.scss'],
+    styleUrls: ['pbi.component.scss'],
     templateUrl: 'pbi.component.html',
     selector: 'hg-pbi'
 })
-export class PbiComponent implements OnInit{
-    @Input() pbi: WorkItem;
-
+export class PbiComponent implements OnInit {
+    pbi: WorkItem;
     pbiTitle: string;
 
-    constructor() { }
+    constructor(private sprintService: SprintService) { }
 
     ngOnInit() {
+        this.sprintService.getSelectedPbi().subscribe(pbi => {
+            this.pbi = pbi;
+            this.setPbi();
+        });
+    }
+
+    private setPbi() {
         this.pbiTitle = `${this.pbi.id} - ${this.pbi.title}`;
     }
 }

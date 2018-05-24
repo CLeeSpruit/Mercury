@@ -6,6 +6,8 @@ import { PbiTaskComponent } from '@sprint/components/pbi-task/pbi-task.component
 import { SprintComponent } from '@sprint/components/sprint/sprint.component';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
+import { CommonModule } from '@angular/common';
+import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 
 @NgModule({
     declarations: [
@@ -17,7 +19,9 @@ import { TfsService } from '@sprint/services/tfs.service';
     ],
     providers: [
         SprintService,
-        TfsService
-    ]
+        TfsService,
+        WorkItemMapper
+    ],
+    imports: [CommonModule]
 })
 export class SprintBoardModule { }

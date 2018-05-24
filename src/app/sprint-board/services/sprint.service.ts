@@ -6,6 +6,7 @@ import { WorkItem } from '../models/work-item';
 @Injectable()
 export class SprintService {
     private workItemChangedSub: Subject<WorkItem> = new Subject<WorkItem>();
+    private selectedPbi: Subject<WorkItem> = new Subject<WorkItem>();
 
     listenToWorkItemChange() {
         return this.workItemChangedSub.asObservable();
@@ -13,5 +14,14 @@ export class SprintService {
 
     sendChangedWorkItem(workItem: WorkItem) {
         this.workItemChangedSub.next(workItem);
+    }
+
+    getSelectedPbi() {
+        return this.selectedPbi.asObservable();
+    }
+
+    setSelectedPbi(pbi: WorkItem) {
+        // TODO: Validate this is a PBI
+        this.selectedPbi.next(pbi);
     }
 }

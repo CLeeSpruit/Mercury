@@ -55,3 +55,13 @@ $danger-color: #dc3545;
         }
     }
 }
+
+// Flex for split
+.sprint-board {
+    display: flex;
+}
+
+hg-sprint, .sprint {
+    float: left;
+    width: 100%;
+}
