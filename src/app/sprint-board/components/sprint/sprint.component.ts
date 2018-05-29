@@ -25,7 +25,6 @@ export class SprintComponent implements OnInit, OnDestroy {
     pbiType: string;
     showAddNewPbi = false;
 
-    private workAssignedQuery: string;
     private workItemIds: Array<string> = new Array<string>(); // They're numbers but whatever.
     private workItemChangeSubscription: Subscription = new Subscription();
 
@@ -43,14 +42,11 @@ export class SprintComponent implements OnInit, OnDestroy {
         this.buildWorkItemProperties();
         this.tfsService.getCurrentSprint().subscribe((data: Sprint) => {
             this.sprint = data;
-        });
 
-        this.tfsService.getWorkAssignedQuery().subscribe((queryData: string) => {
-            this.workAssignedQuery = queryData;
+            this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<string>) => {
+                this.workItemIds = workItems;
 
-            this.tfsService.runQuery(this.workAssignedQuery).subscribe((itemsData: Array<string>) => {
-                this.workItemIds = itemsData;
-
+                // TODO: This might no longer be needed if the query is done correctly
                 this.tfsService.getSpecificWorkItems(this.workItemIds).subscribe((workItemsData: Array<WorkItem>) => {
                     this.workItems = workItemsData;
                     if (this.workItems) {

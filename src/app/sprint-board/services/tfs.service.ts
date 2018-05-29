@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { AsyncSubject } from 'rxjs/AsyncSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -8,6 +9,7 @@ import { WorkItem } from '@sprint/models/work-item';
 import { Sprint } from '@sprint/models/sprint';
 import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
+import { QueryService } from '@sprint/services/query.service';
 
 @Injectable()
 export class TfsService {
@@ -23,7 +25,8 @@ export class TfsService {
 
     constructor(
         private http: HttpClient,
-        private workItemMapper: WorkItemMapper
+        private workItemMapper: WorkItemMapper,
+        private queryService: QueryService
     ) { }
 
     getProjects(): Observable<any> {
@@ -42,27 +45,14 @@ export class TfsService {
             });
     }
 
-    // TODO: Create a query object
-    getWorkAssignedQuery(): Observable<any> {
-        // TODO: Get this query into shared queries for other users
-        const sharedLocation = '/Shared%20Queries/Work%20Assigned';
-        const myLocation = '/My%20Queries/Kanban';
-        const testLocation = '/My%20Queries/Sprint%2036';
-        return this.http.get(`${this.baseLocationOpus}wit/queries${testLocation}`, this.options)
-            .map((data: any) => {
-                return data.id || data;
-            });
+    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
+        return this.queryService.getIterationWorkItems(sprint);
     }
 
-    runQuery(queryId: string): Observable<Array<string>> {
-        return this.http.get(`${this.baseLocationOpus}wit/wiql/${queryId}`, this.options)
+    getAllSprints(): Observable<Array<Sprint>> {
+        return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations`, this.options)
             .map((data: any) => {
-                if (data.workItems) {
-                    return data.workItems.map(wi => {
-                        return wi.id;
-                    });
-                }
-                return data;
+                return <Array<Sprint>>(data.value);
             });
     }
 
