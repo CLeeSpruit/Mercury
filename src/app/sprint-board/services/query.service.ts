@@ -9,6 +9,8 @@ import { Sprint } from '@sprint/models/sprint';
 export class QueryService {
     private baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
     private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
+    private myQueries = '/My%20Queries';
+    private folder = '/Mercury';
 
     private options = {
         headers: new HttpHeaders({
@@ -30,17 +32,14 @@ export class QueryService {
             name: 'Mercury',
             isFolder: true
         };
-        // TODO: Find out what this is
-        // TODO: Pretty sure this is the user Id
-        const queryLocation = 'e7cc2465-418f-4a51-8efe-23cce38547f6';
-        return this.http.post(`${this.baseLocationOpus}wit/queries/${queryLocation}?api-version=1.0`, query, this.options)
+        return this.http.post(`${this.baseLocationOpus}wit/queries/${this.myQueries}?api-version=1.0`, query, this.options)
             .map((data: any) => data.id);
     }
 
     // Returns the id of the folder
     private getMercuryFolder(): Observable<string> {
-        // TODO: Consider storing this in localstorage
-        const mercuryLocation = '/My%20Queries/Mercury';
+        // TODO: Consider storing the folder id in localstorage
+        const mercuryLocation = this.myQueries + this.folder;
         return this.http.get(`${this.baseLocationOpus}wit/queries${mercuryLocation}`, this.options).map((data: any) => data.id);
     }
 
@@ -104,8 +103,7 @@ export class QueryService {
     }
 
     private getQuery(name: string) {
-        const mercuryLocation = '/My%20Queries/Mercury';
-        // const htmlSafeName = name.replace(' ', '%20');
+        const mercuryLocation = this.myQueries + this.folder;
         return this.http.get(
             `${this.baseLocationOpus}wit/queries${mercuryLocation}/${name}`, this.options)
             .map((data: any) => data.id);
@@ -148,7 +146,6 @@ export class QueryService {
         return this.createQuery(query);
     }
 
-    // TODO: Find where this is called
     private runQuery(queryId: string): Observable<Array<string>> {
         return this.http.get(`${this.baseLocationOpus}wit/wiql/${queryId}`, this.options)
             .map((data: any) => {
