@@ -1,0 +1,15 @@
+@import '~bootstrap/scss/bootstrap'; // TODO: Import just the parts you need
+
+.col {
+    height: 100%;
+
+    .header {
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .col-body {
+        background: #cccccc;
+        height: 100%;
+    }
+}

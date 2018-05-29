@@ -1,0 +1,35 @@
+$initals-height: 2em;
+
+.pbi-task {
+    .initials {
+        display: block;
+        text-align: center;
+        display: block;
+        width: $initals-height;
+        height: $initals-height;
+        line-height: $initals-height;
+        border-radius: $initals-height;
+        background-color: #363636;
+        color: #fff;
+    }
+    .dropdown {
+        cursor: pointer;
+    }
+
+    &.in-progress {
+        font-weight: 700;
+    }
+
+    &.done {
+        .text {
+            color: #999;
+            text-decoration: line-through;
+        }
+    }
+
+    .new {
+        cursor: pointer;
+        font-style: italic;
+        color: #aaa;
+    }
+}

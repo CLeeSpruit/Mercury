@@ -1,0 +1,57 @@
+$info-color: #17a2b8;
+$warning-color: #ffc107;
+$danger-color: #dc3545;
+
+.sprint {
+    padding-bottom: 3em; 
+    .title {
+        text-align: center;
+        padding: 1em;
+        color: #3a7bd5;
+        border-bottom: 5px solid;
+    }
+
+    .actions {
+        padding: 1em;
+        border-bottom: #3a7bd5 5px solid;
+        margin-bottom: 1em;
+
+        .btn.selected {
+            border-bottom: 10px solid;
+        }
+
+        .pbi-input input {
+            border: 10px solid;
+            border-radius: 5px;
+        }
+
+        // TODO: Forgive me, for I have sinned
+        .pbi, .btn-info {
+            border-color: $info-color !important;
+        }
+
+        .bug, .btn-warning {
+            border-color: $warning-color !important;
+        }
+
+        .ro, .btn-danger {
+            border-color: $danger-color !important;
+        }
+
+        input.pbi {
+            border-color: $info-color !important;
+            border-top-left-radius: 0px !important;
+        }
+    }
+
+    .board {
+        display: flex;
+        align-items: stretch;
+
+        hg-pbi-column {
+            float: left;
+            flex-grow: 1;
+            width: 100%;
+        }
+    }
+}

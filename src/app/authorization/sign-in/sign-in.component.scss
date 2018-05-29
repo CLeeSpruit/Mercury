@@ -1,0 +1,60 @@
+@import '../../../scss/index.scss';
+
+.sign-in {
+    @include modalize;
+    border: 0;
+    text-align: center;
+
+    .title {
+        h1 {
+            padding: .5em;
+            font-size: 1.5em;
+            color: #3a7bd5;
+        }
+        border-bottom: 3px solid #3a7bd5;
+    }
+
+    .body {
+        padding: 1em;
+        
+        input {
+            border: 1px solid #aaa;
+            border-radius: 2px;
+        }
+        
+        .clickable {
+            @include unselectable;
+        }
+        
+        .directions {
+            text-align: left;
+        }
+        
+        .note { 
+            font-size: .8em;
+        }
+    }
+}
+
+.shader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    // opacity: 0.95;
+    @include blue;
+    z-index: 2;
+
+    @include rainbows;
+
+    &::after{
+        // Consider using \f223 (Mercury icon)
+        @include fontAwesomeIcon('\f135', 30em);
+        color:rgba(255,255,255,0.75);
+        position: absolute;
+        bottom: 0.55em;
+        right: .05em;
+        line-height: 0;
+    }
+}

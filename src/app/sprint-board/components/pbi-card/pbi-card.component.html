@@ -1,0 +1,28 @@
+<div class="pbi-card card" *ngIf="pbi">
+    <div class="container">
+        <div class="card-header row"
+            [class.iconbg]="keyword"
+            [class.publish]="keyword === 'publish'"
+            [class.trac]="keyword === 'trac'"
+            [class.test]="keyword === 'test'"
+            [class.op]="keyword === 'op'"
+            >
+            <div class="col-md-10">
+                <h6 class="card-subtitle" [innerHtml]="pbi.id"></h6>
+                <h5 class="card-title" [innerHtml]="pbi.title"></h5>
+            </div>
+            <div class="col-md-2">
+                <span class="effort" [innerHtml]="pbi.effort"></span>
+                <span class="total-hours" [innerHtml]="pbi.totalHours"></span>
+            </div>
+        </div>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let child of pbi.children">
+            <hg-pbi-task [task]="child" (taskChanged)="pbiChanged($event)"></hg-pbi-task>
+        </li>
+        <li class="list-group-item">
+            <hg-pbi-task [isNew]="true" (newTask)="newTask($event)"></hg-pbi-task>
+        </li>
+    </ul>
+</div>

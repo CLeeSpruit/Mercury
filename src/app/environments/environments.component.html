@@ -1,0 +1,11 @@
+<div class="environments">
+    <div class="title">
+        <h1 class="h1">Environments</h1>
+    </div>
+    <div class="build">
+        <hg-heartbeat 
+            *ngFor="let deployment of deployments" 
+            [deployment]="deployment"
+            ></hg-heartbeat>
+    </div>
+</div>

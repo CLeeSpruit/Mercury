@@ -1,0 +1,65 @@
+@mixin red() {
+    background: #e53935;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #e35d5b, #e53935);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #e35d5b, #e53935); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */        
+}
+
+@mixin green() {
+    background: #56ab2f;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+@mixin blue() {
+    background: #077C94;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #3a7bd5, #077C94);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #3a7bd5, #077C94); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+@mixin rainbows($angle: 45deg) {
+	background: linear-gradient($angle, #a8e063, #3a7bd5, #e35d5b);
+    background-size: 400% 400%;
+    @include animate-gradient(30s);
+}
+
+@mixin animate-gradient($length: 15s) {
+    -webkit-animation: Gradient $length ease infinite;
+	-moz-animation: Gradient $length ease infinite;
+	animation: Gradient $length ease infinite;
+
+    @-webkit-keyframes Gradient {
+        0% {
+            background-position: 0% 50%
+        }
+        50% {
+            background-position: 100% 50%
+        }
+        100% {
+            background-position: 0% 50%
+        }
+    }
+    
+    @-moz-keyframes Gradient {
+        0% {
+            background-position: 0% 50%
+        }
+        50% {
+            background-position: 100% 50%
+        }
+        100% {
+            background-position: 0% 50%
+        }
+    }
+    
+    @keyframes Gradient {
+        0% {
+            background-position: 0% 50%
+        }
+        50% {
+            background-position: 100% 50%
+        }
+        100% {
+            background-position: 0% 50%
+        }
+    }
+}

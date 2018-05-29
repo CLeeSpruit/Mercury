@@ -1,0 +1,96 @@
+<div class="pbi-task row" 
+    [class.in-progress]="task.state === 'In Progress'"
+    [class.done]="task.state ==='Done'" 
+    *ngIf="task"
+    >
+    <div class="assigned col-2">
+        <span 
+            class="initials" 
+            [style.background-color]="initialsColor"
+            *ngIf="initials" 
+            [innerHtml]="initials"
+        ></span>
+    </div>
+    
+    <div class="child text col-7" *ngIf="!isNew">
+        <span
+            *ngIf="!titleEditable"
+            [innerHtml]="task.title"
+            (dblclick)="editTitle()"
+        ></span>
+        <input
+            #titleInput
+            *ngIf="titleEditable"
+            type="text"
+            [value]="task.title"
+            (blur)="saveTitle(titleInput.value)"
+        />
+    </div>
+    <div class="child text col-7" *ngIf="isNew">
+        <span
+            *ngIf="!titleEditable"
+            class="new"
+            [innerHtml]="'Add New'"
+            (click)="editTitle()"
+        ></span>
+        <input
+            #titleInput
+            *ngIf="titleEditable"
+            type="text"
+            (blur)="saveTitle(titleInput.value)"
+            (enter)="saveTitle(titleInput.value, true)"
+        />
+    </div>
+
+    <div class="child col-3">
+        <div class="btn-group" role="group" *ngIf="!isNew">
+            <div class="dropdown btn-group" *ngIf="task.state !== 'Done' && task.remainingWork !== 0">
+                <a
+                    class="btn btn-outline-secondary"
+                    role="button"
+                    [innerHtml]="task.remainingWork"
+                    (click)="toggleHours()"
+                    ></a>
+                <div class="dropdown-menu show" *ngIf="hoursPopup">
+                        <a class="dropdown-item" (click)="hoursChange(1)">
+                            1
+                        </a>
+                        <a class="dropdown-item" (click)="hoursChange(2)">
+                            2
+                        </a>
+                        <a class="dropdown-item" (click)="hoursChange(3)">
+                            3
+                        </a>
+                        <a class="dropdown-item" (click)="hoursChange(5)">
+                            5
+                        </a>
+                </div>
+            </div>
+            <div class="dropdown btn-group">
+                <a
+                    class="fa btn btn-outline-secondary"
+                    role="button"
+                    [class.fa-asterisk]="task.state === 'To Do'"
+                    [class.fa-hourglass-half]="task.state === 'In Progress'"
+                    [class.fa-flask]="task.state === 'Ready to test'"
+                    [class.fa-check]="task.state === 'Done'"
+                    (click)="toggleStatus()"
+                ></a>
+                <div class="dropdown-menu show" *ngIf="statusPopup">
+                        <a class="dropdown-item" (click)="statusChange('To Do')">
+                            <i class="fa fa-asterisk"></i> To Do
+                        </a>
+                        <a class="dropdown-item" (click)="statusChange('In Progress')">
+                            <i class="fa fa-hourglass-half"></i> In Progress
+                        </a>
+                        <a class="dropdown-item" (click)="statusChange('Ready To Test')">
+                            <i class="fa fa-flask"></i> Ready To Test
+                        </a>
+                        <a class="dropdown-item" (click)="statusChange('Done')">
+                            <i class="fa fa-check"></i> Done
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
