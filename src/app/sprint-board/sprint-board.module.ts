@@ -6,6 +6,7 @@ import { PbiTaskComponent } from '@sprint/components/pbi-task/pbi-task.component
 import { SprintComponent } from '@sprint/components/sprint/sprint.component';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
+import { QueryService } from '@sprint/services/query.service';
 import { CommonModule } from '@angular/common';
 import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 
@@ -20,8 +21,11 @@ import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
     providers: [
         SprintService,
         TfsService,
+        QueryService,
         WorkItemMapper
     ],
-    imports: [CommonModule]
+    imports: [
+        CommonModule
+    ]
 })
 export class SprintBoardModule { }

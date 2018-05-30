@@ -22,6 +22,28 @@
     @include animate-gradient(30s);
 }
 
+@mixin rainbow-text($length: 15s) {
+    color: #3a7bd5;
+    -webkit-animation: colorChange $length infinite;
+	-moz-animation: colorChange $length infinite;
+	animation: colorChange $length infinite;
+    
+    @-webkit-keyframes colorChange {
+        0% {
+            color: #3a7bd5;
+        }
+        33%{ 
+            color: #a8e063;
+        }
+        66% {
+            color: #e35d5b;
+        }
+        100% {
+            color: #3a7bd5;
+        }
+    }
+}
+
 @mixin animate-gradient($length: 15s) {
     -webkit-animation: Gradient $length ease infinite;
 	-moz-animation: Gradient $length ease infinite;

@@ -1,33 +1,40 @@
 <div class="sprint-board">
     <div class="sprint" *ngIf="sprint">
         <div class="title">
-            <h1 class="h1" [innerHtml]="sprint.name"></h1>
+            <h1 class="h1" (click)="toggleSelectSprint()">{{sprint.name}} <i class="fa" [class.fa-chevron-down]="!showSprintSelect" [class.fa-chevron-up]="showSprintSelect" ></i></h1>
+            <div class="sprint-select" *ngIf="showSprintSelect">
+                <ul>
+                    <li  *ngFor="let subSprint of sprints" (click)="navToSprint(subSprint)">
+                        <span [innerHtml]="subSprint.name" [class.currentSprint]="subSprint.id === sprint.id"></span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="actions">
             <div class="group-wrapper">
                 <div class="group">
                     <button [class.selected]="pbiType === 'pbi'" class="add btn btn-info" (click)="addPbi('pbi')"
                     > 
-                    <span class="fa fa-plus"></span>
-                    <span>Add New PBI</span>
-                </button>
-                <button [class.selected]="pbiType === 'bug'" class="btn btn-warning" (click)="addPbi('bug')">
-                    <span class="fa fa-bug"></span>
-                    <span>Add New Bug</span>
-                </button>
-                <button [class.selected]="pbiType ==='ro'" class="btn btn-danger" (click)="addPbi('ro')">
-                    <span class="fa fa-bomb"></span>
-                    <span>Add New Rollout</span>
-                </button>
-            </div>
-            <div class="pbi-input" *ngIf="showAddNewPbi">
-                <input
-                #pbiInput
-                    [ngClass]="pbiType"
-                    type="text" 
-                    placeholder="Title"
-                    size="59"
-                    />
+                        <span class="fa fa-plus"></span>
+                        <span>Add New PBI</span>
+                    </button>
+                    <button [class.selected]="pbiType === 'bug'" class="btn btn-warning" (click)="addPbi('bug')">
+                        <span class="fa fa-bug"></span>
+                        <span>Add New Bug</span>
+                    </button>
+                    <button [class.selected]="pbiType ==='ro'" class="btn btn-danger" (click)="addPbi('ro')">
+                        <span class="fa fa-bomb"></span>
+                        <span>Add New Rollout</span>
+                    </button>
+                </div>
+                <div class="pbi-input" *ngIf="showAddNewPbi">
+                    <input
+                    #pbiInput
+                        [ngClass]="pbiType"
+                        type="text" 
+                        placeholder="Title"
+                        size="59"
+                        />
                 </div>
             </div>
         </div>
@@ -36,6 +43,9 @@
             <hg-pbi-column [list]="columns['In Progress']" label="In Progress"></hg-pbi-column>
             <hg-pbi-column [list]="columns['Ready To Test']" label="Testing"></hg-pbi-column>
             <hg-pbi-column [list]="columns['Done']" label="Done"></hg-pbi-column>
+        </div>
+        <div class="board" *ngIf="!showTaskBoard">
+            <span class="loading"><i class="fa fa-spin fa-rocket"></i></span>
         </div>
     </div>
     <hg-pbi></hg-pbi>

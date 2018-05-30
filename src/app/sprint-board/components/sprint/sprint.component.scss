@@ -1,3 +1,5 @@
+@import '../../../../scss/index.scss';
+
 $info-color: #17a2b8;
 $warning-color: #ffc107;
 $danger-color: #dc3545;
@@ -9,6 +11,37 @@ $danger-color: #dc3545;
         padding: 1em;
         color: #3a7bd5;
         border-bottom: 5px solid;
+        cursor: pointer;
+
+        .sprint-select{
+            ul {
+                width: fit-content;
+                margin: 0 auto;
+
+                li {
+                    .currentSprint {
+                        font-style: italic;
+
+                        &::before {
+                            @include fontAwesomeIcon('\f054');
+                            padding-right: 0.5em;
+                        }
+                    }
+
+                    list-style: none;
+                    text-align: left;
+                    width: 75em;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    cursor: pointer;
+                    
+                    &:hover {
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
     }
 
     .actions {
@@ -52,6 +85,13 @@ $danger-color: #dc3545;
             float: left;
             flex-grow: 1;
             width: 100%;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 8em;
+            width: 100%;
+            @include rainbow-text;
         }
     }
 }
