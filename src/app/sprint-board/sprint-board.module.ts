@@ -9,6 +9,7 @@ import { TfsService } from '@sprint/services/tfs.service';
 import { QueryService } from '@sprint/services/query.service';
 import { CommonModule } from '@angular/common';
 import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
         WorkItemMapper
     ],
     imports: [
-        CommonModule
+        CommonModule,
+        SharedModule
     ]
 })
 export class SprintBoardModule { }

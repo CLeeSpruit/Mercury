@@ -1,3 +1,4 @@
-<div class="pbi">
+<div class="pbi" *ngIf="pbi">
     <h1 [innerHtml]="pbiTitle"></h1>
+    <hg-rich-text [field]="pbi.description"></hg-rich-text>
 </div>

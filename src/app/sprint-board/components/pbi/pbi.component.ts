@@ -16,9 +16,14 @@ export class PbiComponent implements OnInit {
     ngOnInit() {
         this.sprintService.getSelectedPbi().subscribe(pbi => {
             this.pbi = pbi;
-            this.setPbi();
+            if (this.pbi) {
+                this.setPbi();
+            }
         });
     }
+
+    // TODO:
+    // savePbi() { }
 
     private setPbi() {
         this.pbiTitle = `${this.pbi.id} - ${this.pbi.title}`;
