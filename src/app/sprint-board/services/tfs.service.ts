@@ -95,6 +95,22 @@ export class TfsService {
             });
         }
 
+        if (changes.description) {
+            allChanges.push({
+                op: 'replace',
+                path: '/fields/System.Description',
+                value: changes.description
+            });
+        }
+
+        if (changes.acceptanceCriteria) {
+            allChanges.push({
+                op: 'replace',
+                path: '/fields/Microsoft.VSTS.Common.AcceptanceCriteria',
+                value: changes.acceptanceCriteria
+            });
+        }
+
         return this.http.patch(
             `${this.baseLocationGeneric}wit/workitems/${itemId}?api-version=1.0`,
             JSON.stringify(allChanges),

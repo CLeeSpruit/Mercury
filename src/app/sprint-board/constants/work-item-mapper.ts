@@ -83,7 +83,8 @@ export class WorkItemMapper {
             remainingWork: wi.fields['Microsoft.VSTS.Scheduling.RemainingWork'],
             backlogPriority: wi.fields['Microsoft.VSTS.Common.BacklogPriority'],
             description: wi.fields['System.Description'],
-            effort: wi.fields['Microsoft.VSTS.Scheduling.Effort']
+            effort: wi.fields['Microsoft.VSTS.Scheduling.Effort'],
+            acceptanceCriteria: wi.fields['Microsoft.VSTS.Common.AcceptanceCriteria']
         };
 
         if (wi.relations) {
@@ -137,6 +138,7 @@ const FieldMap = new Map<string, string>(
             ['remainingWork', 'Microsoft.VSTS.Scheduling.RemainingWork'],
             ['backlogPriority', 'Microsoft.VSTS.Common.BacklogPriority'],
             ['description', 'System.Description'],
-            ['effort', 'Microsoft.VSTS.Scheduling.Effort']
+            ['effort', 'Microsoft.VSTS.Scheduling.Effort'],
+            ['acceptanceCriteria', 'Microsoft.VSTS.Common.AcceptanceCriteria']
         ]
     );

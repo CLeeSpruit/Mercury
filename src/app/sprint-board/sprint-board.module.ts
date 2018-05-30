@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { FormsModule } from '@angular/forms';
+
 import { PbiComponent } from '@sprint/components/pbi/pbi.component';
 import { PbiCardComponent } from '@sprint/components/pbi-card/pbi-card.component';
 import { PbiColumnComponent } from '@sprint/components/pbi-column/pbi-column.component';
@@ -27,7 +30,9 @@ import { SharedModule } from '@shared/shared.module';
     ],
     imports: [
         CommonModule,
-        SharedModule
+        SharedModule,
+        EditorModule,
+        FormsModule
     ]
 })
 export class SprintBoardModule { }

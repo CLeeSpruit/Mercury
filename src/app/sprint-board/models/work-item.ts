@@ -34,6 +34,8 @@ export interface WorkItem {
     remainingWork: number;
 
     /*** PBI ***/
+    // Microsoft.VSTS.Common.AcceptanceCriteria
+    acceptanceCriteria: string;
     boardColumn: string;
     boardColumnDone: boolean;
 

@@ -23,6 +23,7 @@ export class SprintComponent implements OnInit, OnDestroy {
     showSprintSelect = false;
     showAddNewPbi = false;
     showTaskBoard = false;
+    showPbiSlider = false;
 
     sprint: Sprint; // Display component
     sprints: Array<Sprint> = new Array<Sprint>(); // Display list on showSprintSelect
@@ -34,6 +35,7 @@ export class SprintComponent implements OnInit, OnDestroy {
 
     private workItemIds: Array<string>; // They're numbers but whatever.
     private workItemChangeSubscription: Subscription = new Subscription();
+    private pbiSelecitonSubscription: Subscription = new Subscription();
 
     constructor(
         private tfsService: TfsService,
@@ -59,10 +61,12 @@ export class SprintComponent implements OnInit, OnDestroy {
         });
 
         this.workItemChangeSubscription = this.sprintService.listenToWorkItemChange().subscribe(this.syncItem.bind(this));
+        this.pbiSelecitonSubscription = this.sprintService.getSelectedPbi().subscribe(pbi => this.showPbiSlider = !!pbi);
     }
 
     ngOnDestroy() {
         this.workItemChangeSubscription.unsubscribe();
+        this.pbiSelecitonSubscription.unsubscribe();
     }
 
     private reset() {
@@ -71,6 +75,7 @@ export class SprintComponent implements OnInit, OnDestroy {
         this.showSprintSelect = false;
         this.showAddNewPbi = false;
         this.showTaskBoard = false;
+        this.showPbiSlider = false;
         this.workItemIds = new Array<string>();
 
         this.workItemChangeSubscription.unsubscribe();
