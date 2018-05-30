@@ -45,8 +45,9 @@ export class TfsService {
             });
     }
 
-    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
-        return this.queryService.getIterationWorkItems(sprint);
+    getSprint(sprintId: string): Observable<Sprint> {
+        return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations/${sprintId}`, this.options)
+        .map(data => data as Sprint);
     }
 
     getAllSprints(): Observable<Array<Sprint>> {
@@ -54,6 +55,10 @@ export class TfsService {
             .map((data: any) => {
                 return <Array<Sprint>>(data.value);
             });
+    }
+
+    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
+        return this.queryService.getIterationWorkItems(sprint);
     }
 
     getSpecificWorkItems(itemIds: Array<string>): Observable<Array<WorkItem>> {

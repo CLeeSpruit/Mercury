@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/take';
 
 import { WorkItem } from '@sprint/models/work-item';
 import { TfsService } from '@sprint/services/tfs.service';
@@ -8,6 +10,7 @@ import { Sprint } from '@sprint/models/sprint';
 
 import { TaskStatus } from '@sprint/constants/task-status';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'hg-sprint',
@@ -17,30 +20,76 @@ import { WorkItemTypes } from '@sprint/constants/work-item-types';
 export class SprintComponent implements OnInit, OnDestroy {
     @ViewChild('pbiInput') pbiInputBox: HTMLInputElement;
 
-    sprint: Sprint;
-    workItems: Array<WorkItem> = new Array<WorkItem>();
-    workItemProperties: Array<string> = new Array<string>();
+    showSprintSelect = false;
+    showAddNewPbi = false;
+    showTaskBoard = false;
+
+    sprint: Sprint; // Display component
+    sprints: Array<Sprint> = new Array<Sprint>(); // Display list on showSprintSelect
+    private sprintId: string;
+    private workItems: Array<WorkItem>;
 
     columns: Array<Array<WorkItem>> = new Array<Array<WorkItem>>();
     pbiType: string;
-    showAddNewPbi = false;
 
-    private workItemIds: Array<string> = new Array<string>(); // They're numbers but whatever.
+    private workItemIds: Array<string>; // They're numbers but whatever.
     private workItemChangeSubscription: Subscription = new Subscription();
 
     constructor(
         private tfsService: TfsService,
-        private sprintService: SprintService
+        private sprintService: SprintService,
+        private route: ActivatedRoute,
+        private router: Router
     ) {
+        this.route.params.subscribe(param => {
+            if (param && param.iteration && param.iteration !== 'current') {
+                // This should just be the id
+                this.sprintId = param.iteration;
+            } else {
+                this.sprintId = null;
+            }
+
+            this.reset();
+        });
+    }
+
+    ngOnInit() {
+        this.tfsService.getAllSprints().take(1).subscribe((data) => {
+            this.sprints = data;
+        });
+
+        this.workItemChangeSubscription = this.sprintService.listenToWorkItemChange().subscribe(this.syncItem.bind(this));
+    }
+
+    ngOnDestroy() {
+        this.workItemChangeSubscription.unsubscribe();
+    }
+
+    private reset() {
+        // Clear out previous props
+        this.workItems = new Array<WorkItem>();
+        this.showSprintSelect = false;
+        this.showAddNewPbi = false;
+        this.showTaskBoard = false;
+        this.workItemIds = new Array<string>();
+
+        this.workItemChangeSubscription.unsubscribe();
+        this.workItemChangeSubscription = new Subscription();
+
         this.columns[TaskStatus.todo] = new Array<WorkItem>();
         this.columns[TaskStatus.inProgress] = new Array<WorkItem>();
         this.columns[TaskStatus.testing] = new Array<WorkItem>();
         this.columns[TaskStatus.done] = new Array<WorkItem>();
+
+        // Reinit subscriptions
+        this.getSprint();
     }
 
-    ngOnInit() {
-        this.buildWorkItemProperties();
-        this.tfsService.getCurrentSprint().subscribe((data: Sprint) => {
+    private getSprint() {
+        const sprintSub: Observable<Sprint> =
+        this.sprintId ? this.tfsService.getSprint(this.sprintId) : this.tfsService.getCurrentSprint();
+
+        sprintSub.take(1).subscribe((data: Sprint) => {
             this.sprint = data;
 
             this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<string>) => {
@@ -54,13 +103,10 @@ export class SprintComponent implements OnInit, OnDestroy {
                     }
                 });
             });
+        }, () => {
+            // If sprint is not found, redirect to current sprint
+            this.router.navigate(['sprint'], { relativeTo: this.route.parent });
         });
-
-        this.workItemChangeSubscription = this.sprintService.listenToWorkItemChange().subscribe(this.syncItem.bind(this));
-    }
-
-    ngOnDestroy() {
-        this.workItemChangeSubscription.unsubscribe();
     }
 
     addPbi(type: string) {
@@ -70,7 +116,7 @@ export class SprintComponent implements OnInit, OnDestroy {
 
     sendPbi() {
         const title = this.pbiInputBox.textContent;
-        this.tfsService.createPbi(<WorkItem>{title}).subscribe((data: WorkItem) => {
+        this.tfsService.createPbi(<WorkItem>{ title }).subscribe((data: WorkItem) => {
             // TODO: Assign to column
         });
     }
@@ -83,7 +129,17 @@ export class SprintComponent implements OnInit, OnDestroy {
                     this.columns[wi.column].push(wi);
                 }
             });
+
+            this.showTaskBoard = true;
         }
+    }
+
+    toggleSelectSprint() {
+        this.showSprintSelect = !this.showSprintSelect;
+    }
+
+    navToSprint(sprint: Sprint) {
+        this.router.navigate(['sprint', sprint.id], { relativeTo: this.route.parent });
     }
 
     private sortItem(workItem: WorkItem) {
@@ -139,17 +195,6 @@ export class SprintComponent implements OnInit, OnDestroy {
             }).filter((task: WorkItem) => {
                 if (task) { return task; }
             });
-        }
-    }
-
-    private buildWorkItemProperties() {
-        this.workItemProperties = [];
-        const example = <WorkItem>{};
-
-        for (const prop in example) {
-            if (example.hasOwnProperty(prop)) {
-                this.workItemProperties.push(prop);
-            }
         }
     }
 }

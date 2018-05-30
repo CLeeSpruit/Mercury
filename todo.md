@@ -17,6 +17,8 @@
 
 ## Sprint Page
 * Add "Back to Top" arrow in bottom right corner
+* Store sprint query IDs in localstorage for faster responses
+* Store folder ID in localstorage for faster query creation
 
 ### Display
 * Emphasize what's currently in progress

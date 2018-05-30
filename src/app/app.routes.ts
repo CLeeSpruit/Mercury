@@ -7,12 +7,13 @@ import { BacklogComponent } from '@backlog/backlog.component';
 
 // TODO: Move this out to it's own modules to handle the routes + lazy load
 const appRoutes: Routes = [
+    { path: 'sprint/:iteration', component: SprintComponent},
     { path: 'sprint/current', component: SprintComponent },
-    { path: 'sprint', component: SprintComponent },
+    { path: 'sprint', redirectTo: 'sprint/current' },
     { path: 'environments', component: EnvironmentsComponent },
     { path: 'backlog', component: BacklogComponent },
     { path: 'auth', component: SignInComponent },
-    { path: '', component: SprintComponent, pathMatch: 'full' }
+    { path: '', redirectTo: 'sprint/current', pathMatch: 'full' }
 ];
 
 @NgModule({
