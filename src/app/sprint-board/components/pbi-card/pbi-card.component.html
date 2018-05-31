@@ -1,6 +1,7 @@
-<div class="pbi-card card" *ngIf="pbi" (click)="selectPbi(pbi)">
-    <div class="container">
+<div class="pbi-card card" *ngIf="pbi">
+    <div class="container"> 
         <div class="card-header row"
+            (click)="selectPbi(pbi)"
             [class.iconbg]="keyword"
             [class.publish]="keyword === 'publish'"
             [class.trac]="keyword === 'trac'"
