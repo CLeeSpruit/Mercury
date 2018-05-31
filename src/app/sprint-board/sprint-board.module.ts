@@ -13,6 +13,7 @@ import { QueryService } from '@sprint/services/query.service';
 import { CommonModule } from '@angular/common';
 import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 import { SharedModule } from '@shared/shared.module';
+import { PbiContainerComponent } from '@sprint/pbi-container/pbi-container.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { SharedModule } from '@shared/shared.module';
         PbiCardComponent,
         PbiColumnComponent,
         PbiTaskComponent,
-        SprintComponent
+        SprintComponent,
+        PbiContainerComponent
     ],
     providers: [
         SprintService,

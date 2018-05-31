@@ -12,6 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { PbiContainerComponent } from 'sprint-board/pbi-container/pbi-container.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,6 @@ import { NavigationComponent } from './navigation/navigation.component';
     HttpModule,
     RouterModule,
     AppRoutesModule,
-
     AuthorizationModule,
     BacklogModule,
     EnvironmentsModule,

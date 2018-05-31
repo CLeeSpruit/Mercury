@@ -20,6 +20,13 @@
 * Store sprint query IDs in localstorage for faster responses
 * Store folder ID in localstorage for faster query creation
 
+### PBI Panel
+* Open PBI panel in center of viewport, not at the top
+* Allow for panel to be at bottom of screen
+* Allow for click and dragging the panel out
+* Allow for full screen view of pbi
+* Add effort and tags to pbi panel
+
 ### Display
 * Emphasize what's currently in progress
     * Alternatively, de-emphasize what isn't in progress

@@ -39,7 +39,7 @@ export class PbiComponent implements OnInit {
     }
 
     save() {
-        let changes: WorkItem = <WorkItem>{};
+        const changes: WorkItem = <WorkItem>{};
         for (const key in this.pbi) {
             if (this.pbi[key] !== this.unsavedPbi[key]) {
                 changes[key] = this.pbi[key];
