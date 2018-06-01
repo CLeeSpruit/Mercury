@@ -9,11 +9,11 @@ import { PbiTaskComponent } from '@sprint/components/pbi-task/pbi-task.component
 import { SprintComponent } from '@sprint/components/sprint/sprint.component';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
-import { QueryService } from '@sprint/services/query.service';
 import { CommonModule } from '@angular/common';
 import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 import { SharedModule } from '@shared/shared.module';
 import { PbiContainerComponent } from '@sprint/pbi-container/pbi-container.component';
+import { SprintQueryService } from '@sprint/services/sprint-query.service';
 
 @NgModule({
     declarations: [
@@ -27,8 +27,8 @@ import { PbiContainerComponent } from '@sprint/pbi-container/pbi-container.compo
     providers: [
         SprintService,
         TfsService,
-        QueryService,
-        WorkItemMapper
+        WorkItemMapper,
+        SprintQueryService
     ],
     imports: [
         CommonModule,

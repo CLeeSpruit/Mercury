@@ -9,7 +9,7 @@ import { WorkItem } from '@sprint/models/work-item';
 import { Sprint } from '@sprint/models/sprint';
 import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
-import { QueryService } from '@sprint/services/query.service';
+import { SprintQueryService } from '@sprint/services/sprint-query.service';
 
 @Injectable()
 export class TfsService {
@@ -26,7 +26,7 @@ export class TfsService {
     constructor(
         private http: HttpClient,
         private workItemMapper: WorkItemMapper,
-        private queryService: QueryService
+        private sprintQueryService: SprintQueryService
     ) { }
 
     getProjects(): Observable<any> {
@@ -57,11 +57,11 @@ export class TfsService {
             });
     }
 
-    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
-        return this.queryService.getIterationWorkItems(sprint);
+    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<number>> {
+        return this.sprintQueryService.getIterationWorkItems(sprint);
     }
 
-    getSpecificWorkItems(itemIds: Array<string>): Observable<Array<WorkItem>> {
+    getSpecificWorkItems(itemIds: Array<number>): Observable<Array<WorkItem>> {
         const ids = itemIds.toString();
         return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options)
             .map(this.mapWorkItems.bind(this));

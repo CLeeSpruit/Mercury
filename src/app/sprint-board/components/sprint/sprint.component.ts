@@ -33,7 +33,7 @@ export class SprintComponent implements OnInit, OnDestroy {
     columns: Array<Array<WorkItem>> = new Array<Array<WorkItem>>();
     pbiType: string;
 
-    private workItemIds: Array<string>; // They're numbers but whatever.
+    private workItemIds: Array<number>;
     private workItemChangeSubscription: Subscription = new Subscription();
     private pbiSelecitonSubscription: Subscription = new Subscription();
 
@@ -76,7 +76,7 @@ export class SprintComponent implements OnInit, OnDestroy {
         this.showAddNewPbi = false;
         this.showTaskBoard = false;
         this.showPbiSlider = false;
-        this.workItemIds = new Array<string>();
+        this.workItemIds = new Array<number>();
 
         this.workItemChangeSubscription.unsubscribe();
         this.workItemChangeSubscription = new Subscription();
@@ -97,7 +97,7 @@ export class SprintComponent implements OnInit, OnDestroy {
         sprintSub.take(1).subscribe((data: Sprint) => {
             this.sprint = data;
 
-            this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<string>) => {
+            this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<number>) => {
                 this.workItemIds = workItems;
 
                 // TODO: This might no longer be needed if the query is done correctly
