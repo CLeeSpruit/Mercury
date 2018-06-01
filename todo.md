@@ -24,8 +24,8 @@
 * Open PBI panel in center of viewport, not at the top
 * Allow for panel to be at bottom of screen
 * Allow for click and dragging the panel out
-* Allow for full screen view of pbi
 * Add effort and tags to pbi panel
+* Bug: Cannot edit items that do not have an acceptance criteria/description yet
 
 ### Display
 * Emphasize what's currently in progress

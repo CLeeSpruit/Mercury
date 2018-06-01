@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { WorkItem } from '@sprint/models/work-item';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
@@ -16,7 +18,8 @@ export class PbiComponent implements OnInit {
 
     constructor(
         private sprintService: SprintService,
-        private tfsService: TfsService
+        private tfsService: TfsService,
+        private router: Router
     ) {
         // Initialize tinyMceSettings
         this.tinySettings = {
@@ -52,6 +55,10 @@ export class PbiComponent implements OnInit {
             });
         }
 
+    }
+
+    navigateToPbi() {
+        this.router.navigate(['pbi', this.pbi.id]);
     }
 
     private setPbi() {

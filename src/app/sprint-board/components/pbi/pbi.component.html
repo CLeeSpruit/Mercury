@@ -1,6 +1,6 @@
 <div class="pbi" *ngIf="pbi">
     <div class="menubar">
-        <span class="title" [innerHtml]="pbiTitle"></span>
+        <span class="title" [innerHtml]="pbiTitle" (click)="navigateToPbi()"></span>
         <span class="close fa fa-times-circle fa-2x" (click)="close()"></span>
         <span class="close save fa fa-floppy-o fa-2x" (click)="save()"></span>
     </div>
