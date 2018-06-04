@@ -1,7 +1,7 @@
 <div class="cell" *ngIf="isLoaded && pbi">
     <span [innerHtml]="pbi.id"></span>
 </div>
-<div class="cell" *ngIf="isLoaded && pbi">
+<div class="cell wide" *ngIf="isLoaded && pbi">
     <span [innerHtml]="pbi.title"></span>
 </div>
 <div class="cell" *ngIf="isLoaded && pbi">
@@ -15,9 +15,9 @@
 </div>
 
 <!-- Not loaded -->
-<div class="cell placeholder" *ngIf="isLoaded && !pbi">
-    Loading...
+<div class="cell" *ngIf="!pbi">
+    <span [innerHtml]="pbiId"></span>
 </div>
-<div class="cell placeholder" *ngIf="!isLoaded">
-    <span>...</span>
+<div class="cell placeholder" *ngIf="isLoaded && !pbi">
+    <i class="fa fa-pulse fa-spinner"></i>
 </div>

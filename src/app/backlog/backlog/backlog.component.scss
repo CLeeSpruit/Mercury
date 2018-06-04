@@ -1,22 +1,30 @@
 @import '../../../scss/index.scss';
 
 .backlog {
-    display: table;
+    display: flex;
+    flex-flow: column wrap;
     width: 100%;
     .table-header {
-        display: table-header-group;
         text-transform: uppercase;
         font-weight: 500;
         color: white;
+        display: flex;
         @include blue();
 
         .table-label {
             display: table-cell;
             padding: 1em;
+            width: 100%;
+            flex: 1;
+        
+            &.wide {
+                flex: 4;
+            }
         }
     }
     .table-row {
-        display: table-row;
+        display: flex;
+        flex-direction: row;
 
         &:nth-of-type(odd){
             background-color: rgba(0,0,0,0.1);
