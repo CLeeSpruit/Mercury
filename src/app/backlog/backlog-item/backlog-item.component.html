@@ -1,7 +1,7 @@
 <div class="cell" *ngIf="isLoaded && pbi">
     <span [innerHtml]="pbi.id"></span>
 </div>
-<div class="cell wide" *ngIf="isLoaded && pbi">
+<div class="cell wide title" *ngIf="isLoaded && pbi">
     <span [innerHtml]="pbi.title"></span>
 </div>
 <div class="cell" *ngIf="isLoaded && pbi">
@@ -15,7 +15,7 @@
 </div>
 
 <!-- Not loaded -->
-<div class="cell" *ngIf="!pbi">
+<div class="cell" *ngIf="!pbi || !isLoaded">
     <span [innerHtml]="pbiId"></span>
 </div>
 <div class="cell placeholder" *ngIf="isLoaded && !pbi">

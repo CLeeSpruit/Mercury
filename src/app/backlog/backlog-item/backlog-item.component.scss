@@ -1,7 +1,3 @@
-.backlog-item {
-    display: table-row; 
-}
-
 .cell {
     display: table-cell;
     padding: 0.5em 1em;
@@ -10,6 +6,10 @@
 
     &.wide {
         flex: 4;
+    }
+
+    &.title{
+        cursor: pointer;
     }
 }
 

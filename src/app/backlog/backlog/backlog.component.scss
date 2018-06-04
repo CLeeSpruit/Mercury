@@ -12,7 +12,6 @@
         @include blue();
 
         .table-label {
-            display: table-cell;
             padding: 1em;
             width: 100%;
             flex: 1;
@@ -25,6 +24,8 @@
     .table-row {
         display: flex;
         flex-direction: row;
+        flex-basis: content;
+        height: 3em;
 
         &:nth-of-type(odd){
             background-color: rgba(0,0,0,0.1);

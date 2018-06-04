@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChildren, QueryList, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { WorkItem } from '@sprint/models/work-item';
 import { BacklogService } from '@backlog/services/backlog.service';
 import { SprintService } from '@sprint/services/sprint.service';
@@ -21,6 +21,7 @@ export class BacklogComponent implements OnInit, AfterViewInit {
     scrollSub: Subscription = new Subscription();
 
     constructor(
+        private cdr: ChangeDetectorRef,
         private backlogService: BacklogService,
 
         // TODO: Move get work item functionality to shared generic service
@@ -28,21 +29,22 @@ export class BacklogComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit() {
-        // This closes itself and doesn't need an unsubscribe
-        this.backlogService.getBacklog().subscribe((data: Array<string>) => {
-            this.backlogItems = data;
-            // TODO: consider moving this function to the services
 
-        });
     }
 
     ngAfterViewInit() {
-        const scrollWait = 500;
+        // This closes itself and doesn't need an unsubscribe
+        this.backlogService.getBacklog().subscribe((data: Array<string>) => {
+            this.backlogItems = data;
+            this.cdr.detectChanges();
+            this.getScroll();
+        });
+
+        const scrollWait = 100;
         const obs = Observable.fromEvent(window, 'scroll');
         this.scrollSub = obs.debounceTime(scrollWait).subscribe(() => {
             this.getScroll();
         });
-        this.getScroll();
     }
 
     private getScroll() {
