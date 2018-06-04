@@ -1,8 +1,11 @@
+@import '../../../scss/index.scss';
+
 .cell {
     display: table-cell;
     padding: 0.5em 1em;
     width: 100%;
     flex: 1;
+    @include elipsis();
 
     &.wide {
         flex: 4;

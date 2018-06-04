@@ -35,6 +35,9 @@ import { SprintQueryService } from '@sprint/services/sprint-query.service';
         SharedModule,
         EditorModule,
         FormsModule
+    ],
+    exports: [
+        PbiComponent
     ]
 })
 export class SprintBoardModule { }
