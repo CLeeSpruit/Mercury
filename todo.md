@@ -37,8 +37,6 @@
 ### Tasks
 * Add ability to delete tasks
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
-* Bug: Do not display tasks that have been removed
-* Bug: Icon for testing tasks should display
 * Bug: Adding hours to a new task does not work
 * Bug: New task is put at the bottom of list (after Add New)
 * Bug: New task icon doesn't show up on refresh
