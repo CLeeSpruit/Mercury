@@ -1,3 +1,15 @@
+@import '../../../../scss/index.scss';
+
+.title-section {
+    display: flex;
+    justify-content: space-between;
+
+    .information {
+        font-weight: 800;
+        font-size: 1.5em;
+    }
+}
+
 $blue: #003DAD;
 $red: #770101;
 $green: #287228;
@@ -21,32 +33,21 @@ $dgray: #555;
 }
 
 .publish {
-    background: #e53935;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #e35d5b, #e53935);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #e35d5b, #e53935); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */        
-
+    @include red();
     &::after{
         content: '\f1e2';
     }
 }
 
 .trac {
-    background: #56ab2f;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to top, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
-    
-
+    @include green();
     &::after{
         content: '\f074';
     }
 }
 
 .op {
-    background: #077C94;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #3a7bd5, #077C94);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #3a7bd5, #077C94); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
+    @include blue();
 
     &::after{
         content: '\f135';
@@ -54,10 +55,8 @@ $dgray: #555;
 }
 
 .test {
-    background: #56ab2f;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #8AB453, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to top, #8AB453, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
+    @include green();
+
     &::after{
         font-size: 9em;
         content: '\f0c3';
