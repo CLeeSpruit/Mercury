@@ -15,6 +15,8 @@ export class PbiComponent implements OnInit {
     unsavedPbi: WorkItem;
     pbiTitle: string;
     tinySettings: any;
+    hasNoDescription = false;
+    hasNoAcceptanceCriteria = false;
 
     constructor(
         private sprintService: SprintService,
@@ -50,9 +52,13 @@ export class PbiComponent implements OnInit {
         }
 
         if (changes !== <WorkItem>{}) {
-            this.tfsService.editWorkItem(this.pbi.id, changes).subscribe(() => {
-                // TODO: Put something here
-            });
+            this.tfsService.editWorkItem(this.pbi.id, changes, {
+                hasNoDescription: this.hasNoDescription,
+                hasNoAcceptanceCriteria: this.hasNoAcceptanceCriteria
+            })
+                .subscribe(() => {
+                    // TODO: Put something here
+                });
         }
 
     }
@@ -64,6 +70,9 @@ export class PbiComponent implements OnInit {
     private setPbi() {
         this.unsavedPbi = Object.assign({}, this.pbi);
         this.pbiTitle = `${this.pbi.id} - ${this.pbi.title}`;
+        this.hasNoAcceptanceCriteria = !!this.pbi.acceptanceCriteria;
+        // TODO: Bugs do not have a description
+        this.hasNoDescription = !!this.pbi.description;
         if (!this.pbi.description) {
             this.pbi.description = '';
         }

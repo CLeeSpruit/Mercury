@@ -67,11 +67,14 @@ export class TfsService {
             .map(this.mapWorkItems.bind(this));
     }
 
-    editWorkItem(itemId: number, changes: WorkItem): Observable<any> {
+    editWorkItem(itemId: number, changes: WorkItem, options?: {
+        hasNoAcceptanceCriteria?: boolean,
+        hasNoDescription?: boolean
+    }): Observable<any> {
         // Map changes to items that the server can parse
         const allChanges = [];
 
-        if (changes.remainingWork) {
+        if (changes.remainingWork !== undefined) {
             allChanges.push({
                 op: 'replace',
                 path: '/fields/Microsoft.VSTS.Scheduling.RemainingWork',
@@ -79,7 +82,7 @@ export class TfsService {
             });
         }
 
-        if (changes.state) {
+        if (changes.state !== undefined) {
             allChanges.push({
                 op: 'replace',
                 path: '/fields/System.State',
@@ -87,7 +90,7 @@ export class TfsService {
             });
         }
 
-        if (changes.title) {
+        if (changes.title !== undefined) {
             allChanges.push({
                 op: 'replace',
                 path: '/fields/System.Title',
@@ -95,20 +98,30 @@ export class TfsService {
             });
         }
 
-        if (changes.description) {
-            allChanges.push({
+        if (changes.description !== undefined) {
+            const change = {
                 op: 'replace',
                 path: '/fields/System.Description',
                 value: changes.description
-            });
+            };
+
+            if (options.hasNoDescription) {
+                change.op = 'add';
+            }
+            allChanges.push(change);
         }
 
-        if (changes.acceptanceCriteria) {
-            allChanges.push({
+        if (changes.acceptanceCriteria !== undefined) {
+            const change = {
                 op: 'replace',
                 path: '/fields/Microsoft.VSTS.Common.AcceptanceCriteria',
                 value: changes.acceptanceCriteria
-            });
+            };
+
+            if (options.hasNoDescription) {
+                change.op = 'add';
+            }
+            allChanges.push(change);
         }
 
         return this.http.patch(
