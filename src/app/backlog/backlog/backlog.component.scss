@@ -9,6 +9,8 @@
         font-weight: 500;
         color: white;
         display: flex;
+        position: sticky;
+        top: 0;
         @include blue();
 
         .table-label {
