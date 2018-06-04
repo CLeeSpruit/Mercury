@@ -7,7 +7,7 @@ import 'rxjs/add/operator/catch';
 
 import { WorkItem } from '@sprint/models/work-item';
 import { Sprint } from '@sprint/models/sprint';
-import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
+import { WorkItemMapper, FieldMap } from '@sprint/constants/work-item-mapper';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
 import { SprintQueryService } from '@sprint/services/sprint-query.service';
 
@@ -47,7 +47,7 @@ export class TfsService {
 
     getSprint(sprintId: string): Observable<Sprint> {
         return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations/${sprintId}`, this.options)
-        .map(data => data as Sprint);
+            .map(data => data as Sprint);
     }
 
     getAllSprints(): Observable<Array<Sprint>> {
@@ -67,62 +67,29 @@ export class TfsService {
             .map(this.mapWorkItems.bind(this));
     }
 
-    editWorkItem(itemId: number, changes: WorkItem, options?: {
-        hasNoAcceptanceCriteria?: boolean,
-        hasNoDescription?: boolean
-    }): Observable<any> {
+    editWorkItem(itemId: number, changes: WorkItem, additions?: WorkItem): Observable<any> {
         // Map changes to items that the server can parse
         const allChanges = [];
 
-        if (changes.remainingWork !== undefined) {
-            allChanges.push({
-                op: 'replace',
-                path: '/fields/Microsoft.VSTS.Scheduling.RemainingWork',
-                value: changes.remainingWork
-            });
-        }
+        FieldMap.forEach((value, key) => {
+            if (changes[key] !== undefined || additions[key] !== undefined) {
+                const change = {
+                    op: '',
+                    path: `/fields/${value}`,
+                    value: null
+                };
 
-        if (changes.state !== undefined) {
-            allChanges.push({
-                op: 'replace',
-                path: '/fields/System.State',
-                value: changes.state
-            });
-        }
+                if (changes[key] !== undefined) {
+                    change.op = 'replace';
+                    change.value = changes[key];
+                } else {
+                    change.op = 'add';
+                    change.value = additions[key];
+                }
 
-        if (changes.title !== undefined) {
-            allChanges.push({
-                op: 'replace',
-                path: '/fields/System.Title',
-                value: changes.title
-            });
-        }
-
-        if (changes.description !== undefined) {
-            const change = {
-                op: 'replace',
-                path: '/fields/System.Description',
-                value: changes.description
-            };
-
-            if (options.hasNoDescription) {
-                change.op = 'add';
+                allChanges.push(change);
             }
-            allChanges.push(change);
-        }
-
-        if (changes.acceptanceCriteria !== undefined) {
-            const change = {
-                op: 'replace',
-                path: '/fields/Microsoft.VSTS.Common.AcceptanceCriteria',
-                value: changes.acceptanceCriteria
-            };
-
-            if (options.hasNoDescription) {
-                change.op = 'add';
-            }
-            allChanges.push(change);
-        }
+        });
 
         return this.http.patch(
             `${this.baseLocationGeneric}wit/workitems/${itemId}?api-version=1.0`,

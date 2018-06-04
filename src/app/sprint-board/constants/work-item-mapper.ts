@@ -120,7 +120,7 @@ export class WorkItemMapper {
     }
 }
 
-const FieldMap = new Map<string, string>(
+export const FieldMap = new Map<string, string>(
         [
             ['areaPath', 'System.AreaPath'],
             ['teamProject', 'System.TeamProject'],

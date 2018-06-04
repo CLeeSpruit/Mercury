@@ -45,17 +45,21 @@ export class PbiComponent implements OnInit {
 
     save() {
         const changes: WorkItem = <WorkItem>{};
+        const additions: WorkItem = <WorkItem>{};
         for (const key in this.pbi) {
             if (this.pbi[key] !== this.unsavedPbi[key]) {
-                changes[key] = this.pbi[key];
+                if (key === 'description' && this.hasNoDescription) {
+                    additions[key] = this.pbi[key];
+                } else if (key === 'acceptanceCriteria' && this.hasNoAcceptanceCriteria) {
+                    additions[key] = this.pbi[key];
+                } else {
+                    changes[key] = this.pbi[key];
+                }
             }
         }
 
         if (changes !== <WorkItem>{}) {
-            this.tfsService.editWorkItem(this.pbi.id, changes, {
-                hasNoDescription: this.hasNoDescription,
-                hasNoAcceptanceCriteria: this.hasNoAcceptanceCriteria
-            })
+            this.tfsService.editWorkItem(this.pbi.id, changes, additions)
                 .subscribe(() => {
                     // TODO: Put something here
                 });

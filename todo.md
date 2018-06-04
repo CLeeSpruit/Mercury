@@ -37,11 +37,9 @@
 ### Tasks
 * Add ability to delete tasks
 * Figure out what to do with tasks that exists in sprints that are not the current sprint (roll-over pbis)
-* Bug: Adding hours to a new task does not work
 * Bug: New task is put at the bottom of list (after Add New)
 * Bug: New task icon doesn't show up on refresh
 * Add ability to assign a task to a person or self
-* Add more variation for people's name colors
 
 ## Cleanup
 * Remove importing ALL of bootstrap in files

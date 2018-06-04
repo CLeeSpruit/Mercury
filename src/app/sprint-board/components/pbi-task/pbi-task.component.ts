@@ -99,7 +99,11 @@ export class PbiTaskComponent implements OnChanges {
     hoursChange(hours: number) {
         this.toggleHours();
         if (hours && this.task.remainingWork !== hours) {
-            this.tfsService.editWorkItem(this.task.id, <WorkItem>{ remainingWork: hours }).subscribe(data =>
+            const modify: WorkItem = <WorkItem>{ remainingWork: hours };
+            let change, add;
+            change = this.task.remainingWork ? modify : {};
+            add = !this.task.remainingWork ? modify : {};
+            this.tfsService.editWorkItem(this.task.id, change, add).subscribe(data =>
                 this.task.remainingWork = hours
             );
         }
