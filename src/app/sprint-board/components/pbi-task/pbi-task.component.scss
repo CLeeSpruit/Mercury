@@ -1,6 +1,20 @@
 $initals-height: 2em;
 
 .pbi-task {
+    display: flex;
+    justify-content: space-between;
+
+    .column {
+        &.assigned{
+            min-width: 2em;
+        }
+
+        &.text {
+            padding: 1em;
+            width: 100%;
+        }
+    }
+
     .initials {
         display: block;
         text-align: center;

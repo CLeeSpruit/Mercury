@@ -1,9 +1,9 @@
-<div class="pbi-task row" 
+<div class="pbi-task" 
     [class.in-progress]="task.state === 'In Progress'"
     [class.done]="task.state ==='Done'" 
     *ngIf="task"
     >
-    <div class="assigned col-2">
+    <div class="assigned column">
         <span 
             class="initials" 
             [style.background-color]="initialsColor"
@@ -12,7 +12,7 @@
         ></span>
     </div>
     
-    <div class="child text col-7" *ngIf="!isNew">
+    <div class="child text column" *ngIf="!isNew">
         <span
             *ngIf="!titleEditable"
             [innerHtml]="task.title"
@@ -26,7 +26,7 @@
             (blur)="saveTitle(titleInput.value)"
         />
     </div>
-    <div class="child text col-7" *ngIf="isNew">
+    <div class="child text column" *ngIf="isNew">
         <span
             *ngIf="!titleEditable"
             class="new"
@@ -42,7 +42,7 @@
         />
     </div>
 
-    <div class="child col-3">
+    <div class="child column">
         <div class="btn-group" role="group" *ngIf="!isNew">
             <div class="dropdown btn-group" *ngIf="task.state !== 'Done' && task.remainingWork !== 0">
                 <a
