@@ -58,7 +58,7 @@ export class PbiComponent implements OnInit {
             }
         }
 
-        if (changes !== <WorkItem>{}) {
+        if (changes !== <WorkItem>{} || additions !== <WorkItem>{}) {
             this.tfsService.editWorkItem(this.pbi.id, changes, additions)
                 .subscribe(() => {
                     // TODO: Put something here
@@ -74,9 +74,9 @@ export class PbiComponent implements OnInit {
     private setPbi() {
         this.unsavedPbi = Object.assign({}, this.pbi);
         this.pbiTitle = `${this.pbi.id} - ${this.pbi.title}`;
-        this.hasNoAcceptanceCriteria = !!this.pbi.acceptanceCriteria;
+        this.hasNoAcceptanceCriteria = !this.pbi.acceptanceCriteria;
         // TODO: Bugs do not have a description
-        this.hasNoDescription = !!this.pbi.description;
+        this.hasNoDescription = !this.pbi.description;
         if (!this.pbi.description) {
             this.pbi.description = '';
         }
