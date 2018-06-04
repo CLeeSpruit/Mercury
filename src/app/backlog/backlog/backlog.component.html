@@ -1,0 +1,20 @@
+<div class="backlog">
+    <div class="table-header">
+        <div class="table-label">
+            <span>ID</span>
+        </div>
+        <div class="table-label">
+            <span>Title</span>
+        </div>
+        <div class="table-label">
+            <span>Effort</span>
+        </div>
+        <div class="table-label">
+            <span>Status</span>
+        </div>
+        <div class="table-label">
+            <span>Backlog Priority</span>
+        </div>
+    </div>
+    <div hg-backlog-item *ngFor="let backlogItem of backlogItems" [pbiId]="backlogItem" class="table-row"></div>
+</div>

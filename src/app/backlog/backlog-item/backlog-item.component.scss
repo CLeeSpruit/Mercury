@@ -1,8 +1,12 @@
 .backlog-item {
-    display: table-row;
+    display: table-row; 
 }
 
 .cell {
     display: table-cell;
     padding: 1em;
+}
+
+.placeholder {
+    column-span: all;
 }

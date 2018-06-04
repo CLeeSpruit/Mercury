@@ -4,7 +4,7 @@ import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
 
 @Component({
-    selector: 'hg-backlog-item',
+    selector: '[hg-backlog-item]',
     styleUrls: ['backlog-item.component.scss'],
     templateUrl: 'backlog-item.component.html'
 })

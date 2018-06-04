@@ -1,0 +1,25 @@
+@import '../../../scss/index.scss';
+
+.backlog {
+    display: table;
+    width: 100%;
+    .table-header {
+        display: table-header-group;
+        text-transform: uppercase;
+        font-weight: 500;
+        color: white;
+        @include blue();
+
+        .table-label {
+            display: table-cell;
+            padding: 1em;
+        }
+    }
+    .table-row {
+        display: table-row;
+
+        &:nth-of-type(odd){
+            background-color: rgba(0,0,0,0.1);
+        }
+    }
+}

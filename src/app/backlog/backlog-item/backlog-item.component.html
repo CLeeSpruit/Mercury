@@ -1,23 +1,23 @@
-<div class="backlog-item" *ngIf="isLoaded && pbi">
-    <div class="cell">
-        <span [innerHtml]="pbi.id"></span>
-    </div>
-    <div class="cell">
-        <span [innerHtml]="pbi.title"></span>
-    </div>
-    <div class="cell">
-        <span [innerHtml]="pbi.effort"></span>
-    </div>
-    <div class="cell">
-        <span [innerHtml]="pbi.state"></span>
-    </div>
-    <div class="cell">
-        <span [innerHtml]="pbi.backlogPriority"></span>
-    </div>
+<div class="cell" *ngIf="isLoaded && pbi">
+    <span [innerHtml]="pbi.id"></span>
 </div>
-<div class="backlog-item" *ngIf="isLoaded && !pbi">
+<div class="cell" *ngIf="isLoaded && pbi">
+    <span [innerHtml]="pbi.title"></span>
+</div>
+<div class="cell" *ngIf="isLoaded && pbi">
+    <span [innerHtml]="pbi.effort"></span>
+</div>
+<div class="cell" *ngIf="isLoaded && pbi">
+    <span [innerHtml]="pbi.state"></span>
+</div>
+<div class="cell" *ngIf="isLoaded && pbi">
+    <span [innerHtml]="pbi.backlogPriority"></span>
+</div>
+
+<!-- Not loaded -->
+<div class="cell placeholder" *ngIf="isLoaded && !pbi">
     Loading...
 </div>
-<div class="backlog-item" *ngIf="!isLoaded">
+<div class="cell placeholder" *ngIf="!isLoaded">
     <span>...</span>
 </div>

@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { SprintComponent } from '@sprint/components/sprint/sprint.component';
 import { EnvironmentsComponent } from '@environments/environments.component';
 import { SignInComponent } from '@auth/sign-in/sign-in.component';
-import { BacklogComponent } from '@backlog/backlog.component';
 import { PbiContainerComponent } from 'sprint-board/pbi-container/pbi-container.component';
+import { BacklogContainerComponent } from '@backlog/backlog-container/backlog-container.component';
 
 // TODO: Move this out to it's own modules to handle the routes + lazy load
 const appRoutes: Routes = [
@@ -14,7 +14,7 @@ const appRoutes: Routes = [
     { path: 'pbi/:pbiId', component: PbiContainerComponent },
     { path: 'pbi', redirectTo: 'sprint/current'},
     { path: 'environments', component: EnvironmentsComponent },
-    { path: 'backlog', component: BacklogComponent },
+    { path: 'backlog', component: BacklogContainerComponent },
     { path: 'auth', component: SignInComponent },
     { path: '', redirectTo: 'sprint/current', pathMatch: 'full' }
 ];
