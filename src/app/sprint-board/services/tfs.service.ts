@@ -109,9 +109,9 @@ export class TfsService {
             );
     }
 
-    createPbi(newPbi: WorkItem) {
+    createPbi(newPbi: WorkItem, iteration: string) {
         const type = WorkItemTypes.pbi;
-        const itemToBeAdded = this.workItemMapper.createNewTfsPBI(newPbi);
+        const itemToBeAdded = this.workItemMapper.createNewTfsPBI(newPbi, iteration);
 
         return this.http.patch(
             `${this.baseLocationOpus}wit/workitems/$${type}?api-version=1.0`,

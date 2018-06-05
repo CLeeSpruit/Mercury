@@ -6,10 +6,7 @@ import { WorkItem } from '../models/work-item';
 export class WorkItemMapper {
     fields: Map<string, string> = FieldMap;
 
-    createNewTfsPBI = (newPbi: WorkItem, iteration?: string, linkIds?: Array<number>) => {
-        // TODO: Have the option to not add this to the current iteration, but the backlog
-        // TODO: Also don't hard code this
-        iteration = 'OPUS\\Chupacabra\\Sprint 36';
+    createNewTfsPBI = (newPbi: WorkItem, iteration: string, linkIds?: Array<number>) => {
         const allChanges = [];
 
         if (newPbi.title) {
@@ -20,7 +17,7 @@ export class WorkItemMapper {
         }
 
         if (iteration) {
-            allChanges.push(this.buildField(iteration, 'iteration', false));
+            allChanges.push(this.buildField(iteration, 'iterationPath', false));
         }
 
         if (linkIds) {
@@ -35,6 +32,8 @@ export class WorkItemMapper {
                 });
             });
         }
+
+        return allChanges;
     }
 
     createNewTfsTask = (newTask: WorkItem, parent: WorkItem) => {

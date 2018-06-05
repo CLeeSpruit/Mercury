@@ -29,11 +29,12 @@
                 </div>
                 <div class="pbi-input" *ngIf="showAddNewPbi">
                     <input
-                    #pbiInput
+                        #pbiInput
                         [ngClass]="pbiType"
                         type="text" 
                         placeholder="Title"
                         size="59"
+                        (keyup.enter)="createPbi(pbiInput.value)"
                         />
                 </div>
             </div>

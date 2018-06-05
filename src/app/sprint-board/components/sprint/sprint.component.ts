@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/take';
@@ -18,8 +18,6 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./sprint.component.scss']
 })
 export class SprintComponent implements OnInit, OnDestroy {
-    @ViewChild('pbiInput') pbiInputBox: HTMLInputElement;
-
     showSprintSelect = false;
     showAddNewPbi = false;
     showTaskBoard = false;
@@ -119,9 +117,8 @@ export class SprintComponent implements OnInit, OnDestroy {
         this.pbiType = type;
     }
 
-    sendPbi() {
-        const title = this.pbiInputBox.textContent;
-        this.tfsService.createPbi(<WorkItem>{ title }).subscribe((data: WorkItem) => {
+    createPbi(titleText: string) {
+        this.tfsService.createPbi(<WorkItem>{ title: titleText }, this.sprint.path).subscribe((data: WorkItem) => {
             // TODO: Assign to column
         });
     }
