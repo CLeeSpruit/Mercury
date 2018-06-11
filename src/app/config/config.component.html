@@ -1,0 +1,12 @@
+<div class="config">
+    <div class="field">
+        <span class="field-label">Project: </span>
+        <select (change)="changeProject($event)">
+            <option
+                *ngFor="let project of projects"
+                [innerHtml]="project.title"
+                [selected]="project.title === currentProject"
+                ></option>
+        </select>
+    </div>
+</div>

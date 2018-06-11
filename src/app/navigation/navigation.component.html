@@ -1,6 +1,9 @@
 <div class="navigation">
     <div class="site-name">
-        <!-- <h3>Mercury</h3> -->
+        <h3>
+            <span [innerHtml]="projectTitle"></span>
+            <i class="fa fa-gear" (click)="openSettings()"></i>
+        </h3>
     </div>
     <div class="nav">
         <ul>
@@ -20,5 +23,4 @@
             </li>
         </ul>
     </div>
-
 </div>

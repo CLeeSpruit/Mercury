@@ -13,6 +13,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { PbiContainerComponent } from 'sprint-board/pbi-container/pbi-container.component';
+import { ConfigModule } from 'config/config.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PbiContainerComponent } from 'sprint-board/pbi-container/pbi-container.
     BacklogModule,
     EnvironmentsModule,
     SharedModule,
-    SprintBoardModule
+    SprintBoardModule,
+    ConfigModule
   ],
   bootstrap: [AppComponent]
 })
