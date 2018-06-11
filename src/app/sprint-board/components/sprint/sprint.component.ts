@@ -119,7 +119,7 @@ export class SprintComponent implements OnInit, OnDestroy {
 
     createPbi(titleText: string) {
         this.tfsService.createPbi(<WorkItem>{ title: titleText }, this.sprint.path).subscribe((data: WorkItem) => {
-            // TODO: Assign to column
+            this.columns[TaskStatus.todo].push(data);
         });
     }
 
