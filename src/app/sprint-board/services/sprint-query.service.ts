@@ -5,10 +5,14 @@ import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { Query } from '@shared/models/query';
 import { HttpClient } from '@angular/common/http';
 import { WorkItem } from '@sprint/models/work-item';
+import { ConfigService } from 'config/services/config.service';
 
 @Injectable()
 export class SprintQueryService extends QueryService {
-    constructor(protected http: HttpClient) { super(http); }
+    constructor(
+        protected http: HttpClient,
+        protected configService: ConfigService
+    ) { super(http, configService); }
 
     // TODO: clean this up and move to query service
     private fetchQuery(sprint: Sprint): AsyncSubject<string> {

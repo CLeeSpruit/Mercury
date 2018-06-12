@@ -4,8 +4,8 @@
         <select (change)="changeProject($event)">
             <option
                 *ngFor="let project of projects"
-                [innerHtml]="project.title"
-                [selected]="project.title === currentProject"
+                [innerHtml]="project.name"
+                [selected]="project.name === currentProject"
                 ></option>
         </select>
     </div>

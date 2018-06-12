@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/concat';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AsyncSubject } from 'rxjs/AsyncSubject';
 
 import { Build } from '../models/build.model';
 import { Release } from '../models/release.model';
@@ -10,12 +12,13 @@ import { Artifact } from '../models/artifact.model';
 import { ReleaseRequest, ReleaseArtifact } from '../models/release-request.model';
 import { BuildDefinition } from '../models/build-definition.model';
 import { ReleaseDefinition } from '../models/release-definition.model';
+import { ConfigService } from 'config/services/config.service';
+
 
 @Injectable()
 export class TfsEnvironmentService {
-    // TODO: Don't hard code this.
-    private baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
-    private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
+    private baseProjectLocation: string;
+    private apiReady: AsyncSubject<boolean> = new AsyncSubject<boolean>();
 
     private options = {
         headers: new HttpHeaders({
@@ -25,11 +28,20 @@ export class TfsEnvironmentService {
     };
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private configService: ConfigService
     ) { }
 
+    init() {
+        this.configService.getProjectApiUrl().subscribe(url => {
+            this.baseProjectLocation = url;
+            this.apiReady.next(true);
+            this.apiReady.complete();
+        });
+    }
+
     getBuilds(): Observable<Array<Build>> {
-        return this.http.get(`${this.baseLocationOpus}/build/builds`, this.options)
+        return this.http.get(`${this.baseProjectLocation}/build/builds`, this.options)
             .map((response: any) => {
                 const builds: Array<Build> = response.value;
                 return builds.map((build) => {
@@ -65,24 +77,24 @@ export class TfsEnvironmentService {
 
     // Not used
     getBuildTimeline(build: Build) {
-        return this.http.get(`${this.baseLocationOpus}/build/builds/${build.id}/timeline`, this.options)
+        return this.http.get(`${this.baseProjectLocation}/build/builds/${build.id}/timeline`, this.options)
             .catch(this.handleError);
     }
 
     getBuildDefinitions(): Observable<Array<BuildDefinition>> {
-        return this.http.get(`${this.baseLocationOpus}/build/definitions`, this.options)
+        return this.http.get(`${this.baseProjectLocation}/build/definitions`, this.options)
             .map(this.getValue)
             .catch(this.handleError);
     }
 
     getReleases(): Observable<Array<Release>> {
-        return this.http.get(`${this.baseLocationOpus}/release/releases`, this.options)
+        return this.http.get(`${this.baseProjectLocation}/release/releases`, this.options)
             .map(this.getValue)
             .catch(this.handleError);
     }
 
     getReleaseDetails(release: Release): Observable<Release> {
-        return this.http.get(`${this.baseLocationOpus}/release/releases/${release.id}`, this.options)
+        return this.http.get(`${this.baseProjectLocation}/release/releases/${release.id}`, this.options)
             .map((response: any | Release) => {
                 const artifact = <Artifact>{};
                 if (response.artifacts && response.artifacts[0] && response.artifacts[0].definitionReference) {
@@ -109,7 +121,7 @@ export class TfsEnvironmentService {
     }
 
     getReleaseDefinitions(): Observable<Array<ReleaseDefinition>> {
-        return this.http.get(`${this.baseLocationOpus}/release/definitions`, this.options)
+        return this.http.get(`${this.baseProjectLocation}/release/definitions`, this.options)
             .map((res: any) => {
                 return res.value;
             })
@@ -118,12 +130,12 @@ export class TfsEnvironmentService {
 
     createRelease(build: Build, definition: ReleaseDefinition) {
         return this.http
-        .post(
-            `${this.baseLocationOpus}/release/releases?api-version=2.2-preview.1`,
-            JSON.stringify(this.createReleaseRequest(build, definition)),
-            this.options)
-        .map(this.getValue)
-        .catch(this.handleError);
+            .post(
+                `${this.baseProjectLocation}/release/releases?api-version=2.2-preview.1`,
+                JSON.stringify(this.createReleaseRequest(build, definition)),
+                this.options)
+            .map(this.getValue)
+            .catch(this.handleError);
     }
 
     // TODO: Write a response handler

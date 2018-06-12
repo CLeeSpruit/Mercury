@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { QueryService } from '@shared/services/query.service';
 import { Query } from '@shared/models/query';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { WorkItem } from '@sprint/models/work-item';
+import { ConfigService } from 'config/services/config.service';
 
 @Injectable()
 export class BacklogService extends QueryService {
     backlogQueryName = '_backlog';
 
-    constructor(protected http: HttpClient) { super(http); }
+    constructor(
+        protected http: HttpClient,
+        protected configService: ConfigService
+    ) { super(http, configService); }
 
     getBacklog() {
         const workItemsSub: AsyncSubject<Array<string>> = new AsyncSubject<Array<string>>();

@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { Query } from '../models/query';
-import { Sprint } from '@sprint/models/sprint';
-import { WorkItem } from '@sprint/models/work-item';
+import { ConfigService } from 'config/services/config.service';
 
 export class QueryService {
-    protected baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
-    protected baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
+    protected baseLocationGeneric: string;
+    protected baseProjectLocation: string;
     protected myQueries = '/My%20Queries';
     protected folder = '/Mercury';
+    private apiReady: AsyncSubject<boolean> = new AsyncSubject<boolean>();
 
     protected options = {
         headers: new HttpHeaders({
@@ -20,8 +19,17 @@ export class QueryService {
     };
 
     constructor(
-        protected http: HttpClient
+        protected http: HttpClient,
+        protected configService: ConfigService
     ) { }
+
+    init() {
+        this.configService.getProjectApiUrl().subscribe(url => {
+            this.baseProjectLocation = url;
+            this.apiReady.next(true);
+            this.apiReady.complete();
+        });
+    }
 
     /*** Create Folder Query ***/
 
@@ -33,7 +41,7 @@ export class QueryService {
             name: 'Mercury',
             isFolder: true
         };
-        return this.http.post(`${this.baseLocationOpus}wit/queries/${this.myQueries}?api-version=1.0`, query, this.options)
+        return this.http.post(`${this.baseProjectLocation}wit/queries/${this.myQueries}?api-version=1.0`, query, this.options)
             .map((data: any) => data.id);
     }
 
@@ -41,7 +49,7 @@ export class QueryService {
     private getMercuryFolder(): Observable<string> {
         // TODO: Consider storing the folder id in localstorage
         const mercuryLocation = this.myQueries + this.folder;
-        return this.http.get(`${this.baseLocationOpus}wit/queries${mercuryLocation}`, this.options).map((data: any) => data.id);
+        return this.http.get(`${this.baseProjectLocation}wit/queries${mercuryLocation}`, this.options).map((data: any) => data.id);
     }
 
     // TODO: Move this to protected when fetch is recreated
@@ -72,7 +80,7 @@ export class QueryService {
     protected getQuery(name: string) {
         const mercuryLocation = this.myQueries + this.folder;
         return this.http.get(
-            `${this.baseLocationOpus}wit/queries${mercuryLocation}/${name}`, this.options)
+            `${this.baseProjectLocation}wit/queries${mercuryLocation}/${name}`, this.options)
             .map((data: any) => data.id);
     }
 
@@ -84,7 +92,7 @@ export class QueryService {
             query.isFolder = false;
 
             // Create New Mercury query
-            this.http.post(`${this.baseLocationOpus}wit/queries/${id}?api-version=1.0`, query, this.options).subscribe(
+            this.http.post(`${this.baseProjectLocation}wit/queries/${id}?api-version=1.0`, query, this.options).subscribe(
                 (data: any) => {
                     isSuccessful.next(data.id);
                     isSuccessful.complete();
@@ -98,7 +106,7 @@ export class QueryService {
     }
 
     protected runQuery(queryId: any): Observable<Array<any>> {
-        return this.http.get(`${this.baseLocationOpus}wit/wiql/${queryId}`, this.options)
+        return this.http.get(`${this.baseProjectLocation}wit/wiql/${queryId}`, this.options)
             .map((data: any) => {
                 if (data.workItems) {
                     return data.workItems.map(wi => {

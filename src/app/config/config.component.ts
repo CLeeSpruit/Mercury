@@ -29,6 +29,6 @@ export class ConfigComponent implements OnInit, OnDestroy {
     changeProject($event: any) {
         const index = $event.target.options.selectedIndex;
 
-        this.configService.setCurrentProject(this.projects[index].title);
+        this.configService.setCurrentProject(this.projects[index].name);
     }
 }

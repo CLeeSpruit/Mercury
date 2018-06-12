@@ -10,11 +10,13 @@ import { Sprint } from '@sprint/models/sprint';
 import { WorkItemMapper, FieldMap } from '@sprint/constants/work-item-mapper';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
 import { SprintQueryService } from '@sprint/services/sprint-query.service';
+import { ConfigService } from 'config/services/config.service';
 
 @Injectable()
 export class TfsService {
-    private baseLocationGeneric = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
-    private baseLocationOpus = 'http://tfs2013-mn:8080/tfs/DefaultCollection/OPUS/_apis/';
+    private baseLocationGeneric: string;
+    private baseProjectLocation: string;
+    private apiReady: AsyncSubject<boolean> = new AsyncSubject<boolean>();
 
     private options = {
         headers: new HttpHeaders({
@@ -26,32 +28,39 @@ export class TfsService {
     constructor(
         private http: HttpClient,
         private workItemMapper: WorkItemMapper,
-        private sprintQueryService: SprintQueryService
+        private sprintQueryService: SprintQueryService,
+        private configService: ConfigService
     ) { }
 
-    getProjects(): Observable<any> {
-        return this.http.get(`${this.baseLocationGeneric}projects`, this.options);
+    init() {
+        this.configService.getProjectApiUrl().subscribe(url => {
+            this.baseProjectLocation = url;
+            this.apiReady.next(true);
+            this.apiReady.complete();
+        });
+        this.baseLocationGeneric = this.configService.getApiUrl();
     }
 
     // Not used currently
+    // TODO: Fetch repo dynamically
     getRecentCommits() {
-        return this.http.get(`${this.baseLocationOpus}git/repositories/OPUS/commits`, this.options);
+        return this.http.get(`${this.baseProjectLocation}git/repositories/OPUS/commits`, this.options);
     }
 
     getCurrentSprint(): Observable<Sprint> {
-        return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations?$timeframe=current`, this.options)
+        return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations?$timeframe=current`, this.options)
             .map((data: any) => {
                 return <Sprint>(data.value[0]) || data;
             });
     }
 
     getSprint(sprintId: string): Observable<Sprint> {
-        return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations/${sprintId}`, this.options)
+        return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations/${sprintId}`, this.options)
             .map(data => data as Sprint);
     }
 
     getAllSprints(): Observable<Array<Sprint>> {
-        return this.http.get(`${this.baseLocationOpus}work/TeamSettings/Iterations`, this.options)
+        return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations`, this.options)
             .map((data: any) => {
                 return <Array<Sprint>>(data.value);
             });
@@ -102,7 +111,7 @@ export class TfsService {
         const itemToBeAdded = this.workItemMapper.createNewTfsTask(newItem, parent);
 
         return this.http.patch(
-            `${this.baseLocationOpus}wit/workitems/$${type}?api-version=1.0`,
+            `${this.baseProjectLocation}wit/workitems/$${type}?api-version=1.0`,
             JSON.stringify(itemToBeAdded),
             this.options).map(
                 this.mapWorkItems.bind(this)
@@ -114,7 +123,7 @@ export class TfsService {
         const itemToBeAdded = this.workItemMapper.createNewTfsPBI(newPbi, iteration);
 
         return this.http.patch(
-            `${this.baseLocationOpus}wit/workitems/$${type}?api-version=1.0`,
+            `${this.baseProjectLocation}wit/workitems/$${type}?api-version=1.0`,
             JSON.stringify(itemToBeAdded),
             this.options).map(
                 this.mapWorkItems.bind(this)
