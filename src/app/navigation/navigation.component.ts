@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthorizationService } from '@auth/services/authorization.service';
 import { ConfigService } from 'config/services/config.service';
 import { Subscription } from 'rxjs/Subscription';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'hg-navigation',
@@ -16,8 +15,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     constructor(
         private authService: AuthorizationService,
-        private configService: ConfigService,
-        private router: Router
+        private configService: ConfigService
     ) { }
 
     ngOnInit() {
@@ -29,7 +27,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
 
     openSettings() {
-        this.router.navigate(['/', 'config']);
+        this.configService.openSettingsModal();
     }
 
     logout() {

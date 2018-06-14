@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ConfigService } from './services/config.service';
+import { ConfigService } from '../services/config.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Project } from '@shared/models/project.class';
 
 @Component({
-    selector: 'hg-config',
-    styleUrls: ['config.component.scss'],
-    templateUrl: 'config.component.html'
+    selector: 'hg-project-select',
+    styleUrls: ['project-select.component.scss'],
+    templateUrl: 'project-select.component.html'
 })
-export class ConfigComponent implements OnInit, OnDestroy {
+export class ProjectSelectComponent implements OnInit, OnDestroy {
     currentProject: string;
     projects: Array<Project> = new Array<Project>();
 
@@ -18,8 +18,11 @@ export class ConfigComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.subscriptions.push(this.configService.getCurrentProject().subscribe(project => this.currentProject = project));
-        this.subscriptions.push(this.configService.getProjects().subscribe(projects => this.projects = projects ));
+        this.subscriptions.push(this.configService.getCurrentProject().subscribe(project => {
+            console.log(this.currentProject);
+            this.currentProject = project;
+        }));
+        this.subscriptions.push(this.configService.getProjects().subscribe(projects => this.projects = projects));
     }
 
     ngOnDestroy() {
@@ -28,7 +31,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
 
     changeProject($event: any) {
         const index = $event.target.options.selectedIndex;
-
         this.configService.setCurrentProject(this.projects[index].name);
+        this.configService.closeSettingModal();
     }
 }
