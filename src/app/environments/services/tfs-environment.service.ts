@@ -140,7 +140,6 @@ export class TfsEnvironmentService {
 
     // TODO: Write a response handler
     private handleError(error: Response | any, caught: Observable<any>) {
-        console.error(error.json());
         return Observable.throw(error);
     }
 

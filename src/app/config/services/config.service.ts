@@ -14,6 +14,7 @@ export class ConfigService {
     private projects: Array<Project> = new Array<Project>();
     private currentProjectsSub: BehaviorSubject<Array<Project>> = new BehaviorSubject<Array<Project>>(this.projects);
     private projectUrlSub: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    private modalSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private options = {
         headers: new HttpHeaders({
             'cache-control': 'no-cache',
@@ -32,6 +33,11 @@ export class ConfigService {
         if (currentProject) {
             this.setCurrentProject(currentProject);
         }
+    }
+
+    hasCurrentProject(): boolean {
+        // Used as a quick check if the stored in LS
+        return !!(window.localStorage.getItem(this.lsCurrentProject));
     }
 
     getCurrentProject(): Observable<string> {
@@ -80,6 +86,7 @@ export class ConfigService {
             this.settingsModal = comp;
             comp.instance.componentRefDestroy = comp.destroy;
             comp.changeDetectorRef.detectChanges();
+            this.modalSub.next(true);
         });
     }
 
@@ -87,5 +94,11 @@ export class ConfigService {
         if (this.settingsModal) {
             this.settingsModal.instance.close();
         }
+
+        this.modalSub.next(false);
+    }
+
+    getModalStatus(): Observable<boolean> {
+        return this.modalSub.asObservable();
     }
 }
