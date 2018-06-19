@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'hg-settings-modal',
@@ -8,7 +9,7 @@ import { Component } from '@angular/core';
 export class SettingsModalComponent {
     componentRefDestroy: Function;
 
-    constructor() { }
+    constructor(private router: Router) { }
 
     close() {
         // TODO: Figure out why this isn't being destroyed
@@ -18,5 +19,10 @@ export class SettingsModalComponent {
         // }
 
         window.location.reload();
+    }
+
+    navigateChangelog() {
+        this.router.navigate(['about']);
+        this.close();
     }
 }

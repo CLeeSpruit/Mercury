@@ -1,0 +1,30 @@
+[
+    {
+        "version": "1.0.0",
+        "date": "6/19/18",
+        "notes": [
+            "Added about page with changelog",
+            "Added ability to view other projects",
+            "Navigation shrunk down for easier viewing"
+        ]
+    },
+    {
+        "version": "0.9.0",
+        "date": "6/5/18",
+        "notes": [
+            "Added ability to add a PBI to a Sprint Backlog",
+            "Bugfixes for PBI-view editing",
+            "Fixed testing icon not showing up in sprint page"
+        ]
+    },
+    {
+        "version": "0.8.0",
+        "date": "6/1/18",
+        "notes": [
+            "Added Backlog page",
+            "Added fullscreen view for PBI",
+            "Added ability to view other iterations",
+            "Created Mercury repo in TFS"
+        ]
+    }
+]

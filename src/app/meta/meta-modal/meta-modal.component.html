@@ -1,0 +1,16 @@
+<div class="shader"></div>
+<div class="meta-modal">
+    <div class="title">
+        <h1>Mercury Task Manager</h1>
+    </div>
+    <div class="body">
+        <div class="field">
+            <span>Current Version :</span>
+            <span [innerHtml]="version"></span>
+        </div>
+        <div class="field">
+            <span>Changelog: </span>
+            <hg-change *ngFor="let change of changes" [change]="change"></hg-change>
+        </div>
+    </div>
+</div>

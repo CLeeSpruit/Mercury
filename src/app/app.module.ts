@@ -13,6 +13,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ConfigModule } from 'config/config.module';
+import { MetaModule } from 'meta/meta.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ConfigModule } from 'config/config.module';
     EnvironmentsModule,
     SharedModule,
     SprintBoardModule,
-    ConfigModule
+    ConfigModule,
+    MetaModule
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,11 @@
+<div class="change">
+    <div class="title">
+        <h3 [innerHtml]="change.version"></h3>
+    </div>
+    <div class="date">
+        <span [innerHtml]="change.date"></span>
+    </div>
+    <ul class="notes">
+        <li class="note" *ngFor="let note of change.notes" [innerHtml]="note"></li>
+    </ul>
+</div>

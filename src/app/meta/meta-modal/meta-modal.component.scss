@@ -1,10 +1,9 @@
 @import '../../../scss/index.scss';
 
-.settings-modal {
+.meta-modal {
     @include modalize;
     border: 0;
     text-align: center;
-    min-width: 25em;
 
     .title {
         h1 {
@@ -33,10 +32,6 @@
         
         .note { 
             font-size: .8em;
-        }
-        
-        .changelog {
-            margin-top: 1em;
         }
     }
 }

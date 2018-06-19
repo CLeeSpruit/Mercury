@@ -1,0 +1,12 @@
+.change {
+    text-align: left;
+
+    .title, .date {
+        display: inline-block;
+    }
+
+    .date {
+        font-style: italic;
+        margin-left: 1em;
+    }
+}
