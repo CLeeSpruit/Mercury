@@ -3,7 +3,6 @@
 ## Authorization
 * Add "Continue as Guest"
 * Add more reliable way to store PATs
-* If a request returns as not authorized, show modal
 
 ## Environments Page
 * Add indicator that Deploy went though successfully
