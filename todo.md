@@ -19,6 +19,9 @@
 * Store sprint query IDs in localstorage for faster responses
 * Store folder ID in localstorage for faster query creation
 
+* Add section at the top of each column to show WIP limit
+* Add a WIP limit to in progress
+
 ### PBI Panel
 * Open PBI panel in center of viewport, not at the top
 * Allow for panel to be at bottom of screen
@@ -28,6 +31,14 @@
 ### Display
 * Emphasize what's currently in progress
     * Alternatively, de-emphasize what isn't in progress
+* Collapse done tasks to be smaller and slimmer
+
+#### Bugs
+* New tasks do not add properly
+* New tasks should automatically have focus
+* New tasks should close when losing focus
+* Cannot move a task to done
+* Opening a sprint with no items constantly has a loading icon
 
 ### PBI
 * Make Items Draggable in priority
@@ -62,6 +73,3 @@
 * Set dates
 * Set Sprint Name (based off of Sprint # -)
 * Set team capacity (days off)
-
-### Changelog Page
-* Post a list of recent bugfixes and features
