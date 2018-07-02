@@ -17,7 +17,7 @@
         </div>
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let child of pbi.children">
+        <li class="list-group-item" *ngFor="let child of pbi.children; trackBy: trackTasks">
             <hg-pbi-task [task]="child" (taskChanged)="pbiChanged($event)"></hg-pbi-task>
         </li>
         <li class="list-group-item">

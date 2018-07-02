@@ -1,8 +1,8 @@
-<div class="col" [class.empty]="!list.length">
+<div class="col" [class.empty]="!items.length">
     <div class="header" [innerHTML]="label"></div>
     <div class="col-body">
         <hg-pbi-card
-            *ngFor="let pbi of list"
+            *ngFor="let pbi of items"
             [pbi]="pbi"
         ></hg-pbi-card>
     </div>

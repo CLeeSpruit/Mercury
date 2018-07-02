@@ -47,6 +47,7 @@ export class PbiCardComponent implements OnChanges {
         this.sprintService.setSelectedPbi(wi);
     }
 
+    // TODO: Consider moving this out to it's own file
     private parseHeader() {
         const title = this.pbi.title;
         if (title.toLowerCase().includes('publish')) {
@@ -59,5 +60,9 @@ export class PbiCardComponent implements OnChanges {
         } else {
             this.keyword = 'op';
         }
+    }
+
+    trackTasks(index, task: WorkItem) {
+        return task.backlogPriority;
     }
 }
