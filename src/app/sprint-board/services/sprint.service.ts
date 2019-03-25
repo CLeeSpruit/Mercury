@@ -8,6 +8,7 @@ export class SprintService {
     private workItemChangedSub: Subject<WorkItem> = new Subject<WorkItem>();
     private selectedPbi: Subject<WorkItem> = new Subject<WorkItem>();
 
+    // TODO: no one is listening
     listenToWorkItemChange() {
         return this.workItemChangedSub.asObservable();
     }

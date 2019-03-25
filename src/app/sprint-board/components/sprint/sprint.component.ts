@@ -27,7 +27,6 @@ export class SprintComponent implements OnInit, OnDestroy {
     sprints: Array<Sprint> = new Array<Sprint>(); // Display list on showSprintSelect
     private sprintId: string;
 
-    columns: Array<Array<WorkItem>> = new Array<Array<WorkItem>>();
     pbiType: string;
 
     private pbiSelecitonSubscription: Subscription = new Subscription();
@@ -70,11 +69,6 @@ export class SprintComponent implements OnInit, OnDestroy {
         this.showTaskBoard = false;
         this.showPbiSlider = false;
 
-        this.columns[TaskStatus.todo] = new Array<WorkItem>();
-        this.columns[TaskStatus.inProgress] = new Array<WorkItem>();
-        this.columns[TaskStatus.testing] = new Array<WorkItem>();
-        this.columns[TaskStatus.done] = new Array<WorkItem>();
-
         // Reinit subscriptions
         this.getSprint();
     }
@@ -86,10 +80,11 @@ export class SprintComponent implements OnInit, OnDestroy {
         sprintSub.take(1).subscribe((data: Sprint) => {
             this.sprint = data;
 
-            this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<number>) => {
+            this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<string>) => {
                 // TODO: This might no longer be needed if the query is done correctly
                 this.tfsService.getSpecificWorkItems(workItems).subscribe((workItemsData: Array<WorkItem>) => {
                     this.sprintCommService.setAllPbis(workItemsData);
+                    this.showTaskBoard = true;
                 });
             });
         }, () => {
@@ -105,7 +100,8 @@ export class SprintComponent implements OnInit, OnDestroy {
 
     createPbi(titleText: string) {
         this.tfsService.createPbi(<WorkItem>{ title: titleText }, this.sprint.path).subscribe((data: WorkItem) => {
-            this.columns[TaskStatus.todo].push(data);
+            // TODO: Create PBI through comm service
+            // this.columns[TaskStatus.todo].push(data);
         });
     }
 

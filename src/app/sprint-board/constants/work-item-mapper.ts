@@ -6,7 +6,7 @@ import { WorkItem } from '../models/work-item';
 export class WorkItemMapper {
     fields: Map<string, string> = FieldMap;
 
-    createNewTfsPBI = (newPbi: WorkItem, iteration: string, linkIds?: Array<number>) => {
+    createNewTfsPBI = (newPbi: WorkItem, iteration: string, linkIds?: Array<string>) => {
         const allChanges = [];
 
         if (newPbi.title) {
@@ -21,7 +21,7 @@ export class WorkItemMapper {
         }
 
         if (linkIds) {
-            linkIds.forEach((id: number) => {
+            linkIds.forEach((id: string) => {
                 allChanges.push({
                     op: 'add',
                     path: '/relations/-',
@@ -36,17 +36,18 @@ export class WorkItemMapper {
         return allChanges;
     }
 
-    createNewTfsTask = (newTask: WorkItem, parent: WorkItem) => {
+    createNewTfsTask = (newTask: WorkItem, parent: WorkItem, iterationPath?: string) => {
         const allChanges = [];
 
-        if (newTask.title) {
+        if (newTask) {
             allChanges.push(this.buildField(newTask, 'title'));
         } else {
             // Title is required
             return null;
         }
 
-        if (parent.iterationPath) {
+        // If no iteration path, this is added to the backlog
+        if (iterationPath) {
             allChanges.push(this.buildField(parent, 'iterationPath'));
         }
 
@@ -105,7 +106,7 @@ export class WorkItemMapper {
         return url.match(/\d*$/)[0];
     }
 
-    private buildUrl(id: number): string {
+    private buildUrl(id: string): string {
         const baseUrl = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_api/_wit/workItems/';
         return baseUrl + id;
     }

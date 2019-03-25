@@ -6,7 +6,7 @@ import { TfsService } from '@sprint/services/tfs.service';
 import { BacklogItemComponent } from '@backlog/backlog-item/backlog-item.component';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { Subscription } from 'rxjs/Subscription';
-import { Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 
@@ -48,7 +48,7 @@ export class BacklogComponent implements OnInit, AfterViewInit {
     }
 
     private getScroll() {
-        const toBeLoaded: Map<number, AsyncSubject<WorkItem>> = new Map<number, AsyncSubject<WorkItem>>();
+        const toBeLoaded: Map<string, AsyncSubject<WorkItem>> = new Map<string, AsyncSubject<WorkItem>>();
         this.backlogItemComponents.forEach((comp: BacklogItemComponent) => {
             const loaded = comp.checkScroll();
             if (!comp.pbi && loaded) {

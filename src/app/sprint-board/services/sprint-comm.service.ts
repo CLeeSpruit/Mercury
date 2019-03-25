@@ -4,11 +4,13 @@ import { WorkItem } from '@sprint/models/work-item';
 import { Observable } from 'rxjs/Observable';
 import { TaskStatus } from '@sprint/constants/task-status';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
+import { TfsService } from '@sprint/services/tfs.service';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class SprintCommService {
     // Used for individual components, a queryable mirror of the subject below
-    private pbis: Map<number, BehaviorSubject<WorkItem>> = new Map<number, BehaviorSubject<WorkItem>>();
+    private pbis: Map<string | number, BehaviorSubject<WorkItem>> = new Map<string | number, BehaviorSubject<WorkItem>>();
     // Used for the sprint component
     private allPbis: BehaviorSubject<Array<WorkItem>> = new BehaviorSubject<Array<WorkItem>>([]);
     // Used for column components
@@ -18,8 +20,41 @@ export class SprintCommService {
         [TaskStatus.done, new BehaviorSubject([])]
     ]);
 
-    getPbi(id: number): Observable<WorkItem> {
-        return this.pbis.get(id).asObservable();
+    constructor(private tfsService: TfsService) { }
+
+    /*** Task ***/
+    createTask(taskTitle: string, parentId: string) {
+        const parent = this.pbis.get(parentId).getValue();
+        this.tfsService.createTask(taskTitle, parent).subscribe((data: WorkItem) => {
+            this.setTask(data);
+            // Add to parent without having to refetch
+            parent.childrenIds.push(data.id);
+            this.setPbi(parent);
+        });
+    }
+
+    setTask(task: WorkItem, parentId?: string) {
+        const subject = this.pbis.get(task.id);
+        if (parentId) {
+            // Tell the parent to reinit
+            const parent = this.pbis.get(parentId).getValue();
+            const childTaskIndex = parent.children.findIndex(child => child.id === task.id);
+            if (childTaskIndex !== -1) {
+                const newChildren = new Array(...parent.children);
+                newChildren[childTaskIndex] = task;
+                parent.children = newChildren;
+                this.setPbi(parent);
+            }
+        }
+        subject.next(task);
+    }
+
+    /*** PBI ***/
+    getWorkItem(id: string | number): Observable<WorkItem> {
+        if (!this.pbis.get(+id)) {
+            return Observable.of(null);
+        }
+        return this.pbis.get(+id).asObservable();
     }
 
     setPbi(pbi: WorkItem) {
@@ -33,6 +68,7 @@ export class SprintCommService {
         subject.next(pbi);
     }
 
+    /*** Sprint level ***/
     getAllPbis(): Observable<Array<WorkItem>> {
         return this.allPbis.asObservable();
     }
@@ -41,11 +77,15 @@ export class SprintCommService {
         this.pbis.forEach(pbi => pbi.unsubscribe());
         this.pbis.clear();
 
-        this.sortWork(pbisArr);
+        const sorted = this.sortPbis(pbisArr);
         pbisArr.forEach(pbi => {
-            this.pbis.set(pbi.id, new BehaviorSubject(pbi));
+            this.pbis.set(+pbi.id, new BehaviorSubject(pbi));
         });
         this.allPbis.next(pbisArr);
+        this.columns.get(TaskStatus.todo).next(sorted.filter(wi => wi.column === TaskStatus.todo));
+        this.columns.get(TaskStatus.inProgress).next(sorted.filter(wi => wi.column === TaskStatus.inProgress));
+        this.columns.get(TaskStatus.done).next(sorted.filter(wi => wi.column === TaskStatus.done));
+
     }
 
     getColumn(columnName: string): Observable<Array<WorkItem>> {
@@ -54,31 +94,30 @@ export class SprintCommService {
 
     /*** Private ***/
 
-    private sortWork(workItems: Array<WorkItem>): Array<WorkItem> {
+    private sortPbis(workItems: Array<WorkItem>): Array<WorkItem> {
         const items: Array<WorkItem> = workItems
             .filter(wi => (wi.workItemType === WorkItemTypes.pbi || wi.workItemType === WorkItemTypes.bug))
-            .map((wi: WorkItem, index: number, arr: Array<WorkItem>) => {
-                wi = this.linkTasks(wi, arr);
+            .map((wi: WorkItem) => {
+                wi = this.linkTasks(wi, workItems);
                 wi = this.findColumn(wi);
                 return wi;
             });
-
-        this.columns.get(TaskStatus.todo).next(items.filter(wi => wi.column === TaskStatus.todo));
-        this.columns.get(TaskStatus.inProgress).next(items.filter(wi => wi.column === TaskStatus.inProgress));
-        this.columns.get(TaskStatus.done).next(items.filter(wi => wi.column === TaskStatus.todo));
-
         return items;
     }
 
     private linkTasks(pbi: WorkItem, pbiList: Array<WorkItem>): WorkItem {
         // For now, only go one deep. If a tree is needed...well, we'll get to that bridge when we come to it
+        // This is left for marking what column each pbi card goes into.
+        // Children linking is up to the childid attached to the parent.
         if (pbi.childrenIds && pbi.childrenIds.length) {
-            pbi.children = pbi.childrenIds.map((taskId: number) => {
+            pbi.children = pbi.childrenIds.map((taskId: string) => {
                 if (!taskId) { return; }
 
-                const id = taskId;
+                // Tasks that do not show up:
+                // Removed
+                // Tasks from last sprint (Do we want this?)
                 return pbiList.find((task: WorkItem) => {
-                    return task.id === +id;
+                    return +(task.id) === +taskId;
                 });
             }).filter((task: WorkItem) => {
                 if (task) { return task; }
@@ -88,6 +127,7 @@ export class SprintCommService {
         return pbi;
     }
 
+    // TODO: Make this work outside of the sprint comm service
     private findColumn(workItem: WorkItem): WorkItem {
         // To do: No tasks have been assigned
         // In progress: One or more tasks have been moved to 'In Progress'
@@ -110,7 +150,7 @@ export class SprintCommService {
     }
 
     private moveColumn(workItem: WorkItem, previousColumn: string, nextColumn: string) {
-        const futureList = this.columns.get(nextColumn).getValue();
+        let futureList = this.columns.get(nextColumn).getValue();
         const previousList = this.columns.get(previousColumn).getValue();
         if (previousList) {
             const foundIndex = previousList.findIndex(wi => wi.id === workItem.id);
@@ -120,8 +160,23 @@ export class SprintCommService {
             }
         }
 
-        // TODO: Sort this by priority
         futureList.push(workItem);
+        // TODO: For some reason this isn't sorting the todo column correctly
+        this.sortColumn(futureList);
         this.columns.get(nextColumn).next(futureList);
+    }
+
+    private sortColumn(col: Array<WorkItem>) {
+        col.sort((a, b) => {
+            if (a.backlogPriority > b.backlogPriority) {
+                return 1;
+            }
+            if (a.backlogPriority < b.backlogPriority) {
+                return -1;
+            }
+            if (a.backlogPriority === b.backlogPriority) {
+                return 0;
+            }
+        });
     }
 }

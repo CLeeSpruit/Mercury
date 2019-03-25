@@ -1,46 +1,38 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { WorkItem } from '@sprint/models/work-item';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
+import { Subscription } from 'rxjs/Subscription';
+import { SprintCommService } from '@sprint/services/sprint-comm.service';
 
 @Component({
     selector: 'hg-pbi-card',
     templateUrl: './pbi-card.component.html',
     styleUrls: ['./pbi-card.component.scss']
 })
-export class PbiCardComponent implements OnChanges {
-    @Input() pbi: WorkItem;
+export class PbiCardComponent implements OnInit, OnDestroy {
+    // CAUTION: Using childIds will get you ALL children tasks, even if it's not in the sprint
+    @Input() id: string;
+
+    pbi: WorkItem;
     keyword: string;
+
+    private pbiSub: Subscription = new Subscription();
 
     constructor(
         private sprintService: SprintService,
-        private tfsService: TfsService
+        private sprintCommService: SprintCommService
     ) { }
 
-    ngOnChanges() {
-        if (this.pbi) {
-            this.parseHeader();
-        }
-    }
-
-    pbiChanged(wi: WorkItem) {
-        const foundIndex = this.pbi.children.findIndex(child => child.id === wi.id);
-        if (foundIndex !== -1) {
-            this.pbi.children[foundIndex] = wi;
-        }
-        this.sprintService.sendChangedWorkItem(this.pbi);
-    }
-
-    newTask(task: WorkItem) {
-        this.tfsService.createTask(task, this.pbi).subscribe((data: WorkItem) => {
-            if (this.pbi.children) {
-                this.pbi.children = new Array(...this.pbi.children, data);
-            } else {
-                this.pbi.children = [data];
-            }
-
-            this.pbiChanged(this.pbi);
+    ngOnInit() {
+        this.pbiSub = this.sprintCommService.getWorkItem(this.id).subscribe(data => {
+            this.pbi = data;
+            this.keyword = this.parseHeader(data);
         });
+    }
+
+    ngOnDestroy() {
+        this.pbiSub.unsubscribe();
     }
 
     selectPbi(wi: WorkItem) {
@@ -48,17 +40,17 @@ export class PbiCardComponent implements OnChanges {
     }
 
     // TODO: Consider moving this out to it's own file
-    private parseHeader() {
-        const title = this.pbi.title;
-        if (title.toLowerCase().includes('publish')) {
-            this.keyword = 'publish';
-        } else if (title.toLowerCase().includes('trac')) {
-            this.keyword = 'trac';
-        } else if (title.toLowerCase().includes('r & d') || title.toLowerCase().includes('r&d')
+    private parseHeader(pbi: WorkItem): string {
+        const title = pbi.title.toLowerCase();
+        if (title.includes('publish')) {
+            return 'publish';
+        } else if (title.includes('trac')) {
+            return 'trac';
+        } else if (title.includes('r & d') || title.includes('r&d')
         ) {
-            this.keyword = 'test';
+            return 'test';
         } else {
-            this.keyword = 'op';
+            return 'op';
         }
     }
 

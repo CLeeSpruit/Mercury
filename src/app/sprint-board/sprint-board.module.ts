@@ -14,6 +14,7 @@ import { WorkItemMapper } from '@sprint/constants/work-item-mapper';
 import { SharedModule } from '@shared/shared.module';
 import { PbiContainerComponent } from '@sprint/pbi-container/pbi-container.component';
 import { SprintQueryService } from '@sprint/services/sprint-query.service';
+import { SprintCommService } from '@sprint/services/sprint-comm.service';
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { SprintQueryService } from '@sprint/services/sprint-query.service';
         SprintService,
         TfsService,
         WorkItemMapper,
-        SprintQueryService
+        SprintQueryService,
+        SprintCommService
     ],
     imports: [
         CommonModule,

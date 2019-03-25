@@ -1,5 +1,5 @@
 export interface WorkItem {
-    id: number;
+    id: string;
     rev: number;
     url: string;
 
@@ -26,7 +26,7 @@ export interface WorkItem {
     description: string;
 
     // Relations
-    childrenIds: Array<number>;
+    childrenIds: Array<string>;
     children: Array<WorkItem>;
 
     /*** Tasks ***/

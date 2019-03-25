@@ -66,17 +66,17 @@ export class TfsService {
             });
     }
 
-    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<number>> {
+    getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
         return this.sprintQueryService.getIterationWorkItems(sprint);
     }
 
-    getSpecificWorkItems(itemIds: Array<number>): Observable<Array<WorkItem>> {
+    getSpecificWorkItems(itemIds: Array<string>): Observable<Array<WorkItem>> {
         const ids = itemIds.toString();
         return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options)
             .map(this.mapWorkItems.bind(this));
     }
 
-    editWorkItem(itemId: number, changes: WorkItem, additions?: WorkItem): Observable<any> {
+    editWorkItem(itemId: string, changes: WorkItem, additions: WorkItem = <WorkItem>{}): Observable<any> {
         // Map changes to items that the server can parse
         const allChanges = [];
 
@@ -103,12 +103,12 @@ export class TfsService {
         return this.http.patch(
             `${this.baseLocationGeneric}wit/workitems/${itemId}?api-version=1.0`,
             JSON.stringify(allChanges),
-            this.options);
+            this.options).map(this.mapWorkItems.bind(this));
     }
 
-    createTask(newItem: WorkItem, parent: WorkItem) {
+    createTask(newItemTitle: string, parent: WorkItem) {
         const type = WorkItemTypes.task;
-        const itemToBeAdded = this.workItemMapper.createNewTfsTask(newItem, parent);
+        const itemToBeAdded = this.workItemMapper.createNewTfsTask(<WorkItem>{ title: newItemTitle }, parent);
 
         return this.http.patch(
             `${this.baseProjectLocation}wit/workitems/$${type}?api-version=1.0`,
@@ -137,13 +137,17 @@ export class TfsService {
     }
 
     private mapWorkItems(payload) {
-        if (payload && payload.value) {
+        if (!payload) {
+            return payload;
+        }
+
+        if (payload.value) {
             return payload.value.map((wi: any) => {
                 return this.workItemMapper.mapWorkItem(wi);
             });
         }
 
-        return payload;
+        return  this.workItemMapper.mapWorkItem(payload) || payload;
     }
 }
 

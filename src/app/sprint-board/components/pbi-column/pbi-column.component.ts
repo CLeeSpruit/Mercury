@@ -9,9 +9,9 @@ import { Subscription } from 'rxjs/Subscription';
     styleUrls: ['./pbi-column.component.scss']
 })
 export class PbiColumnComponent implements OnInit, OnDestroy {
-    @Input() list: string;
-    @Input() label: string;
-    items: Array<WorkItem> = new Array<WorkItem>();
+    @Input() list: string; // Corresponding TaskStatus title
+    @Input() label: string; // Title to display on page
+    ids: Array<string> = new Array<string>();
 
     private columnSub: Subscription = new Subscription();
 
@@ -22,9 +22,11 @@ export class PbiColumnComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.columnSub = this.sprintCommSerivce.getColumn(this.list).subscribe(data => {
             // TODO: Move this to the service?
-            this.items = data.sort((a: WorkItem, b: WorkItem) => {
-                return a.backlogPriority - b.backlogPriority;
-            });
+            this.ids = data
+                .sort((a: WorkItem, b: WorkItem) => {
+                    return a.backlogPriority - b.backlogPriority;
+                })
+                .map(wi => wi.id);
         });
     }
 

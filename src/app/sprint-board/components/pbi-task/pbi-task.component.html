@@ -23,7 +23,7 @@
             *ngIf="titleEditable"
             type="text"
             [value]="task.title"
-            (blur)="saveTitle(titleInput.value)"
+            (blur)="saveTitleEdit(titleInput.value)"
         />
     </div>
     <div class="child text column" *ngIf="isNew">
@@ -37,8 +37,8 @@
             #titleInput
             *ngIf="titleEditable"
             type="text"
-            (blur)="saveTitle(titleInput.value)"
-            (enter)="saveTitle(titleInput.value, true)"
+            (blur)="saveNewTitle(titleInput.value)"
+            (enter)="saveNewTitle(titleInput.value, true)"
         />
     </div>
 

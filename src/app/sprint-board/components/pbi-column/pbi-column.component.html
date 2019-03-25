@@ -1,9 +1,6 @@
-<div class="col" [class.empty]="!items.length">
+<div class="col" [class.empty]="!ids.length">
     <div class="header" [innerHTML]="label"></div>
     <div class="col-body">
-        <hg-pbi-card
-            *ngFor="let pbi of items"
-            [pbi]="pbi"
-        ></hg-pbi-card>
+        <hg-pbi-card *ngFor="let id of ids" [id]="id"></hg-pbi-card>
     </div>
 </div>

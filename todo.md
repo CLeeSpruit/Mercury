@@ -4,6 +4,9 @@
 * Add "Continue as Guest"
 * Add more reliable way to store PATs
 
+#### Bugs
+* Inputting an incorrect PAT logs you in as that (and cannot log back out)
+
 ## Environments Page
 * Add indicator that Deploy went though successfully
 * Add better visual indicators that a build is running

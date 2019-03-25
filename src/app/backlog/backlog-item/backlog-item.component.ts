@@ -9,7 +9,7 @@ import { TfsService } from '@sprint/services/tfs.service';
     templateUrl: 'backlog-item.component.html'
 })
 export class BacklogItemComponent {
-    @Input() pbiId: number;
+    @Input() pbiId: string;
 
     pbi: WorkItem;
     isLoaded = false;

@@ -64,12 +64,12 @@ export class SprintQueryService extends QueryService {
         return this.createQuery(query);
     }
 
-    getIterationWorkItems(sprint: Sprint): AsyncSubject<Array<number>> {
-        const workItemsSub: AsyncSubject<Array<number>> = new AsyncSubject<Array<number>>();
+    getIterationWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
+        const workItemsSub: AsyncSubject<Array<string>> = new AsyncSubject<Array<string>>();
         // Check if query already exists
         const name = sprint.name;
         this.fetchQuery(sprint).subscribe((id: string) => {
-            this.runQuery(id).subscribe((data: Array<number>) => {
+            this.runQuery(id).subscribe((data: Array<string>) => {
                 workItemsSub.next(data);
                 workItemsSub.complete();
             });

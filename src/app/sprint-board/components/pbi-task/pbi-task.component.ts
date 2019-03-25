@@ -1,22 +1,23 @@
-import { Component, EventEmitter, OnInit, Input, Output, OnChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 
 import { TfsService } from '@sprint/services/tfs.service';
 import { SprintService } from '@sprint/services/sprint.service';
 import { WorkItem } from '@sprint/models/work-item';
-import { TaskStatus } from '@sprint/constants/task-status';
+import { Subscription } from 'rxjs/Subscription';
+import { SprintCommService } from '@sprint/services/sprint-comm.service';
 
 @Component({
     selector: 'hg-pbi-task',
     templateUrl: './pbi-task.component.html',
     styleUrls: ['./pbi-task.component.scss']
 })
-export class PbiTaskComponent implements OnChanges {
-    @Input() task: WorkItem;
+export class PbiTaskComponent implements OnInit, OnDestroy {
+    @Input() id: string;
+    @Input() parentId: string;
     @Input() isNew = false;
-    @Output() taskChanged: EventEmitter<WorkItem> = new EventEmitter<WorkItem>();
-    @Output() newTask: EventEmitter<WorkItem> = new EventEmitter<WorkItem>();
     @ViewChild('initials') initial: HTMLElement;
 
+    task: WorkItem;
     statusPopup = false;
     hoursPopup = false;
     titleEditable = false;
@@ -24,34 +25,31 @@ export class PbiTaskComponent implements OnChanges {
     initials: string;
     initialsColor: string;
 
+    private taskSub: Subscription = new Subscription();
+
     constructor(
         private tfsService: TfsService,
-        private sprintService: SprintService
+        private sprintCommService: SprintCommService
     ) { }
 
-    ngOnChanges() {
-        if (this.task && this.task.assignedTo) {
-            this.initials = this.parseInitials(this.task.assignedTo);
-            this.initialsColor = this.generateColor(this.initials);
-        } else if (this.isNew) {
+    ngOnInit() {
+        if (this.isNew) {
             this.task = <WorkItem>{
                 title: 'Add New'
             };
+        } else {
+            this.taskSub = this.sprintCommService.getWorkItem(this.id).subscribe(data => {
+                if (data) {
+                    this.initials = this.parseInitials(data.assignedTo);
+                    this.initialsColor = this.generateColor(this.initials, data.assignedTo);
+                    this.task = data;
+                }
+            });
         }
     }
 
-    /* User Icon */
-    private parseInitials(user: string) {
-        const words = user.split(' ');
-        words.splice(words.length - 1); // Remove last <> with username
-        return words.map(word => word.charAt(0)).join('');
-    }
-
-    private generateColor(initials: string) {
-        const colorList = ['#01BAEF', '#01BAEF', '#939F5C', '#D16014', '#FE64A3', '#3E000C', '#AF125A'];
-        const initialNumber = this.task.assignedTo.length;
-        const multiplier = this.task.assignedTo.charCodeAt(0);
-        return colorList[(initialNumber * multiplier) % colorList.length];
+    ngOnDestroy() {
+        this.taskSub.unsubscribe();
     }
 
     /* Title */
@@ -59,20 +57,21 @@ export class PbiTaskComponent implements OnChanges {
         this.titleEditable = true;
     }
 
-    saveTitle(title: string, addAnother: boolean = false) {
+    saveTitleEdit(title: string) {
         this.titleEditable = false;
-        if (title !== '' && (this.isNew || this.task.title !== title)) {
-            if (this.isNew) {
-                this.task.title = title;
-                this.isNew = false;
-                this.newTask.emit(this.task);
-                if (addAnother) {
-                    // TODO: Set focus to next text
-                }
-            } else {
-                this.tfsService.editWorkItem(this.task.id, <WorkItem>{ title: title }).subscribe(data =>
-                    this.task.title = title
-                );
+        if (title !== '' && this.task.title !== title) {
+            this.tfsService.editWorkItem(this.id, <WorkItem>{ title: title }).subscribe(data => {
+                // This doesn't really affect the parent, so this doesn't need to recalc parent
+                this.sprintCommService.setPbi(data);
+            });
+        }
+    }
+
+    saveNewTitle(title: string, addAnother: boolean = false) {
+        if (title !== '') {
+            this.sprintCommService.createTask(title, this.parentId);
+            if (!addAnother) {
+                this.titleEditable = false;
             }
         }
     }
@@ -90,8 +89,7 @@ export class PbiTaskComponent implements OnChanges {
         this.toggleStatus();
         if (status !== '' && status !== this.task.state) {
             this.tfsService.editWorkItem(this.task.id, <WorkItem>{ state: status }).subscribe(data => {
-                this.task.state = status;
-                this.taskChanged.emit(this.task);
+                this.sprintCommService.setTask(data, this.parentId);
             });
         }
     }
@@ -104,8 +102,24 @@ export class PbiTaskComponent implements OnChanges {
             change = this.task.remainingWork ? modify : {};
             add = !this.task.remainingWork ? modify : {};
             this.tfsService.editWorkItem(this.task.id, change, add).subscribe(data =>
-                this.task.remainingWork = hours
+                this.sprintCommService.setTask(data, this.parentId)
             );
         }
+    }
+
+    /* User Icon */
+    private parseInitials(user: string): string {
+        if (!user) { return; }
+        const words = user.split(' ');
+        words.splice(words.length - 1); // Remove last <> with username
+        return words.map(word => word.charAt(0)).join('');
+    }
+
+    private generateColor(initials: string, assignedTo: string) {
+        if (!initials || !assignedTo) { return; }
+        const colorList = ['#01BAEF', '#01BAEF', '#939F5C', '#D16014', '#FE64A3', '#3E000C', '#AF125A'];
+        const initialNumber = assignedTo.length;
+        const multiplier = assignedTo.charCodeAt(0);
+        return colorList[(initialNumber * multiplier) % colorList.length];
     }
 }

@@ -1,5 +1,14 @@
 [
     {
+        "version": "1.0.1",
+        "date": "3/25/18",
+        "notes": [
+            "Implemented some minor fixes from last year",
+            "PBI columns update when tasks are updated",
+            "Rebuilt task board communication so less queries are made, better performance"
+        ]
+    },
+    {
         "version": "1.0.0",
         "date": "6/19/18",
         "notes": [
