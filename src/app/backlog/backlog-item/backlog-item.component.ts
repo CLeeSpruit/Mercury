@@ -2,6 +2,7 @@ import { Component, Input, ElementRef } from '@angular/core';
 import { WorkItem } from '@sprint/models/work-item';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
+import { take } from 'rxjs/operators';
 
 @Component({
     selector: '[hg-backlog-item]',
@@ -37,7 +38,7 @@ export class BacklogItemComponent {
     }
 
     private load() {
-        this.tfsService.getSpecificWorkItems([this.pbiId]).take(1).subscribe((workItems: Array<WorkItem>) => {
+        this.tfsService.getSpecificWorkItems([this.pbiId]).pipe(take(1)).subscribe((workItems: Array<WorkItem>) => {
             this.pbi = workItems[0];
         });
     }

@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/take';
+import { Subscription ,  Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 import { WorkItem } from '@sprint/models/work-item';
 import { TfsService } from '@sprint/services/tfs.service';
@@ -51,7 +50,7 @@ export class SprintComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.tfsService.getAllSprints().take(1).subscribe((data) => {
+        this.tfsService.getAllSprints().pipe(take(1)).subscribe((data) => {
             this.sprints = data;
         });
 
@@ -77,7 +76,7 @@ export class SprintComponent implements OnInit, OnDestroy {
         const sprintSub: Observable<Sprint> =
             this.sprintId ? this.tfsService.getSprint(this.sprintId) : this.tfsService.getCurrentSprint();
 
-        sprintSub.take(1).subscribe((data: Sprint) => {
+        sprintSub.pipe(take(1)).subscribe((data: Sprint) => {
             this.sprint = data;
 
             this.tfsService.getSprintWorkItems(this.sprint).subscribe((workItems: Array<string>) => {

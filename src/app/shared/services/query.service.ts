@@ -1,6 +1,6 @@
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { Observable ,  AsyncSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Query } from '../models/query';
 import { ConfigService } from 'config/services/config.service';
 
@@ -41,15 +41,15 @@ export class QueryService {
             name: 'Mercury',
             isFolder: true
         };
-        return this.http.post(`${this.baseProjectLocation}wit/queries/${this.myQueries}?api-version=1.0`, query, this.options)
-            .map((data: any) => data.id);
+        return this.http.post(`${this.baseProjectLocation}wit/queries/${this.myQueries}?api-version=1.0`, query, this.options).pipe(
+            map((data: any) => data.id));
     }
 
     // Returns the id of the folder
     private getMercuryFolder(): Observable<string> {
         // TODO: Consider storing the folder id in localstorage
         const mercuryLocation = this.myQueries + this.folder;
-        return this.http.get(`${this.baseProjectLocation}wit/queries${mercuryLocation}`, this.options).map((data: any) => data.id);
+        return this.http.get(`${this.baseProjectLocation}wit/queries${mercuryLocation}`, this.options).pipe(map((data: any) => data.id));
     }
 
     // TODO: Move this to protected when fetch is recreated
@@ -80,8 +80,8 @@ export class QueryService {
     protected getQuery(name: string) {
         const mercuryLocation = this.myQueries + this.folder;
         return this.http.get(
-            `${this.baseProjectLocation}wit/queries${mercuryLocation}/${name}`, this.options)
-            .map((data: any) => data.id);
+            `${this.baseProjectLocation}wit/queries${mercuryLocation}/${name}`, this.options).pipe(
+            map((data: any) => data.id));
     }
 
 
@@ -106,8 +106,8 @@ export class QueryService {
     }
 
     protected runQuery(queryId: any): Observable<Array<any>> {
-        return this.http.get(`${this.baseProjectLocation}wit/wiql/${queryId}`, this.options)
-            .map((data: any) => {
+        return this.http.get(`${this.baseProjectLocation}wit/wiql/${queryId}`, this.options).pipe(
+            map((data: any) => {
                 if (data.workItems) {
                     return data.workItems.map(wi => {
                         // TODO: Can we grab this from the query now?
@@ -115,6 +115,6 @@ export class QueryService {
                     });
                 }
                 return data;
-            });
+            }));
     }
 }

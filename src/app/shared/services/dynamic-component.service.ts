@@ -8,10 +8,8 @@ import {
     ComponentRef
 } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import 'rxjs/add/operator/filter';
+import { Observable ,  BehaviorSubject ,  AsyncSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class DynamicComponentService {
@@ -25,7 +23,7 @@ export class DynamicComponentService {
 
     addComponent(component: any): Observable<ComponentRef<any>> {
         // Wait until the root viewContainerRef is not null
-        this.rootContainerSubject.filter(vcr => !!vcr).subscribe((vcr: ViewContainerRef) => {
+        this.rootContainerSubject.pipe(filter(vcr => !!vcr)).subscribe((vcr: ViewContainerRef) => {
             // Generate a factory to create specified component
             const factory: ComponentFactory<{}> = this.componentFactoryResolver.resolveComponentFactory(component);
 

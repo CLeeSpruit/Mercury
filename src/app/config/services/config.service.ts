@@ -1,11 +1,10 @@
 import { Injectable, ComponentRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { Project } from '@shared/models/project.class';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { DynamicComponentService } from '@shared/services/dynamic-component.service';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
-
+import { filter, map } from 'rxjs/operators';
 @Injectable()
 export class ConfigService {
     private lsCurrentProject = 'current-project';
@@ -41,7 +40,7 @@ export class ConfigService {
     }
 
     getCurrentProject(): Observable<string> {
-        return this.currentProjectSub.asObservable().filter(proj => !!proj);
+        return this.currentProjectSub.asObservable().pipe(filter(proj => !!proj));
     }
 
     setCurrentProject(project: string) {
@@ -51,10 +50,10 @@ export class ConfigService {
     }
 
     private fetchProjects(): Observable<Array<Project>> {
-        return this.http.get<Array<Project>>(`${this.apiUrl}projects`, this.options)
-            .map((data: any) => {
+        return this.http.get<Array<Project>>(`${this.apiUrl}projects`, this.options).pipe(
+            map((data: any) => {
                 return data.value;
-            });
+            }));
     }
 
     getProjects(): Observable<Array<Project>> {
@@ -65,11 +64,11 @@ export class ConfigService {
         } catch (e) {
             this.fetchProjects().subscribe(data => this.currentProjectsSub.next(data));
         }
-        return this.currentProjectsSub.asObservable().filter(projs => !!(projs) && !!(projs.length));
+        return this.currentProjectsSub.asObservable().pipe(filter(projs => !!(projs) && !!(projs.length)));
     }
 
     getProjectApiUrl(): Observable<string> {
-        return this.projectUrlSub.asObservable().filter(url => !!url);
+        return this.projectUrlSub.asObservable().pipe(filter(url => !!url));
     }
 
     getApiUrl(): string {

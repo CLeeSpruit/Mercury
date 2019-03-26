@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject ,  Observable, of } from 'rxjs';
 import { WorkItem } from '@sprint/models/work-item';
-import { Observable } from 'rxjs/Observable';
 import { TaskStatus } from '@sprint/constants/task-status';
 import { WorkItemTypes } from '@sprint/constants/work-item-types';
 import { TfsService } from '@sprint/services/tfs.service';
-import 'rxjs/add/observable/of';
+
 
 @Injectable()
 export class SprintCommService {
@@ -52,7 +51,7 @@ export class SprintCommService {
     /*** PBI ***/
     getWorkItem(id: string | number): Observable<WorkItem> {
         if (!this.pbis.get(+id)) {
-            return Observable.of(null);
+            return of(null);
         }
         return this.pbis.get(+id).asObservable();
     }

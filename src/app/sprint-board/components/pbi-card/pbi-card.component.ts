@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { WorkItem } from '@sprint/models/work-item';
 import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { SprintCommService } from '@sprint/services/sprint-comm.service';
 
 @Component({

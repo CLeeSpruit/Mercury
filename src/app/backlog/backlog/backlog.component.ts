@@ -1,14 +1,11 @@
 import { Component, OnInit, HostListener, ViewChildren, QueryList, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { WorkItem } from '@sprint/models/work-item';
 import { BacklogService } from '@backlog/services/backlog.service';
-import { SprintService } from '@sprint/services/sprint.service';
 import { TfsService } from '@sprint/services/tfs.service';
 import { BacklogItemComponent } from '@backlog/backlog-item/backlog-item.component';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/debounceTime';
+import { AsyncSubject, Subscription, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 
 @Component({
     templateUrl: 'backlog.component.html',
@@ -41,8 +38,8 @@ export class BacklogComponent implements OnInit, AfterViewInit {
         });
 
         const scrollWait = 100;
-        const obs = Observable.fromEvent(window, 'scroll');
-        this.scrollSub = obs.debounceTime(scrollWait).subscribe(() => {
+        const obs = fromEvent(window, 'scroll');
+        this.scrollSub = obs.pipe(debounceTime(scrollWait)).subscribe(() => {
             this.getScroll();
         });
     }

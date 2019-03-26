@@ -1,15 +1,13 @@
+
+import { throwError as observableThrowError, Observable, AsyncSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/concat';
+import { map, catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
 
 import { Build } from '../models/build.model';
 import { Release } from '../models/release.model';
 import { Artifact } from '../models/artifact.model';
-import { ReleaseRequest, ReleaseArtifact } from '../models/release-request.model';
+import { ReleaseRequest } from '../models/release-request.model';
 import { BuildDefinition } from '../models/build-definition.model';
 import { ReleaseDefinition } from '../models/release-definition.model';
 import { ConfigService } from 'config/services/config.service';
@@ -41,8 +39,8 @@ export class TfsEnvironmentService {
     }
 
     getBuilds(): Observable<Array<Build>> {
-        return this.http.get(`${this.baseProjectLocation}/build/builds`, this.options)
-            .map((response: any) => {
+        return this.http.get(`${this.baseProjectLocation}/build/builds`, this.options).pipe(
+            map((response: any) => {
                 const builds: Array<Build> = response.value;
                 return builds.map((build) => {
                     build.finishTime = new Date(build.finishTime);
@@ -60,8 +58,7 @@ export class TfsEnvironmentService {
                     }
                     return build;
                 });
-            })
-            .catch(this.handleError);
+            }), catchError(this.handleError));
     }
 
     private parseBranch(sourceBranch: string) {
@@ -77,25 +74,20 @@ export class TfsEnvironmentService {
 
     // Not used
     getBuildTimeline(build: Build) {
-        return this.http.get(`${this.baseProjectLocation}/build/builds/${build.id}/timeline`, this.options)
-            .catch(this.handleError);
+        return this.http.get(`${this.baseProjectLocation}/build/builds/${build.id}/timeline`, this.options);
     }
 
     getBuildDefinitions(): Observable<Array<BuildDefinition>> {
-        return this.http.get(`${this.baseProjectLocation}/build/definitions`, this.options)
-            .map(this.getValue)
-            .catch(this.handleError);
+        return this.http.get(`${this.baseProjectLocation}/build/definitions`, this.options).pipe(map(this.getValue));
     }
 
     getReleases(): Observable<Array<Release>> {
-        return this.http.get(`${this.baseProjectLocation}/release/releases`, this.options)
-            .map(this.getValue)
-            .catch(this.handleError);
+        return this.http.get(`${this.baseProjectLocation}/release/releases`, this.options).pipe(map(this.getValue));
     }
 
     getReleaseDetails(release: Release): Observable<Release> {
-        return this.http.get(`${this.baseProjectLocation}/release/releases/${release.id}`, this.options)
-            .map((response: any | Release) => {
+        return this.http.get(`${this.baseProjectLocation}/release/releases/${release.id}`, this.options).pipe(
+            map((response: any | Release) => {
                 const artifact = <Artifact>{};
                 if (response.artifacts && response.artifacts[0] && response.artifacts[0].definitionReference) {
                     if (response.artifacts[0].definitionReference.version) {
@@ -116,16 +108,14 @@ export class TfsEnvironmentService {
                     artifact
                 };
 
-            })
-            .catch(this.handleError);
+            }));
     }
 
     getReleaseDefinitions(): Observable<Array<ReleaseDefinition>> {
         return this.http.get(`${this.baseProjectLocation}/release/definitions`, this.options)
-            .map((res: any) => {
+            .pipe(map((res: any) => {
                 return res.value;
-            })
-            .catch(this.handleError);
+            }))
     }
 
     createRelease(build: Build, definition: ReleaseDefinition) {
@@ -133,14 +123,13 @@ export class TfsEnvironmentService {
             .post(
                 `${this.baseProjectLocation}/release/releases?api-version=2.2-preview.1`,
                 JSON.stringify(this.createReleaseRequest(build, definition)),
-                this.options)
-            .map(this.getValue)
-            .catch(this.handleError);
+                this.options).pipe(
+            map(this.getValue));
     }
 
     // TODO: Write a response handler
     private handleError(error: Response | any, caught: Observable<any>) {
-        return Observable.throw(error);
+        return observableThrowError(error);
     }
 
     private createReleaseRequest(build: Build, definition: ReleaseDefinition) {

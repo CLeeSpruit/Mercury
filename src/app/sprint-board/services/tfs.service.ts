@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 
+import { throwError as observableThrowError, Observable, AsyncSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WorkItem } from '@sprint/models/work-item';
 import { Sprint } from '@sprint/models/sprint';
 import { WorkItemMapper, FieldMap } from '@sprint/constants/work-item-mapper';
@@ -49,21 +48,21 @@ export class TfsService {
 
     getCurrentSprint(): Observable<Sprint> {
         return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations?$timeframe=current`, this.options)
-            .map((data: any) => {
+            .pipe(map((data: any) => {
                 return <Sprint>(data.value[0]) || data;
-            });
+            }));
     }
 
     getSprint(sprintId: string): Observable<Sprint> {
         return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations/${sprintId}`, this.options)
-            .map(data => data as Sprint);
+            .pipe(map(data => data as Sprint));
     }
 
     getAllSprints(): Observable<Array<Sprint>> {
         return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations`, this.options)
-            .map((data: any) => {
+            .pipe(map((data: any) => {
                 return <Array<Sprint>>(data.value);
-            });
+            }));
     }
 
     getSprintWorkItems(sprint: Sprint): AsyncSubject<Array<string>> {
@@ -72,8 +71,8 @@ export class TfsService {
 
     getSpecificWorkItems(itemIds: Array<string>): Observable<Array<WorkItem>> {
         const ids = itemIds.toString();
-        return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options)
-            .map(this.mapWorkItems.bind(this));
+        return this.http.get(`${this.baseLocationGeneric}wit/workitems?ids=${ids}&$expand=all`, this.options).pipe(
+            map(this.mapWorkItems.bind(this)));
     }
 
     editWorkItem(itemId: string, changes: WorkItem, additions: WorkItem = <WorkItem>{}): Observable<any> {
@@ -103,7 +102,7 @@ export class TfsService {
         return this.http.patch(
             `${this.baseLocationGeneric}wit/workitems/${itemId}?api-version=1.0`,
             JSON.stringify(allChanges),
-            this.options).map(this.mapWorkItems.bind(this));
+            this.options).pipe(map(this.mapWorkItems.bind(this)));
     }
 
     createTask(newItemTitle: string, parent: WorkItem) {
@@ -113,9 +112,9 @@ export class TfsService {
         return this.http.patch(
             `${this.baseProjectLocation}wit/workitems/$${type}?api-version=1.0`,
             JSON.stringify(itemToBeAdded),
-            this.options).map(
+            this.options).pipe(map(
                 this.mapWorkItems.bind(this)
-            );
+            ));
     }
 
     createPbi(newPbi: WorkItem, iteration: string) {
@@ -125,15 +124,15 @@ export class TfsService {
         return this.http.patch(
             `${this.baseProjectLocation}wit/workitems/$${type}?api-version=1.0`,
             JSON.stringify(itemToBeAdded),
-            this.options).map(
+            this.options).pipe(map(
                 this.mapWorkItems.bind(this)
-            );
+            ));
     }
 
     // TODO: Create a responses interceptor for these
     private handleError(error: Response | any, caught: Observable<any>) {
         console.error(error.json());
-        return Observable.throw(error);
+        return observableThrowError(error);
     }
 
     private mapWorkItems(payload) {
@@ -147,7 +146,7 @@ export class TfsService {
             });
         }
 
-        return  this.workItemMapper.mapWorkItem(payload) || payload;
+        return this.workItemMapper.mapWorkItem(payload) || payload;
     }
 }
 

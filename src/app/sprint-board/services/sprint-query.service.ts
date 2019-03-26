@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QueryService } from '@shared/services/query.service';
 import { Sprint } from '@sprint/models/sprint';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { AsyncSubject } from 'rxjs';
 import { Query } from '@shared/models/query';
 import { HttpClient } from '@angular/common/http';
 import { WorkItem } from '@sprint/models/work-item';

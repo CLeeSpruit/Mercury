@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { Build } from './models/build.model';
 import { TfsEnvironmentService } from './services/tfs-environment.service';
@@ -72,7 +73,7 @@ export class EnvironmentsComponent implements OnInit {
             return;
         }
 
-        this.buildsSubject.filter(builds => !!builds).subscribe((builds: Array<Build>) => {
+        this.buildsSubject.pipe(filter(builds => !!builds)).subscribe((builds: Array<Build>) => {
             this.populateDeployments(build, release, builds);
         });
     }

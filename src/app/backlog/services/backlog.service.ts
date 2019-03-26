@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { QueryService } from '@shared/services/query.service';
 import { Query } from '@shared/models/query';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { AsyncSubject } from 'rxjs';
 import { ConfigService } from 'config/services/config.service';
 
 @Injectable()

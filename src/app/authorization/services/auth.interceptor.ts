@@ -1,7 +1,8 @@
+
+import { throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable, ComponentRef } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
+
 
 import { DynamicComponentService } from '@shared/services/dynamic-component.service';
 import { AuthorizationService } from './authorization.service';
@@ -17,7 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
         const token = this.authService.getAuthorization();
         if (!token) {
             this.createAuthModal();
-            return Observable.throw('No authorization found. You need to get an Personal Access Token from TFS');
+            return observableThrowError('No authorization found. You need to get an Personal Access Token from TFS');
         }
 
         const newRequest = request.clone({
