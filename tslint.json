@@ -116,7 +116,6 @@
     "directive-selector": [
       true,
       "attribute",
-      "hg",
       "camelCase"
     ],
     "component-selector": [

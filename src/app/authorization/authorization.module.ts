@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { AuthorizationService } from './services/authorization.service';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -13,7 +14,8 @@ import { AuthInterceptor } from './services/auth.interceptor';
     imports: [
         HttpClientModule,
         CommonModule,
-        HttpClientModule
+        HttpClientModule,
+        SharedModule
     ],
     providers: [
         AuthorizationService,

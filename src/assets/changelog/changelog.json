@@ -4,7 +4,8 @@
         "date": "3/26/18",
         "notes": [
             "Added Electron",
-            "Upgraded to Angular 7, Rxjs 6"
+            "Upgraded to Angular 7, Rxjs 6",
+            "Electron: Logging in moved out of localStorage"
         ]
     },
     {

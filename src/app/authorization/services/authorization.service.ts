@@ -1,24 +1,46 @@
 import { Injectable } from '@angular/core';
+import { ElectronService } from '@shared/services/electron.service';
+import { FileStoreService } from '@shared/services/file-store.service';
 
 @Injectable()
 export class AuthorizationService {
-    tokenCookie = 'mercury-auth';
+    storageToken = 'mercury-auth';
+    private electronService = new ElectronService();
+    private fileStore = new FileStoreService();
 
     authorize(pat: string) {
-        this.setCookie(this.tokenCookie, pat);
+        if (this.electronService.isElectron) {
+            this.fileStore.write(this.storageToken, '.json', pat);
+        } else {
+            this.setCookie(this.storageToken, pat);
+        }
     }
 
     getAuthorization() {
-        if (!this.hasCookie(this.tokenCookie)) {
-            // TODO: redirect to auth page if no cookie found
+        const token = this.readAuthorization();
+
+        if (!token) {
+            // TODO: Navigate to auth page if token doesn't exist
             return;
         }
-
-        return this.createAuthorization(this.getCookie(this.tokenCookie));
+        return this.createAuthorization(token);
     }
 
     logout() {
-        this.clearCookie(this.tokenCookie);
+        if (this.electronService.isElectron) {
+            this.fileStore.write(this.storageToken, '.json', null);
+        } else {
+            this.clearCookie(this.storageToken);
+        }
+    }
+
+    // Reads either from localstorage or file
+    private readAuthorization() {
+        if (this.electronService.isElectron) {
+            return this.fileStore.read(this.storageToken, '.json');
+        } else {
+            return this.getCookie(this.storageToken);
+        }
     }
 
     // Returns a string for tfs to read
