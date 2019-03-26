@@ -1,5 +1,13 @@
 [
     {
+        "version": "2.0.0",
+        "date": "3/26/18",
+        "notes": [
+            "Added Electron",
+            "Upgraded to Angular 7, Rxjs 6"
+        ]
+    },
+    {
         "version": "1.0.1",
         "date": "3/25/18",
         "notes": [
