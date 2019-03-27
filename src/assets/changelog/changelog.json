@@ -1,12 +1,13 @@
 [
     {
-        "version": "2.0.0",
+        "version": "2.0.0-beta1",
         "date": "3/26/18",
         "notes": [
             "Added Electron",
             "Upgraded to Angular 7, Rxjs 6",
-            "Electron: Logging in moved out of localStorage",
-            "Electron: Builds can now be selected for each environment"
+            "Auth: Logging in moved out of localStorage",
+            "Env: Builds can now be selected for each environment",
+            "Env: Environments can be favorited to move to the top and expanded"
         ]
     },
     {
@@ -15,7 +16,8 @@
         "notes": [
             "Implemented some minor fixes from last year",
             "PBI columns update when tasks are updated",
-            "Rebuilt task board communication so less queries are made, better performance"
+            "Rebuilt task board communication so less queries are made, better performance",
+            "Env: Environments are auto-collapsed"
         ]
     },
     {
