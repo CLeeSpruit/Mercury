@@ -1,29 +1,51 @@
 <div class="heartbeat card-group">
-    <div class="card-header col-md-1">
+    <div class="card-header col-md-2" (click)="toggleView()">
         <span [innerHtml]="deployment.name"></span>
     </div>
 
     <div class="card">
         <div class="card-header">Build</div>
-        <div class="card-body">
-            <p>Last Build: <span [innerHtml]="deployment.build?.buildNumber"></span></p>
-            <p>Date: <span [innerHtml]="deployment.build?.finishTime | date: 'medium'"></span></p>
-            <p>Status:
-                <span
-                [class.text-success]="deployment.build?.status === 'completed'"
-                [class.text-info]= "deployment.build?.status === 'inProgress'"
-                [innerHtml]="deployment.build?.status"
-                ></span>
-            </p>
-            <p>Requested By:
-                <span [innerHtml]="deployment.build?.requestedFor?.displayName"></span>
-            </p>
+        <div class="card-body" *ngIf="expanded && deployment.settings?.associatedBuildName">
+            <div *ngIf="deployment.build">
+                <p>Last Build: <span [innerHtml]="deployment.build?.buildNumber"></span></p>
+                <p>Date: <span [innerHtml]="deployment.build?.finishTime | date: 'medium'"></span></p>
+                <p>Status:
+                    <span
+                    [class.text-success]="deployment.build?.status === 'completed'"
+                    [class.text-info]= "deployment.build?.status === 'inProgress'"
+                    [innerHtml]="deployment.build?.status"
+                    ></span>
+                </p>
+                <p>Requested By:
+                    <span [innerHtml]="deployment.build?.requestedFor?.displayName"></span>
+                </p>
+            </div>
+            <div *ngIf="!deployment.build">
+                <p>No builds have been found for <span [innerHtml]="deployment.settings?.associatedBuildName"></span>.</p>
+            </div>
+            <button class="btn btn-primary" type="button" (click)="deassociateBuild()">Remove build from environment</button>
+        </div>
+        <div class="card-body" *ngIf="expanded && !deployment.settings?.associatedBuildName">
+            <p>No build associated with this release. Please select a build from the dropdown.</p>
+            <div class="input-group">
+                <select class="custom-select" #buildSelect>
+                    <option selected>Select Build</option>
+                    <option 
+                        *ngFor="let listItem of buildList"
+                        [innerHtml]="listItem"
+                        [value]="listItem"
+                        ></option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" (click)="selectBuild(buildSelect.value)">Select</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="card">
         <div class="card-header">Release</div>
-        <div class="card-body">
+        <div class="card-body" *ngIf="expanded">
             <p>Last Release: 
                 <span [innerHtml]="deployment.release?.name"></span>
             </p>
@@ -39,19 +61,27 @@
 
     <div class="card">
         <div class="card-header">Deploy to Environment</div>
-        <div class="card-body">
-            <div class="input-group">
-                <select class="custom-select" #deploySelect>
-                    <option selected>Select Build</option>
-                    <option 
+        <div class="card-body"  *ngIf="expanded">
+            <div *ngIf="deployment.settings?.associatedBuildName">
+                <div class="input-group" *ngIf="deployment.applicableBuilds.length">
+                    <select class="custom-select" #deploySelect>
+                        <option selected>Select Build</option>
+                        <option 
                         *ngFor="let applicableBuild of deployment.applicableBuilds"
                         [innerHtml]="applicableBuild.dropdownName"
                         [value]="applicableBuild.id"
                         ></option>
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" (click)="startRelease(deploySelect.value)">Deploy</button>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" (click)="startRelease(deploySelect.value)">Deploy</button>
+                    </div>
                 </div>
+                <div *ngIf="!deployment.applicableBuilds.length">
+                    <p>No builds found.</p>
+                </div>
+            </div>
+            <div *ngIf="!deployment.settings?.associatedBuildName">
+                <p>No builds associated with this release.</p>
             </div>
         </div>
     </div>

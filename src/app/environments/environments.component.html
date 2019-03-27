@@ -4,7 +4,8 @@
     </div>
     <div class="build">
         <hg-heartbeat 
-            *ngFor="let deployment of deployments" 
+            *ngFor="let deployment of deployments"
+            [buildList]="buildList"
             [deployment]="deployment"
             ></hg-heartbeat>
     </div>

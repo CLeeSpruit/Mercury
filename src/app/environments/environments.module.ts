@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { EnvironmentsComponent } from './environments.component';
 import { HeartbeatComponent } from './heartbeat/heartbeat.component';
 import { TfsEnvironmentService } from './services/tfs-environment.service';
+import { HeartbeatCommService } from '@environments/services/heartbeat-comm.service';
 
 @NgModule({
     declarations: [
@@ -11,7 +12,10 @@ import { TfsEnvironmentService } from './services/tfs-environment.service';
         HeartbeatComponent
     ],
     imports: [CommonModule],
-    providers: [TfsEnvironmentService],
+    providers: [
+        TfsEnvironmentService,
+        HeartbeatCommService
+    ],
     bootstrap: []
 })
 export class EnvironmentsModule { }

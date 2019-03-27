@@ -19,7 +19,7 @@ export class FileStoreService {
 
     write(fileName: string, extension: string, data: any): void {
         fs.writeFile(this.getFilePath(fileName, extension), JSON.stringify(data),
-            (err) => { console.log('Error reading file', fileName); }
+            (err) => { if (err) { console.log('Error reading file', fileName); } }
         );
     }
 

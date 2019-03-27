@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Build } from './models/build.model';
@@ -8,25 +8,33 @@ import { BuildDefinition } from './models/build-definition.model';
 import { Release } from './models/release.model';
 import { ReleaseDefinition } from './models/release-definition.model';
 import { Deployment } from './models/deployment.model';
+import { HeartbeatSettings } from '@environments/models/heartbeat-settings.model';
+import { HeartbeatCommService } from '@environments/services/heartbeat-comm.service';
+import { ElectronService } from '@shared/services/electron.service';
 
 @Component({
     selector: 'hg-environments',
     templateUrl: './environments.component.html',
     styleUrls: ['./environments.component.scss']
 })
-export class EnvironmentsComponent implements OnInit {
+export class EnvironmentsComponent implements OnInit, OnDestroy {
     mostRecentBuilds: Array<Build> = new Array<Build>();
     private buildDefinitions: Array<BuildDefinition> = new Array<BuildDefinition>();
     private buildsSubject: BehaviorSubject<Array<Build>> = new BehaviorSubject<Array<Build>>(null);
 
     mostRecentReleases: Array<Release> = new Array<Release>();
-    private releases: Array<Release> = new Array<Release>();
     private releaseDefinitions: Array<ReleaseDefinition> = new Array<ReleaseDefinition>();
 
     deployments: Array<Deployment> = new Array<Deployment>();
+    buildList: Array<string> = new Array<string>();
+
+    private settingsList: Array<HeartbeatSettings> = new Array<HeartbeatSettings>();
+    private settingsSub: Subscription = new Subscription();
 
     constructor(
-        private tfsEnvironmentService: TfsEnvironmentService
+        private tfsEnvironmentService: TfsEnvironmentService,
+        private heartbeatCommService: HeartbeatCommService,
+        private electronService: ElectronService
     ) { }
 
     ngOnInit() {
@@ -36,22 +44,35 @@ export class EnvironmentsComponent implements OnInit {
 
             this.tfsEnvironmentService.getBuildDefinitions().subscribe((definitionData: Array<BuildDefinition>) => {
                 this.buildDefinitions = definitionData;
+                this.buildList = this.buildDefinitions.map(def => def.name);
                 this.mostRecentBuilds = this.getMostRecentBuilds(data);
-                this.mostRecentBuilds.forEach(build => this.setDeployment(build));
+                this.reinstanceDeployments();
             });
         });
 
         this.tfsEnvironmentService.getReleases().subscribe((data: Array<Release>) => {
-            this.releases = data;
             this.tfsEnvironmentService.getReleaseDefinitions().subscribe((definitionData: Array<ReleaseDefinition>) => {
                 this.releaseDefinitions = definitionData;
                 this.mostRecentReleases = this.getMostRecentReleases(data);
-                this.mostRecentReleases.forEach((release: Release) => {
-                    this.tfsEnvironmentService.getReleaseDetails(release).subscribe((releaseFull: Release) => {
-                        release = releaseFull;
-                        this.setDeployment(null, release);
-                    });
-                });
+            });
+        });
+
+        if (this.electronService.isElectron()) {
+            this.settingsList = this.heartbeatCommService.getSettings();
+            this.settingsSub = this.heartbeatCommService.getSettingsChangedEvent().subscribe(() => {
+                this.reinstanceDeployments();
+            })
+        }
+    }
+
+    ngOnDestroy() {
+        this.settingsSub.unsubscribe();
+    }
+
+    private reinstanceDeployments() {
+        this.mostRecentReleases.forEach((release: Release) => {
+            this.tfsEnvironmentService.getReleaseDetails(release).subscribe((releaseFull: Release) => {
+                this.setDeployment(releaseFull);
             });
         });
     }
@@ -68,36 +89,55 @@ export class EnvironmentsComponent implements OnInit {
             .filter(release => release); // Remove undefined
     }
 
-    private setDeployment(build?: Build, release?: Release) {
-        if (!build && !release) {
+    private setDeployment(release: Release) {
+        if (!release) {
             return;
         }
 
+        // Wait until builds have been queried
         this.buildsSubject.pipe(filter(builds => !!builds)).subscribe((builds: Array<Build>) => {
-            this.populateDeployments(build, release, builds);
+            this.populateDeployments(release, builds);
         });
     }
 
-    private populateDeployments(build: Build, release: Release, builds: Array<Build>) {
-        const name = build ? build.definition.name : release.releaseDefinition.name;
-        const applicableBuilds = builds.filter(buildListItem => buildListItem.definition.name === name);
-        const foundIndex = this.deployments.findIndex(deploy => deploy.name === name);
+    private populateDeployments(release: Release, builds: Array<Build>) {
+        const name = release.releaseDefinition.name;
+        const newDeployment: Deployment = <Deployment>{
+            name,
+            release
+        };
+        // Get settings for deployment
+        if (this.settingsList && this.settingsList.length) {
 
-        if (foundIndex !== -1) {
-            if (build) {
-                this.deployments[foundIndex].build = build;
-            } else {
-                this.deployments[foundIndex].release = release;
-                this.deployments[foundIndex].applicableBuilds = applicableBuilds;
+            const settings: HeartbeatSettings = this.settingsList.find(setting => setting.releaseName === name);
+            if (settings && settings.associatedBuildName) {
+                newDeployment.settings = settings;
+
+                // Get applicable builds
+                const applicableBuilds = builds.filter(buildListItem => buildListItem.definition.name === name);
+                newDeployment.applicableBuilds = applicableBuilds;
+
+                // Get latest build
+                if (applicableBuilds.length) {
+                    const latestBuild = applicableBuilds.reduce((acc: Build, curr: Build) => {
+                        if (acc.queueTime > curr.queueTime) {
+                            return acc;
+                        } else {
+                            return curr;
+                        }
+                    });
+                    newDeployment.build = latestBuild;
+                }
             }
-        } else {
-            const newDeployment: Deployment = <Deployment>{
-                name,
-                build,
-                release,
-                applicableBuilds
-            };
+        }
 
+        const index = this.deployments.findIndex(deploy => deploy.name === newDeployment.name);
+        if (index !== -1) {
+            // TODO: Make a comm service for deployments
+            const newArr = new Array(...this.deployments);
+            newArr[index] = newDeployment;
+            this.deployments = newArr;
+        } else {
             this.deployments.push(newDeployment);
         }
     }
