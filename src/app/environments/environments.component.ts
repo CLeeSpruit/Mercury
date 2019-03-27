@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, AsyncSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Build } from './models/build.model';
@@ -70,9 +70,40 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
     }
 
     private reinstanceDeployments() {
+        const allDeploymentsSet = new AsyncSubject();
+        allDeploymentsSet.subscribe(() => {
+            // Currently sort alphabetically
+            // TODO: Sort by priority between favorite and alpha
+            this.deployments = this.deployments.sort((a, b) => {
+                const aFav = a.settings && a.settings.favorite;
+                const bFav = b.settings && b.settings.favorite;
+
+                if (!aFav && bFav) {
+                    return 1;
+                }
+                if (aFav && !bFav) {
+                    return -1;
+                }
+                if (aFav === bFav) {
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    if (b.name < a.name) {
+                        return -1;
+                    }
+                }
+                return 0;
+            });
+        });
+        let count = 0;
         this.mostRecentReleases.forEach((release: Release) => {
             this.tfsEnvironmentService.getReleaseDetails(release).subscribe((releaseFull: Release) => {
                 this.setDeployment(releaseFull);
+                count++;
+                if (count >= this.mostRecentReleases.length) {
+                    allDeploymentsSet.next(null);
+                    allDeploymentsSet.complete();
+                }
             });
         });
     }

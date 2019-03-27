@@ -36,6 +36,10 @@ export class HeartbeatComponent implements OnInit {
         this.expanded = !this.expanded;
     }
 
+    toggleFavorite() {
+        this.heartbeatCommService.toggleFavorite(this.deployment.release.releaseDefinition.name);
+    }
+
     selectBuild(associatedBuild: string) {
         this.heartbeatCommService.setAssociatedBuild(this.deployment.release.releaseDefinition.name, associatedBuild);
     }

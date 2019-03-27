@@ -5,7 +5,8 @@
         "notes": [
             "Added Electron",
             "Upgraded to Angular 7, Rxjs 6",
-            "Electron: Logging in moved out of localStorage"
+            "Electron: Logging in moved out of localStorage",
+            "Electron: Builds can now be selected for each environment"
         ]
     },
     {

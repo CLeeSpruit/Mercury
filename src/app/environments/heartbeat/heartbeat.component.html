@@ -1,6 +1,11 @@
 <div class="heartbeat card-group">
     <div class="card-header col-md-2" (click)="toggleView()">
         <span [innerHtml]="deployment.name"></span>
+        <span class="fa right"
+            [class.fa-star-o]="!deployment.settings?.favorite"
+            [class.fa-star]="deployment.settings?.favorite"
+            (click)="toggleFavorite()"
+        ></span>
     </div>
 
     <div class="card">
