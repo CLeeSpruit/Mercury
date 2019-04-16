@@ -10,14 +10,12 @@ function createWindow() {
 
     const electronScreen = screen;
     const size = electronScreen.getPrimaryDisplay().workAreaSize;
-    const width = 800;
-    const height = 600;
     // Create the browser window.
     win = new BrowserWindow({
         x: 0,
         y: 0,
-        width: width,
-        height: height,
+        width: size.width,
+        height: size.height,
         webPreferences: {
             nodeIntegration: true,
         },
@@ -72,13 +70,6 @@ try {
         if (win === null) {
             createWindow();
         }
-    });
-
-    ipcMain.on('ondragstart', (event, filePath) => {
-        event.sender.startDrag({
-            file: filePath,
-            icon: './favicon.png'
-        });
     });
 
     // Set AppUserModelId to enable notfications in windows

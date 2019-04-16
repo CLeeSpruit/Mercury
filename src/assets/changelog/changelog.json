@@ -1,6 +1,15 @@
 [
     {
         "version": "2.0.0-beta1",
+        "date": "4/16/18",
+        "notes": [
+            "Env: Auto-updates builds and releases",
+            "Added notifications on build and release success",
+            "Icon changed to something better fitting"
+        ]
+    },
+    {
+        "version": "2.0.0-beta1",
         "date": "3/26/18",
         "notes": [
             "Added Electron",

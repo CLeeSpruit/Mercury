@@ -9,14 +9,12 @@ serve = args.some(function (val) { return val === '--serve'; });
 function createWindow() {
     var electronScreen = electron_1.screen;
     var size = electronScreen.getPrimaryDisplay().workAreaSize;
-    var width = 800;
-    var height = 600;
     // Create the browser window.
     win = new electron_1.BrowserWindow({
         x: 0,
         y: 0,
-        width: width,
-        height: height,
+        width: size.width,
+        height: size.height,
         webPreferences: {
             nodeIntegration: true,
         },
@@ -64,12 +62,6 @@ try {
         if (win === null) {
             createWindow();
         }
-    });
-    electron_1.ipcMain.on('ondragstart', function (event, filePath) {
-        event.sender.startDrag({
-            file: filePath,
-            icon: './favicon.png'
-        });
     });
     // Set AppUserModelId to enable notfications in windows
     electron_1.app.setAppUserModelId(process.execPath);
