@@ -81,6 +81,9 @@ try {
         });
     });
 
+    // Set AppUserModelId to enable notfications in windows
+    app.setAppUserModelId(process.execPath);
+
 } catch (e) {
     // Catch Error
     // throw e;

@@ -5,6 +5,7 @@ import { EnvironmentsComponent } from './environments.component';
 import { HeartbeatComponent } from './heartbeat/heartbeat.component';
 import { TfsEnvironmentService } from './services/tfs-environment.service';
 import { HeartbeatCommService } from '@environments/services/heartbeat-comm.service';
+import { BuildMonitorService } from '@environments/services/build-monitor.service';
 
 @NgModule({
     declarations: [
@@ -14,7 +15,8 @@ import { HeartbeatCommService } from '@environments/services/heartbeat-comm.serv
     imports: [CommonModule],
     providers: [
         TfsEnvironmentService,
-        HeartbeatCommService
+        HeartbeatCommService,
+        BuildMonitorService
     ],
     bootstrap: []
 })

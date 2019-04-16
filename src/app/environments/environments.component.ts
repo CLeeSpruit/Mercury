@@ -11,6 +11,7 @@ import { Deployment } from './models/deployment.model';
 import { HeartbeatSettings } from '@environments/models/heartbeat-settings.model';
 import { HeartbeatCommService } from '@environments/services/heartbeat-comm.service';
 import { ElectronService } from '@shared/services/electron.service';
+import { BuildMonitorService } from '@environments/services/build-monitor.service';
 
 @Component({
     selector: 'hg-environments',
@@ -33,12 +34,13 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
 
     constructor(
         private tfsEnvironmentService: TfsEnvironmentService,
+        private buildMonitorService: BuildMonitorService,
         private heartbeatCommService: HeartbeatCommService,
         private electronService: ElectronService
     ) { }
 
     ngOnInit() {
-        this.tfsEnvironmentService.getBuilds().subscribe((data: Array<Build>) => {
+        this.buildMonitorService.getBuilds().subscribe((data: Array<Build>) => {
             // Let the set deployment know it can trigger
             this.buildsSubject.next(data);
 
@@ -50,7 +52,7 @@ export class EnvironmentsComponent implements OnInit, OnDestroy {
             });
         });
 
-        this.tfsEnvironmentService.getReleases().subscribe((data: Array<Release>) => {
+        this.buildMonitorService.getReleases().subscribe((data: Array<Release>) => {
             this.tfsEnvironmentService.getReleaseDefinitions().subscribe((definitionData: Array<ReleaseDefinition>) => {
                 this.releaseDefinitions = definitionData;
                 this.mostRecentReleases = this.getMostRecentReleases(data);

@@ -71,6 +71,8 @@ try {
             icon: './favicon.png'
         });
     });
+    // Set AppUserModelId to enable notfications in windows
+    electron_1.app.setAppUserModelId(process.execPath);
 }
 catch (e) {
     // Catch Error

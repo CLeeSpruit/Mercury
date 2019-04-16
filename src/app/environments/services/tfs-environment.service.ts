@@ -115,7 +115,7 @@ export class TfsEnvironmentService {
         return this.http.get(`${this.baseProjectLocation}/release/definitions`, this.options)
             .pipe(map((res: any) => {
                 return res.value;
-            }))
+            }));
     }
 
     createRelease(build: Build, definition: ReleaseDefinition) {

@@ -6,6 +6,7 @@ import { ConfigService } from 'config/services/config.service';
 import { TfsService } from '@sprint/services/tfs.service';
 import { BacklogService } from '@backlog/services/backlog.service';
 import { SprintQueryService } from '@sprint/services/sprint-query.service';
+import { BuildMonitorService } from '@environments/services/build-monitor.service';
 
 @Component({
     selector: 'hg-root',
@@ -21,13 +22,15 @@ export class AppComponent implements AfterViewInit {
         private environmentService: TfsEnvironmentService,
         private tfsService: TfsService,
         private backlogService: BacklogService,
-        private sprintQueryService: SprintQueryService
+        private sprintQueryService: SprintQueryService,
+        private buildMonitorService: BuildMonitorService
     ) {
         configService.init();
         tfsService.init();
         environmentService.init();
         backlogService.init();
         sprintQueryService.init();
+        buildMonitorService.initMonitor();
     }
 
     ngAfterViewInit() {

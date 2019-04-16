@@ -6,6 +6,7 @@ import { ElectronService } from '@shared/services/electron.service';
 import { ElectronViewDirective } from '@shared/directives/electronview.directive';
 import { WebViewDirective } from '@shared/directives/webview.directive';
 import { ExternalLinkDirective } from '@shared/directives/external-link.directive';
+import { NotificationService } from '@shared/services/notification.service';
 @NgModule({
     declarations: [
         ElectronViewDirective,
@@ -15,6 +16,7 @@ import { ExternalLinkDirective } from '@shared/directives/external-link.directiv
     providers: [
         DynamicComponentService,
         ElectronService,
+        NotificationService
     ],
     exports: [
         ElectronViewDirective,
