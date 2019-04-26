@@ -35,7 +35,7 @@ export class AuthorizationService {
     }
 
     // Reads either from localstorage or file
-    private readAuthorization() {
+    readAuthorization() {
         if (this.electronService.isElectron) {
             return this.fileStore.read(this.storageToken, '.json');
         } else {

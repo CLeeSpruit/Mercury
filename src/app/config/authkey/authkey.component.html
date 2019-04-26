@@ -1,0 +1,20 @@
+<div class="field">
+    <span class="field-label">Authorization Key:
+        <span *ngIf="isHidden"
+            class="clickable"
+            (click)="showKey()">Show</span>
+    </span>
+    <div class="token"
+        *ngIf="!isHidden">
+        <input type="text"
+            [value]="token" />
+        <button class="btn btn-info"
+            (click)="saveToken()">Save</button>
+    </div>
+</div>
+<div class="field">
+    <span class="field-label">Log Out of Mercury</span>
+    <span class="warning">Caution, this will remove your key! If you want access, you'll need to regenerate a different
+        one or save it elsewhere.</span>
+    <button class="btn btn-danger logout" (click)="logout()">Log out</button>
+</div>

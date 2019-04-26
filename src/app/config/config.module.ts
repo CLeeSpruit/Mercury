@@ -5,6 +5,7 @@ import { ConfigService } from './services/config.service';
 import { ProjectSelectComponent } from './project-select/project-select.component';
 import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 import { ConfigInterceptor } from './services/config.interceptor';
+import { AuthkeyComponent } from 'config/authkey/authkey.component';
 
 @NgModule({
     imports: [CommonModule],
@@ -14,7 +15,8 @@ import { ConfigInterceptor } from './services/config.interceptor';
     ],
     declarations: [
         ProjectSelectComponent,
-        SettingsModalComponent
+        SettingsModalComponent,
+        AuthkeyComponent
     ],
     entryComponents: [SettingsModalComponent]
 })

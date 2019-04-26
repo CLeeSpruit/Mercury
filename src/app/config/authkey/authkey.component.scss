@@ -1,0 +1,12 @@
+@import '../../../scss/index.scss';
+
+.warning {
+    color: $danger-color;
+    font-style: italic;
+    font-size: .8em;
+    display: block;
+}
+
+.logout {
+    margin: .5em;
+}

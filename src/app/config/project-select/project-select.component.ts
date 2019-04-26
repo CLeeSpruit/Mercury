@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfigService } from '../services/config.service';
 import { Subscription } from 'rxjs';
 import { Project } from '@shared/models/project.class';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'hg-project-select',
@@ -15,6 +16,7 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
     private subscriptions: Array<Subscription> = new Array<Subscription>();
     constructor(
         private configService: ConfigService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -33,5 +35,9 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
         const index = $event.target.options.selectedIndex;
         this.configService.setCurrentProject(this.projects[index].name);
         this.configService.closeSettingModal();
+    }
+
+    goToProject() {
+        this.router.navigate(['sprint']);
     }
 }

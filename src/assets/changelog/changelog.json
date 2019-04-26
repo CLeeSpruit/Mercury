@@ -1,6 +1,19 @@
 [
     {
-        "version": "2.0.0-beta1",
+        "version": "2.0.0-beta3",
+        "date": "4/26/18",
+        "notes": [
+            "Added titlebar instead of Windows default",
+            "Added better navigation for changelog and settings",
+            "Nav: Slimmer for smaller resolutions, logout moved to settings",
+            "Settings: Added auth key and logout",
+            "Settings: Added settings for titlebar color",
+            "Settings: Added settings per environment",
+            "Settings: Added settings for build notifications"
+        ]
+    },
+    {
+        "version": "2.0.0-beta2",
         "date": "4/16/18",
         "notes": [
             "Env: Auto-updates builds and releases",

@@ -1,25 +1,20 @@
 <div class="navigation">
     <div class="site-name">
         <h3>
+            <i class="fa fa-gear" (click)="openSettings()"></i>&nbsp;
             <span [innerHtml]="projectTitle"></span>
-            <i class="fa fa-gear" (click)="openSettings()"></i>
         </h3>
     </div>
     <div class="nav">
         <ul>
             <li>
-                <a routerLink="/">Sprint Board</a>
+                <a routerLink="/">Sprint</a>
             </li>
             <li>
                 <a routerLink="/backlog">Backlog</a>
             </li>
             <li>
                 <a routerLink="/environments">Environments</a>
-            </li>
-            <li>
-                <div class="user clickable">
-                    <span (click)="logout()">Log out</span>
-                </div>
             </li>
         </ul>
     </div>

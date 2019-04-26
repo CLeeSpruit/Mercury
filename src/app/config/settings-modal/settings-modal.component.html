@@ -4,14 +4,15 @@
         <h1>Mercury Settings</h1>
     </div>
     <div class="body">
+        <div class="field changelog clickable" (click)="navigateChangelog()">
+            View Changelog
+        </div>
         <div class="field">
             <div class="directions">
                 Select a project for Mercury to view.
             </div>
             <hg-project-select></hg-project-select>
         </div>
-        <div class="field changelog clickable" (click)="navigateChangelog()">
-            View Changelog
-        </div>
+        <hg-authkey></hg-authkey>
     </div>
 </div>
