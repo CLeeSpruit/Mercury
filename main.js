@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
-var win, serve;
+var win, serve, tray;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
 function createWindow() {
@@ -18,6 +18,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
         },
+        frame: false
     });
     if (serve) {
         require('electron-reload')(__dirname, {
@@ -33,7 +34,7 @@ function createWindow() {
         }));
     }
     if (serve) {
-        // win.webContents.openDevTools();
+        win.webContents.openDevTools();
     }
     // Emitted when the window is closed.
     win.on('closed', function () {
@@ -42,12 +43,36 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
+    // IPC Renderer actions
+    electron_1.ipcMain.on('app:quit', function () {
+        win = null;
+        electron_1.app.quit();
+    });
+    electron_1.ipcMain.on('app:minimize', function () {
+        win.minimize();
+    });
+    electron_1.ipcMain.on('app:maximize', function () {
+        win.restore();
+    });
+    electron_1.ipcMain.on('app:fullscreen', function () {
+        win.maximize();
+    });
+}
+function createTray() {
+    tray = new electron_1.Tray(path.join(__dirname, 'src/favicon.ico'));
+    var contextMenu = electron_1.Menu.buildFromTemplate([
+        { label: 'Open Mercury', type: 'normal', }
+    ]);
+    tray.setContextMenu(contextMenu);
 }
 try {
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    electron_1.app.on('ready', createWindow);
+    electron_1.app.on('ready', function () {
+        createWindow();
+        createTray();
+    });
     // Quit when all windows are closed.
     electron_1.app.on('window-all-closed', function () {
         // On OS X it is common for applications and their menu bar

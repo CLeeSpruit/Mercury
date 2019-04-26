@@ -1,8 +1,8 @@
-import { app, BrowserWindow, screen, ipcMain, WebContents } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, Tray, Menu } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-let win, serve;
+let win: BrowserWindow, serve, tray: Tray;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
@@ -19,6 +19,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
         },
+        frame: false
     });
 
     if (serve) {
@@ -35,7 +36,7 @@ function createWindow() {
     }
 
     if (serve) {
-        // win.webContents.openDevTools();
+        win.webContents.openDevTools();
     }
 
     // Emitted when the window is closed.
@@ -46,6 +47,32 @@ function createWindow() {
         win = null;
     });
 
+    // IPC Renderer actions
+    ipcMain.on('app:quit', () => {
+        win = null;
+        app.quit();
+    });
+
+    ipcMain.on('app:minimize', () => {
+        win.minimize();
+    });
+
+    ipcMain.on('app:maximize', () => {
+        win.restore();
+    });
+
+    ipcMain.on('app:fullscreen', () => {
+        win.maximize();
+    });
+}
+
+function createTray() {
+    tray = new Tray(path.join(__dirname, 'src/favicon.ico'));
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'Open Mercury', type: 'normal', }
+    ]);
+
+    tray.setContextMenu(contextMenu);
 }
 
 try {
@@ -53,7 +80,10 @@ try {
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    app.on('ready', createWindow);
+    app.on('ready', () => {
+        createWindow();
+        createTray();
+    });
 
     // Quit when all windows are closed.
     app.on('window-all-closed', () => {
@@ -74,7 +104,6 @@ try {
 
     // Set AppUserModelId to enable notfications in windows
     app.setAppUserModelId(process.execPath);
-
 } catch (e) {
     // Catch Error
     // throw e;

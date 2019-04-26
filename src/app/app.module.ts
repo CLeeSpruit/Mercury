@@ -14,11 +14,13 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ConfigModule } from 'config/config.module';
 import { MetaModule } from 'meta/meta.module';
+import { TitlebarComponent } from 'titlebar/titlebar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent
+    NavigationComponent,
+    TitlebarComponent
   ],
   imports: [
     BrowserModule,
