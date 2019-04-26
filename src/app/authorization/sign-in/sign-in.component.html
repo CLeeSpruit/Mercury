@@ -5,8 +5,9 @@
     </div>
     <div class="body">
         <div class="field">
-            <span label="auth">Authorization Key *: </span>
+            <span label="auth field-label">Authorization Key: </span>
             <input name="auth" type="text" #authInput (keyup.enter)="signIn(authInput.value)">
+            <button class="login-btn btn btn-info" (click)="signIn(authInput.value)">Save</button>
         </div>
         <div class="register">
             <a href="http://tfs2013-mn:8080/tfs/DefaultCollection/_details/security/tokens">Get an auth key from TFS <i class="fa fa-external-link"></i></a>
