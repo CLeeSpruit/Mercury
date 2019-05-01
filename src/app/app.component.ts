@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, AfterViewInit, Renderer } from '@angular/core';
 import { DynamicComponentService } from '@shared/services/dynamic-component.service';
 import { TfsEnvironmentService } from '@environments/services/tfs-environment.service';
 import { SprintService } from '@sprint/services/sprint.service';
@@ -23,17 +23,23 @@ export class AppComponent implements AfterViewInit {
         private tfsService: TfsService,
         private backlogService: BacklogService,
         private sprintQueryService: SprintQueryService,
-        private buildMonitorService: BuildMonitorService
+        private buildMonitorService: BuildMonitorService,
+        private renderer: Renderer
     ) {
-        configService.init();
-        tfsService.init();
-        environmentService.init();
-        backlogService.init();
-        sprintQueryService.init();
-        buildMonitorService.initMonitor();
+        configService.init().subscribe(() => {
+            tfsService.init();
+            environmentService.init();
+            backlogService.init();
+            sprintQueryService.init();
+            buildMonitorService.initMonitor();
+        });
     }
 
     ngAfterViewInit() {
+        const body = document.querySelector('body');
         this.dynamicComponentService.setRootContainer(this.dynamicInsert);
+        this.configService.getDarkMode().subscribe(isDark => {
+            this.renderer.setElementClass(body, 'dark', isDark);
+        });
     }
 }

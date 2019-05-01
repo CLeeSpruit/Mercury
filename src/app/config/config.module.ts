@@ -6,6 +6,8 @@ import { ProjectSelectComponent } from './project-select/project-select.componen
 import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 import { ConfigInterceptor } from './services/config.interceptor';
 import { AuthkeyComponent } from 'config/authkey/authkey.component';
+import { StyleConfigComponent } from 'config/style-config/style-config.component';
+import { NotificationSettingsComponent } from 'config/notification-settings/notification-settings.component';
 
 @NgModule({
     imports: [CommonModule],
@@ -16,7 +18,9 @@ import { AuthkeyComponent } from 'config/authkey/authkey.component';
     declarations: [
         ProjectSelectComponent,
         SettingsModalComponent,
-        AuthkeyComponent
+        AuthkeyComponent,
+        StyleConfigComponent,
+        NotificationSettingsComponent
     ],
     entryComponents: [SettingsModalComponent]
 })

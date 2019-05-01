@@ -1,0 +1,11 @@
+<div class="field">
+    <span class="field-label">Toggle Theme:</span>
+    <div class="toggle btn-bar">
+        <button class="btn light"
+            (click)="toggleDark()"
+            [disabled]="!isDark">Light</button>
+        <button class="btn dark"
+            (click)="toggleDark()"
+            [disabled]="isDark">Dark</button>
+    </div>
+</div>

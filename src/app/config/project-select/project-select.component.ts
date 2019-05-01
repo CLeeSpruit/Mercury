@@ -34,7 +34,6 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
     changeProject($event: any) {
         const index = $event.target.options.selectedIndex;
         this.configService.setCurrentProject(this.projects[index].name);
-        this.configService.closeSettingModal();
     }
 
     goToProject() {

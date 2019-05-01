@@ -1,5 +1,4 @@
-@import '../../scss/gradients';
-@import '../../scss/_mixins.scss';
+@import '../../scss/index';
 
 .navigation {
     @include blue;
@@ -12,6 +11,7 @@
         flex-grow: 1;
 
         padding: 1em;
+
         h3 {
             margin: 0;
         }
@@ -22,7 +22,7 @@
         width: 100%;
         flex-grow: 1;
         flex-shrink: 2;
-        
+
         ul {
             display: flex;
             justify-content: space-evenly;
@@ -33,20 +33,22 @@
             li {
                 flex-grow: 1;
                 list-style: none;
-                
+
                 padding: 1em;
-                
+
                 font-size: 1.2em;
                 font-variant: small-caps;
                 text-align: center;
+
                 a {
                     color: #fff;
                     text-decoration: none;
                 }
-                
+
                 transition: background-color 0.5s ease;
+
                 &:hover {
-                    background-color: rgba(255,255,255,0.25);
+                    background-color: rgba(255, 255, 255, 0.25);
                 }
 
                 .user {
@@ -55,6 +57,4 @@
             }
         }
     }
-
-
 }

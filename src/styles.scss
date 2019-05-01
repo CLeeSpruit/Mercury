@@ -35,16 +35,58 @@ body {
     overflow: auto;
 }
 
+/***********************
+    Dark Mode
+************************/
+body.dark {
+    // Site wide
+    background-color: $dark-bg;
+    color: $dark-color;
+
+    .navigation {
+        background: $dark-bg-light;
+    }
+
+    // Settings
+    .settings-modal {
+        background-color: $dark-bg-light;
+    }
+
+    .shader {
+        background: $dark-bg;
+
+        &::after {
+            @include rainbow-text;
+        }
+    }
+
+    // Sprint board
+    .col {    
+        .col-body {
+            background: $dark-bg-mid !important;
+        }
+    }
+
+    .card {
+        background-color: $dark-bg-mid;
+    }
+
+    .list-group-item{
+        background: $dark-bg-light;
+    }
+}
+
 /************* 
     Shame 
 **************/
 
 // TODO: Create a more acceptable modal wrapper
-hg-sign-in, hg-settings-modal, hg-meta-modal {
+hg-sign-in,
+hg-settings-modal,
+hg-meta-modal {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 }
-
