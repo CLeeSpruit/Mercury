@@ -108,8 +108,7 @@ export class ConfigService {
 
     private fetchConfig(): ConfigSettings {
         try {
-            const oldConfig = this.fileStore.read(this.storageToken, '.json');
-            return JSON.parse(oldConfig) as ConfigSettings;
+            return this.fileStore.read(this.storageToken, '.json');
         } catch (e) {
             return <ConfigSettings>{};
         }
