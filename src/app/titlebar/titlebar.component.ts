@@ -1,6 +1,8 @@
 import * as ElectronTitlebarWindows from 'electron-titlebar-windows';
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { ElectronService } from '@shared/services/electron.service';
+import { ConfigService } from 'config/services/config.service';
+import { ConfigSettings } from 'config/models/config.model';
 
 @Component({
     selector: 'hg-titlebar',
@@ -9,40 +11,48 @@ import { ElectronService } from '@shared/services/electron.service';
 })
 export class TitlebarComponent implements OnInit {
     private electronTitlebar: typeof ElectronTitlebarWindows;
+    private titlebar: any;
     constructor(
         private electronSerivce: ElectronService,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private configService: ConfigService
     ) {
         //
     }
 
     ngOnInit() {
-        const options = {
-            darkMode: false,
-            color: '#ffffff',
-            backgroundColor: '#e35d5b',
-            draggable: true,
-            fullscreen: false
-        };
-
         this.electronTitlebar = window.require('electron-titlebar-windows');
-        const titlebar = new this.electronTitlebar(options);
-        titlebar.appendTo(this.elementRef.nativeElement);
+        this.configService.getConfig().subscribe((config: ConfigSettings) => {
+            const options = {
+                darkMode: config.isDarkMode,
+                backgroundColor: config.titlebarColor || '#e35d5b',
+                draggable: true,
+                fullscreen: false
+            };
 
-        titlebar.on('close', () => {
-            this.electronSerivce.ipcRenderer.send('app:quit');
-        });
+            if (this.titlebar) {
+                // Titlebar.destory doesn't work in this instance, so we'll have to do it manually
+                this.elementRef.nativeElement.innerHTML = '';
+            }
 
-        titlebar.on('minimize', () => {
-            this.electronSerivce.ipcRenderer.send('app:minimize');
-        });
+            this.titlebar = new this.electronTitlebar(options);
+            this.titlebar.appendTo(this.elementRef.nativeElement);
 
-        titlebar.on('maximize', () => {
-            this.electronSerivce.ipcRenderer.send('app:maximize');
-        });
+            this.titlebar.on('close', () => {
+                this.electronSerivce.ipcRenderer.send('app:quit');
+            });
 
-        titlebar.on('fullscreen', () => {
-            this.electronSerivce.ipcRenderer.send('app:fullscreen');
+            this.titlebar.on('minimize', () => {
+                this.electronSerivce.ipcRenderer.send('app:minimize');
+            });
+
+            this.titlebar.on('maximize', () => {
+                this.electronSerivce.ipcRenderer.send('app:maximize');
+            });
+
+            this.titlebar.on('fullscreen', () => {
+                this.electronSerivce.ipcRenderer.send('app:fullscreen');
+            });
         });
     }
 }

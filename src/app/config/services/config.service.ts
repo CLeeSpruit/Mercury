@@ -9,37 +9,35 @@ import { FileStoreService } from '@shared/services/file-store.service';
 import { ConfigSettings } from 'config/models/config.model';
 @Injectable()
 export class ConfigService {
-    private lsCurrentProject = 'current-project';
     private apiUrl = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
     private fileStore = new FileStoreService();
     private storageToken = 'config';
     private config: ConfigSettings;
 
+    private configSub: BehaviorSubject<ConfigSettings> = new BehaviorSubject<ConfigSettings>(<ConfigSettings>{});
     private currentProjectSub: BehaviorSubject<string> = new BehaviorSubject<string>('');
     private projects: Array<Project> = new Array<Project>();
     private currentProjectsSub: BehaviorSubject<Array<Project>> = new BehaviorSubject<Array<Project>>(this.projects);
     private projectUrlSub: BehaviorSubject<string> = new BehaviorSubject<string>('');
-    private modalSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private darkSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     private options = {
         headers: new HttpHeaders({
             'cache-control': 'no-cache',
             'Content-Type': 'application/json-patch+json'
         })
     };
-    private settingsModal: ComponentRef<SettingsModalComponent>;
+
     private settingsLoadedSub: AsyncSubject<boolean> = new AsyncSubject<boolean>();
 
     constructor(
-        private http: HttpClient,
-        private dynamicComponentService: DynamicComponentService
+        private http: HttpClient
     ) { }
 
     init() {
         this.config = this.fetchConfig();
         if (this.config) {
-            this.setDarkMode(this.config.isDarkMode, true);
-            this.setCurrentProject(this.config.currentProject, true);
+            this.setConfig(this.config, true);
         }
         this.settingsLoadedSub.next(true);
         this.settingsLoadedSub.complete();
@@ -97,13 +95,32 @@ export class ConfigService {
         }
     }
 
+    setTitleBarColor(color: string, doNotSave?: boolean) {
+        this.config.titlebarColor = color;
+
+        if (!doNotSave) {
+            this.saveConfig();
+        }
+    }
+
     getDarkMode(): Observable<boolean> {
         return this.darkSub.asObservable();
+    }
+
+    getConfig(): Observable<ConfigSettings> {
+        return this.configSub.asObservable();
+    }
+
+    setConfig(config: ConfigSettings, doNotSave?: boolean) {
+        this.configSub.next(config);
+        this.setDarkMode(config.isDarkMode, doNotSave);
+        this.setCurrentProject(config.currentProject, doNotSave);
     }
 
     // fs store
     private saveConfig() {
         this.fileStore.write(this.storageToken, '.json', this.config);
+        this.configSub.next(this.config);
     }
 
     private fetchConfig(): ConfigSettings {

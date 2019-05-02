@@ -8,17 +8,23 @@ import { ConfigService } from 'config/services/config.service';
 })
 export class StyleConfigComponent implements OnInit {
     isDark = false;
+    titlebarColor = '#000';
     constructor(private configService: ConfigService) {
         //
     }
 
     ngOnInit() {
-        this.configService.getDarkMode().subscribe(isDark => {
-            this.isDark = isDark;
+        this.configService.getConfig().subscribe(config => {
+            this.isDark = config.isDarkMode;
+            this.titlebarColor = config.titlebarColor;
         });
     }
 
     toggleDark() {
         this.configService.setDarkMode(!this.isDark);
+    }
+
+    setTitleBarColor(color: string) {
+        this.configService.setTitleBarColor(color);
     }
 }

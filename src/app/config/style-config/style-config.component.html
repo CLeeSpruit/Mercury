@@ -8,4 +8,6 @@
             (click)="toggleDark()"
             [disabled]="isDark">Dark</button>
     </div>
+    <span class="field-label">Titlebar Color: </span>
+    <input type="color" [value]="titlebarColor" #titlebarColor (change)="setTitleBarColor(titlebarColor.value)" />
 </div>
