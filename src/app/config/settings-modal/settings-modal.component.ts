@@ -11,18 +11,7 @@ export class SettingsModalComponent {
 
     constructor(private router: Router) { }
 
-    close() {
-        // TODO: Figure out why this isn't being destroyed
-        // That which is dynamically created, must be dynamically destroyed
-        // if (this.componentRefDestroy) {
-        //     this.componentRefDestroy();
-        // }
-
-        window.location.reload();
-    }
-
     navigateChangelog() {
         this.router.navigate(['about']);
-        this.close();
     }
 }

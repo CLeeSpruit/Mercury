@@ -31,7 +31,7 @@ export class AppComponent implements AfterViewInit {
             environmentService.init();
             backlogService.init();
             sprintQueryService.init();
-            buildMonitorService.initMonitor();
+            buildMonitorService.init();
         });
     }
 

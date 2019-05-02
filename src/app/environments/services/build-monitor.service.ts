@@ -2,30 +2,45 @@ import { TfsEnvironmentService } from '@environments/services/tfs-environment.se
 import { Injectable } from '@angular/core';
 import { ElectronService } from '@shared/services/electron.service';
 import { NotificationService } from '@shared/services/notification.service';
-import { Observable, interval, BehaviorSubject } from 'rxjs';
+import { Observable, interval, BehaviorSubject, Subscription } from 'rxjs';
 import { startWith, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { Build } from '@environments/models/build.model';
 import { Release } from '@environments/models/release.model';
+import { ConfigService } from 'config/services/config.service';
 
 /* This service should init with app if it is electron */
 
 @Injectable()
 export class BuildMonitorService {
-    // TODO: Make this configurable
-    // private interval = 1000 * 60 * 2; // Two minutes
-    private interval = 1000 * 30; // Thirty seconds
+    private interval: number;
     private builds: BehaviorSubject<Array<Build>> = new BehaviorSubject(new Array<Build>());
     private releases: BehaviorSubject<Array<Release>> = new BehaviorSubject(new Array<Release>());
+    private buildInterval: Subscription = new Subscription();
+    private releaseInterval: Subscription = new Subscription();
 
     constructor(
         private tfsEnvironmentService: TfsEnvironmentService,
         private electronService: ElectronService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private configService: ConfigService
     ) {
         //
     }
 
-    initMonitor() {
+    init() {
+        this.configService.getBuildSettings().subscribe(buildConfig => {
+            const configOrDefaultInterval = buildConfig.buildMonitorInterval || 30; // Thirty seconds default
+            this.interval = configOrDefaultInterval * 1000;
+            this.buildInterval.unsubscribe();
+            this.releaseInterval.unsubscribe();
+
+            if (buildConfig.notificationsOn) {
+                this.initMonitor();
+            }
+        });
+    }
+
+    private initMonitor() {
         // Builds
         interval(this.interval).pipe(startWith(0), switchMap(() => {
             return this.tfsEnvironmentService.getBuilds();

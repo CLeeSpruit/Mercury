@@ -7,6 +7,8 @@ import { SettingsModalComponent } from '../settings-modal/settings-modal.compone
 import { filter, map } from 'rxjs/operators';
 import { FileStoreService } from '@shared/services/file-store.service';
 import { ConfigSettings } from 'config/models/config.model';
+import { ProjectSettings } from 'config/models/project-config.model';
+import { stringify } from '@angular/core/src/util';
 @Injectable()
 export class ConfigService {
     private apiUrl = 'http://tfs2013-mn:8080/tfs/DefaultCollection/_apis/';
@@ -20,6 +22,7 @@ export class ConfigService {
     private currentProjectsSub: BehaviorSubject<Array<Project>> = new BehaviorSubject<Array<Project>>(this.projects);
     private projectUrlSub: BehaviorSubject<string> = new BehaviorSubject<string>('');
     private darkSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private buildSettingsSub: BehaviorSubject<ProjectSettings> = new BehaviorSubject<ProjectSettings>(<ProjectSettings>{});
 
     private options = {
         headers: new HttpHeaders({
@@ -45,7 +48,7 @@ export class ConfigService {
     }
 
     hasCurrentProject(): boolean {
-        return !!(this.config.currentProject);
+        return !!(this.config && this.config.currentProject);
     }
 
     getCurrentProject(): Observable<string> {
@@ -56,6 +59,7 @@ export class ConfigService {
         this.projectUrlSub.next(`http://tfs2013-mn:8080/tfs/DefaultCollection/${project}/_apis/`);
         this.currentProjectSub.next(project);
         this.config.currentProject = project;
+        this.setBuildSettings();
         if (!doNotSave) {
             this.saveConfig();
         }
@@ -117,15 +121,75 @@ export class ConfigService {
         this.setCurrentProject(config.currentProject, doNotSave);
     }
 
+    setBuildSettings() {
+        if (!this.config.projectSettings) {
+            this.config.projectSettings = new Map<string, ProjectSettings>();
+        }
+        let project = this.config.projectSettings.get(this.config.currentProject);
+        if (!project) {
+            this.config.projectSettings.set(this.config.currentProject, this.createDefaultProjectSetting(this.config.currentProject));
+            project = this.config.projectSettings.get(this.config.currentProject);
+        }
+
+        this.buildSettingsSub.next(project);
+    }
+
+    getBuildSettings(): Observable<ProjectSettings> {
+        return this.buildSettingsSub.asObservable();
+    }
+
+    private createDefaultProjectSetting(projectName: string) {
+        return <ProjectSettings>{
+            projectName,
+            notificationsOn: true,
+            buildMonitorInterval: 30
+        };
+    }
+
+    private setProjectSetting(settingProp: string, value: any, doNotSave?: boolean) {
+        if (!this.config.projectSettings) {
+            this.config.projectSettings = new Map<string, ProjectSettings>();
+        }
+
+        const project = this.config.projectSettings.get(this.config.currentProject) || this.createDefaultProjectSetting(this.config.currentProject);
+        project[settingProp] = value;
+
+        this.config.projectSettings.set(this.config.currentProject, project);
+        this.setBuildSettings();
+
+        if (!doNotSave) {
+            this.saveConfig();
+        }
+    }
+
+    setNotifications(notificationsOn: boolean, doNotSave?: boolean) {
+        this.setProjectSetting('notificationsOn', notificationsOn, doNotSave);
+    }
+
+    setMonitorInterval(interval: number, doNotSave?: boolean) {
+        this.setProjectSetting('buildMonitorInterval', interval, doNotSave);
+    }
+
     // fs store
     private saveConfig() {
-        this.fileStore.write(this.storageToken, '.json', this.config);
+        const mapped = {
+            ...this.config,
+            projectSettings: Array.from(this.config.projectSettings.values())
+        };
+
+        this.fileStore.write(this.storageToken, '.json', mapped);
         this.configSub.next(this.config);
     }
 
     private fetchConfig(): ConfigSettings {
         try {
-            return this.fileStore.read(this.storageToken, '.json');
+            const config: ConfigSettings = this.fileStore.read(this.storageToken, '.json');
+            const jsonSettings = config.projectSettings;
+            config.projectSettings = new Map<string, ProjectSettings>();
+            jsonSettings.forEach(key => {
+                config.projectSettings.set(key.projectName, key);
+            });
+            return config;
         } catch (e) {
             return <ConfigSettings>{};
         }

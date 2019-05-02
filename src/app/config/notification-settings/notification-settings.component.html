@@ -1,0 +1,24 @@
+<div class="settings-section" *ngIf="projectName">
+    <div class="description">
+        Settings for {{projectName}}
+    </div>
+    <div class="field">
+        <span class="field-label">Toggle Notifications:</span>
+        <div class="toggle btn-group">
+            <button class="btn btn-secondary"
+                (click)="toggleNotifications()"
+                [disabled]="isNotificationsOn">On</button>
+            <button class="btn btn-secondary"
+                (click)="toggleNotifications()"
+                [disabled]="!isNotificationsOn">Off</button>
+        </div>
+    </div>
+    <div class="field">
+        <span class="field-label">Build Monitor Interval (s): </span>
+        <input type="number"
+            [value]="intervalValue"
+            #intervalInput />&nbsp;
+        <button class="btn btn-info"
+            (click)="saveInterval(intervalInput.value)">Save</button>
+    </div>
+</div>
