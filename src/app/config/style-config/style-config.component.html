@@ -1,13 +1,20 @@
-<div class="field">
-    <span class="field-label">Toggle Theme:</span>
-    <div class="toggle btn-bar">
-        <button class="btn light"
-            (click)="toggleDark()"
-            [disabled]="!isDark">Light</button>
-        <button class="btn dark"
-            (click)="toggleDark()"
-            [disabled]="isDark">Dark</button>
+<div class="settings-section">
+    <div class="field">
+        <span class="field-label">Toggle Theme:</span>
+        <div class="toggle btn-group">
+            <button class="btn btn-secondary"
+                (click)="toggleDark()"
+                [disabled]="!isDark">Light</button>
+            <button class="btn btn-secondary"
+                (click)="toggleDark()"
+                [disabled]="isDark">Dark</button>
+        </div>
     </div>
-    <span class="field-label">Titlebar Color: </span>
-    <input type="color" [value]="titlebarColor" #titlebarColor (change)="setTitleBarColor(titlebarColor.value)" />
+    <div class="field">
+        <span class="field-label">Titlebar Color: </span>
+        <input type="color"
+            [value]="titlebarColor"
+            #titlebarColor
+            (change)="setTitleBarColor(titlebarColor.value)" />
+    </div>
 </div>

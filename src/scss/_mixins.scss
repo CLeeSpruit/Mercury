@@ -31,9 +31,9 @@
 
 @mixin modalize {
     position: absolute;
-    top: 50%;
+    top: 15%;
     left: 50%;
-    transform: translate(-50%, -75%);
+    transform: translate(-50%, 0%);
     border: 3px solid #3a7bd5;
     border-radius: 5px;
     background-color: #fff;

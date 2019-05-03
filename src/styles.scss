@@ -50,6 +50,14 @@ body.dark {
     // Settings
     .settings-modal {
         background-color: $dark-bg-light;
+
+        .settings-section {
+            border-color: $dark-bg-mid;
+        }
+    }
+
+    .meta-modal {
+        background-color: $dark-bg-light;
     }
 
     .shader {
@@ -89,4 +97,20 @@ hg-meta-modal {
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+// TODO: Put this in a settings-wide style sheet. I'm in a hurry, so lazy it is.
+.settings-section {
+    border: 1px solid $dark-bg-light;
+    border-radius: 5px;
+    padding: .5em;
+    margin: .25em;
+}
+
+.field {
+    padding: .25em;
+}
+
+.field-label {
+    padding: .5em;
 }
