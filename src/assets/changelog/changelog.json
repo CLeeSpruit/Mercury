@@ -1,20 +1,22 @@
 [
     {
         "version": "2.0.0-beta3",
-        "date": "4/26/18",
+        "date": "5/2/19",
         "notes": [
             "Added titlebar instead of Windows default",
             "Added better navigation for changelog and settings",
             "Nav: Slimmer for smaller resolutions, logout moved to settings",
             "Settings: Added auth key and logout",
+            "Settings: Added dark mode",
             "Settings: Added settings for titlebar color",
             "Settings: Added settings per environment",
-            "Settings: Added settings for build notifications"
+            "Settings: Added settings for build notifications",
+            "Build: Upgraded packages and angular-electron files"
         ]
     },
     {
         "version": "2.0.0-beta2",
-        "date": "4/16/18",
+        "date": "4/16/19",
         "notes": [
             "Env: Auto-updates builds and releases",
             "Added notifications on build and release success",
@@ -23,7 +25,7 @@
     },
     {
         "version": "2.0.0-beta1",
-        "date": "3/26/18",
+        "date": "3/26/19",
         "notes": [
             "Added Electron",
             "Upgraded to Angular 7, Rxjs 6",
@@ -34,7 +36,7 @@
     },
     {
         "version": "1.0.1",
-        "date": "3/25/18",
+        "date": "3/25/19",
         "notes": [
             "Implemented some minor fixes from last year",
             "PBI columns update when tasks are updated",
