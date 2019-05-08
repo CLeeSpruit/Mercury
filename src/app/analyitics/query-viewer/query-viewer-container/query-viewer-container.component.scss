@@ -1,0 +1,14 @@
+.backlog-container {
+    display: flex;
+
+    hg-query-viewer-list, hg-pbi {
+        width: 100%;
+        flex: 1;
+    }
+
+    hg-pbi {
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+    }
+}

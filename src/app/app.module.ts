@@ -15,6 +15,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { ConfigModule } from 'config/config.module';
 import { MetaModule } from 'meta/meta.module';
 import { TitlebarComponent } from 'titlebar/titlebar.component';
+import { AnalyticsModule } from 'analyitics/analytics.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TitlebarComponent } from 'titlebar/titlebar.component';
     SharedModule,
     SprintBoardModule,
     ConfigModule,
-    MetaModule
+    MetaModule,
+    AnalyticsModule
   ],
   bootstrap: [AppComponent]
 })

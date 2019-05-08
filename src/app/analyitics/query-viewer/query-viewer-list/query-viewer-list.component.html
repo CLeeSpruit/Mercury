@@ -1,0 +1,16 @@
+<div class="query-viewer">
+    <div class="table-header">
+        <div *ngFor="let columnItem of columnItems">
+            <div class="table-label"
+                [class.wide]="columnItem.isWide">
+                <span [innerHtml]="columnItem.displayName"></span>
+            </div>
+        </div>
+    </div>
+
+    <hg-query-viewer-item
+        *ngFor="let queryItem of queryItems"
+        [pbiId]="backlogItem"
+        [columns]="columnItems"
+        class="table-row"></hg-query-viewer-item>
+</div>

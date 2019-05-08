@@ -1,0 +1,15 @@
+<div *ngFor="let column of columns">
+    <div class="cell" *ngIf="isLoaded && pbi" [class.wide]="column.isWide">
+        <span [innerHtml]="pbi[column.propName]"></span>
+    </div>
+</div>
+
+<!-- Not loaded -->
+<div class="cell"
+    *ngIf="!pbi || !isLoaded">
+    <span [innerHtml]="pbiId"></span>
+</div>
+<div class="cell placeholder"
+    *ngIf="isLoaded && !pbi">
+    <i class="fa fa-pulse fa-spinner"></i>
+</div>

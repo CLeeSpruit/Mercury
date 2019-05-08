@@ -52,6 +52,13 @@ export class QueryService {
         return this.http.get(`${this.baseProjectLocation}wit/queries${mercuryLocation}`, this.options).pipe(map((data: any) => data.id));
     }
 
+    // Returns the id of the folder
+    // Folder name should be the non encoded version (Ex: "Custom Queries" instead of "Custom%20Queries")
+    private getSubFolder(subFolderName: string): Observable<string> {
+        const mercuryLocation = this.myQueries + this.folder + '/' + encodeURI(subFolderName);
+        return this.http.get(`${this.baseProjectLocation}wit/queries${mercuryLocation}`, this.options).pipe(map((data: any) => data.id));
+    }
+
     // TODO: Move this to protected when fetch is recreated
     protected fetchMercuryFolder(): AsyncSubject<string> {
         const asyncId: AsyncSubject<string> = new AsyncSubject<string>();
@@ -71,6 +78,26 @@ export class QueryService {
                 }));
             }
             // TODO: Handle if the code is not the missing folder code
+        });
+
+        return asyncId;
+    }
+
+    protected fetchSubFolder(folderName: string): AsyncSubject<string> {
+        const asyncId: AsyncSubject<string> = new AsyncSubject<string>();
+
+        this.getSubFolder(folderName).subscribe(id => {
+            asyncId.next(id);
+            asyncId.complete();
+        }, (error: any) => {
+            const tfsError = error.error;
+            const missingFolderErrorCode = 600288;
+            if (tfsError && tfsError.errorCode === missingFolderErrorCode) {
+                this.createSubFolder(folderName).subscribe((id => {
+                    asyncId.next(id);
+                    asyncId.complete();
+                }));
+            }
         });
 
         return asyncId;
@@ -105,6 +132,18 @@ export class QueryService {
         return isSuccessful;
     }
 
+    // Subfolder folderName should NOT start with a slash
+    protected createSubFolder(folderName: string): Observable<string> {
+        const query: Query = <Query>{
+            'api-version': '1.0',
+            name: folderName,
+            isFolder: true
+        };
+        return this.http.post(`${this.baseProjectLocation}wit/queries/${this.myQueries}${this.folder}?api-version=1.0`, query, this.options).pipe(
+            map((data: any) => data.id));
+    }
+
+    // Run created queries
     protected runQuery(queryId: any): Observable<Array<any>> {
         return this.http.get(`${this.baseProjectLocation}wit/wiql/${queryId}`, this.options).pipe(
             map((data: any) => {

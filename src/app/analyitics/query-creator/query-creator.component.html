@@ -1,0 +1,18 @@
+<div class="field">
+    <label for="queryName">Query Name:</label>
+    <input id="queryName" #queryName type="text" />
+</div>
+<div class="field">
+    <label for="query">Query Body:</label>
+    <textarea #queryBody rows="10" cols="250">SELECT
+            [System.Id],[System.Title],[System.State],[System.Tags],
+            [System.WorkItemType],[System.IterationId],[Microsoft.VSTS.Common.BacklogPriority]
+        FROM WorkItems
+        WHERE
+            [System.TeamProject] = @project AND
+            [System.WorkItemType] <> 'Task' AND
+            [System.State] <> 'Removed' AND
+            [System.State] <> 'Done'
+        ORDER BY [Microsoft.VSTS.Common.BacklogPriority] ASC</textarea>
+</div>
+<button class="btn btn-success" (click)="createQuery(queryName.value, queryBody.value)">Save and Run</button>

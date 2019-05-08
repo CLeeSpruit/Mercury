@@ -7,6 +7,7 @@ import { PbiContainerComponent } from 'sprint-board/pbi-container/pbi-container.
 import { BacklogContainerComponent } from '@backlog/backlog-container/backlog-container.component';
 import { MetaModalComponent } from 'meta/meta-modal/meta-modal.component';
 import { SettingsModalComponent } from 'config/settings-modal/settings-modal.component';
+import { AnalyticsPageComponent } from 'analyitics/analytics-page/analytics-page.component';
 
 // TODO: Move this out to it's own modules to handle the routes + lazy load
 const appRoutes: Routes = [
@@ -15,6 +16,7 @@ const appRoutes: Routes = [
     { path: 'sprint', redirectTo: 'sprint/current' },
     { path: 'pbi/:pbiId', component: PbiContainerComponent },
     { path: 'pbi', redirectTo: 'sprint/current'},
+    { path: 'analytics', component: AnalyticsPageComponent },
     { path: 'about', component: MetaModalComponent },
     { path: 'settings', component: SettingsModalComponent },
     { path: 'environments', component: EnvironmentsComponent },
