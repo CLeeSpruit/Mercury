@@ -1,0 +1,7 @@
+<ul>
+    <div class="folder-or-query" *ngFor="let query of queries">
+        <li *ngIf="!query.isFolder" [innerHtml]="name" (click)="openQuery(query)"></li>
+        <li *ngIf="query.isFolder && !query.hasChildren" [innerHtml]="name"></li>
+        <hg-query-browser *ngIf="query.isFolder && query.hasChildren" [root]="query"></hg-query-browser>
+    </div>
+</ul>

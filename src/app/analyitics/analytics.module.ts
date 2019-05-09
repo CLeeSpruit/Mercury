@@ -9,6 +9,7 @@ import { QueryViewerListComponent } from 'analyitics/query-viewer/query-viewer-l
 import { QueryViewerContainerComponent } from 'analyitics/query-viewer/query-viewer-container/query-viewer-container.component';
 import { SharedModule } from '@shared/shared.module';
 import { SprintBoardModule } from '@sprint/sprint-board.module';
+import { QueryBrowserComponent } from 'analyitics/query-browser/query-browser.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { SprintBoardModule } from '@sprint/sprint-board.module';
         QueryCreatorComponent,
         QueryViewerListComponent,
         QueryItemComponent,
-        QueryViewerContainerComponent
+        QueryViewerContainerComponent,
+        QueryBrowserComponent
     ],
     imports: [CommonModule, SharedModule, SprintBoardModule],
     providers: [
