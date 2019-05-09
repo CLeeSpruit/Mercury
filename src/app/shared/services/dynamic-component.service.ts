@@ -1,4 +1,4 @@
-// Shamelessly borrowed from Opus' dynamic component service, with some extras
+
 import {
     Injectable,
     Injector,

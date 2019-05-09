@@ -40,12 +40,6 @@ export class TfsService {
         this.baseLocationGeneric = this.configService.getApiUrl();
     }
 
-    // Not used currently
-    // TODO: Fetch repo dynamically
-    getRecentCommits() {
-        return this.http.get(`${this.baseProjectLocation}git/repositories/OPUS/commits`, this.options);
-    }
-
     getCurrentSprint(): Observable<Sprint> {
         return this.http.get(`${this.baseProjectLocation}work/TeamSettings/Iterations?$timeframe=current`, this.options)
             .pipe(map((data: any) => {
